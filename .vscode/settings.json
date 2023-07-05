@@ -1,0 +1,16 @@
+{
+  "deno.enable": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/__pycache__": true,
+    "[!s]*/**": true,
+    "s[!r]*/**": true,
+    "sr[!c]*/**": true
+  },
+  "workspace.isHidden": true
+}

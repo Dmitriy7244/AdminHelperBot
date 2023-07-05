@@ -1,0 +1,17 @@
+{
+  "tasks": {
+    "dev": "deno run --watch -A src/main/mod.ts"
+  },
+  "imports": {
+    "grammy": "https://deno.land/x/grammy@v1.17.1/mod.ts",
+    "tg": "https://deno.land/x/grammy@v1.17.1/types.ts",
+    "grammy_conversations": "https://deno.land/x/grammy_conversations@v1.1.2/mod.ts",
+    "parse_env": "https://deno.land/x/parse_env@v0.0.1/mod.ts",
+    "grammy_parse_mode": "https://deno.land/x/grammy_parse_mode@1.7.1/mod.ts",
+    "core": "./src/core/mod.ts",
+    "observer": "./src/core/observer.ts"
+  },
+  "fmt": {
+    "semiColons": false
+  }
+}
