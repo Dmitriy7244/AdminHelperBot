@@ -1,6 +1,9 @@
-import { bold, link, parseEntity } from "core"
+import { bold, link, parseEntity, removePrefix } from "core"
 import { Message } from "tg"
+import { Context } from "../core/types.ts"
 import * as config from "./config.ts"
+import { Channel, Post, Sale, Seller } from "./models.ts"
+import { Prefix } from "./buttons.ts";
 
 function parseChannels(msg: Message): string[] {
   const channels: string[] = []
@@ -86,40 +89,6 @@ function reprSale(sale: Sale) {
   return [date_time, header, channels].join("\n\n")
 }
 
-class Channel {
-  constructor(
-    public chat_id: number,
-    public title: string,
-    public url: string,
-  ) {}
-
-  static fromTitle(title: string) {
-    for (const c of config.channels) {
-      if (c.title != title) continue
-      return new Channel(c.id, title, c.url)
-    }
-    throw new Error("Unknown title")
-  }
-}
-
-class Seller {
-  constructor(
-    public user_id: number,
-    public name: string,
-  ) {}
-}
-
-class Post {
-  constructor(public publish_date: Date) {}
-}
-
-class Sale {
-  constructor(
-    public seller: Seller,
-    public channels: Channel[],
-    public posts: Post[],
-  ) {}
-}
 
 export {
   Channel,

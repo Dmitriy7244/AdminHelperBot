@@ -1,15 +1,10 @@
-import { reply, sendMessage, setState } from "core"
+import { editReplyMarkup, exclude, reply, sendMessage, setState } from "core"
+import { parseQuery } from "./buttons.ts"
 import { REPORT_GROUP_ID } from "./config.ts"
-import {
-  Channel,
-  parseChannels,
-  Post,
-  resolveDate,
-  resolveDatetime,
-  Sale,
-  Seller,
-} from "./lib.ts"
+import K from "./kbs.ts"
+import { parseChannels, resolveDate, resolveDatetime } from "./lib.ts"
 import M from "./messages.ts"
+import { Channel, Post, Sale, Seller } from "./models.ts"
 import O from "./observers.ts"
 
 O.start.handler = (ctx) => reply(ctx, M.hello)
@@ -17,8 +12,8 @@ O.channels.handler = (ctx) => reply(ctx, M.channels)
 O.userbot.handler = (ctx) => reply(ctx, M.userbot)
 
 O.addSale.handler = async (ctx) => {
-  await reply(ctx, M.askDate)
-  setState(ctx, "sale:date")
+  ctx.session.channels = []
+  await reply(ctx, M.askChannels)
 }
 
 O.text.state("sale:date").handler = async (ctx) => {
@@ -55,4 +50,13 @@ O.text.handler = async (ctx) => {
   ctx.session.channels = channels
   setState(ctx, "sale:date")
   await reply(ctx, M.askDate)
+}
+
+O.pickChannel.handler = async (ctx) => {
+  const channel = parseQuery(ctx, "channel")
+  let channels = ctx.session.channels ?? []
+  if (channels.includes(channel)) channels = exclude(channels, channel)
+  else channels.push(channel)
+  ctx.session.channels = channels
+  await editReplyMarkup(ctx, K.channels(channels))
 }

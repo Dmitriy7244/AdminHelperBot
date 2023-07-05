@@ -9,6 +9,7 @@
     "parse_env": "https://deno.land/x/parse_env@v0.0.1/mod.ts",
     "grammy_parse_mode": "https://deno.land/x/grammy_parse_mode@1.7.1/mod.ts",
     "core": "./src/core/mod.ts",
+    "types": "./src/core/types.ts",
     "observer": "./src/core/observer.ts"
   },
   "fmt": {

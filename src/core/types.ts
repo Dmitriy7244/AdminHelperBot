@@ -7,7 +7,7 @@ type Context =
   & ParseModeFlavor<grammy.Context>
   & SessionFlavor<Session>
 
-type State = "sale:date" | "sale:time"
+type State = "sale:channels" | "sale:date" | "sale:time"
 type Command = "start" | "add_sale" | "channels" | "userbot"
 
 type Session = {

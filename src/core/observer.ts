@@ -20,6 +20,14 @@ class Observer<C extends Context> {
   text() {
     return new Observer(this.composer.on("message:text"))
   }
+  button(prefix: string) {
+    return new Observer(
+      this.composer.filter((ctx) => {
+        const data = ctx.callbackQuery?.data
+        return data ? data.startsWith(prefix) : false
+      }),
+    )
+  }
 }
 
 export const observer = new Observer(bot)
