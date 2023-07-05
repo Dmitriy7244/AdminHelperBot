@@ -1,5 +1,6 @@
 import { editReplyMarkup, exclude, reply, sendMessage, setState } from "core"
 import { parseQuery } from "./buttons.ts"
+import * as config from "./config.ts"
 import { REPORT_GROUP_ID } from "./config.ts"
 import K from "./kbs.ts"
 import { parseChannels, resolveDate, resolveDatetime } from "./lib.ts"
@@ -57,6 +58,14 @@ O.pickChannel.handler = async (ctx) => {
   let channels = ctx.session.channels ?? []
   if (channels.includes(channel)) channels = exclude(channels, channel)
   else channels.push(channel)
+  ctx.session.channels = channels
+  await editReplyMarkup(ctx, K.channels(channels))
+}
+
+O.pickAllChannels.handler = async (ctx) => {
+  let channels = ctx.session.channels ?? []
+  if (channels.length == config.channels.length) channels = []
+  else channels = config.channels.map((c) => c.title)
   ctx.session.channels = channels
   await editReplyMarkup(ctx, K.channels(channels))
 }

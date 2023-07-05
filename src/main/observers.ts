@@ -10,6 +10,7 @@ const O = {
   userbot: observer.command("userbot"),
   text: observer.text(),
   pickChannel: button("channel"),
+  pickAllChannels: button("➕ Выбрать все"),
 }
 
 export default O

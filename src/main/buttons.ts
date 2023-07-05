@@ -2,14 +2,17 @@ import { removePrefix } from "core"
 import { InlineKeyboardButton } from "tg"
 import { Context } from "types"
 
-function CallbackButton(text: string, data?: string): InlineKeyboardButton {
-  return { text, callback_data: data ?? text }
-}
-
-type Prefix = "channel"
+type Prefix = "channel" | "➕ Выбрать все" | "✅ Готово"
 const SEP = ":"
 const CallbackData = (prefix: Prefix, payload: string) =>
   `${prefix}${SEP}${payload}`
+function CallbackButton(data: string, text?: string): InlineKeyboardButton {
+  return { text: text ?? data, callback_data: data }
+}
+
+function PrefixButton(prefix: Prefix) {
+  return CallbackButton(prefix)
+}
 
 function parseQuery(ctx: Context, prefix: Prefix) {
   return removePrefix(ctx.callbackQuery!.data!, prefix + SEP)
@@ -18,11 +21,11 @@ function parseQuery(ctx: Context, prefix: Prefix) {
 const B = {
   channel: (title: string, selected: string[]) =>
     CallbackButton(
-      (selected.includes(title) ? "🔸 " : "") + title,
       CallbackData("channel", title),
+      (selected.includes(title) ? "🔸 " : "") + title,
     ),
-  pickAll: CallbackButton("➕ Выбрать все"),
-  ready: CallbackButton("✅ Готово"),
+  pickAll: PrefixButton("➕ Выбрать все"),
+  ready: PrefixButton("✅ Готово"),
 }
 
 export { CallbackData, parseQuery, type Prefix }
