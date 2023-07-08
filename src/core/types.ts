@@ -17,6 +17,7 @@ type Session = {
   date?: Date
   asForward?: boolean
   noSound?: boolean
+  lastMessageId?: number
 }
 
 type Composer<C extends Context = Context> = grammy.Composer<C>

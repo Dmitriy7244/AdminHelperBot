@@ -1,4 +1,5 @@
 import { editReplyMarkup, exclude, reply, sendMessage, setState } from "core"
+import { Message } from "tg"
 import messageCollector from "../core/messageCollector.ts"
 import { Context } from "../core/types.ts"
 import { copyMessages } from "../core/userbot.ts"
@@ -11,6 +12,20 @@ import M from "./messages.ts"
 import { Channel, Post, Sale, Seller } from "./models.ts"
 import O from "./observers.ts"
 
+async function tryDeleteLastMsg(ctx: Context) {
+  const msgId = ctx.session.lastMessageId
+  if (!msgId) return
+  try {
+    await ctx.api.deleteMessage(ctx.chat!.id, msgId)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+function saveLastMsgId(ctx: Context, msg: Message) {
+  ctx.session.lastMessageId = msg.message_id
+}
+
 O.start.handler = async (ctx) => {
   setState(ctx)
   await reply(ctx, M.hello)
@@ -22,6 +37,7 @@ O.addSale.handler = async (ctx) => {
   ctx.session.channels = []
   await reply(ctx, M.askChannels)
   setState(ctx, "sale:channels")
+  await ctx.deleteMessage()
 }
 
 O.pickChannel.handler = async (ctx) => {
@@ -48,7 +64,8 @@ O.ready.state("sale:channels").handler = async (ctx) => {
     return
   }
   setState(ctx, "sale:date")
-  await reply(ctx, M.askDate)
+  saveLastMsgId(ctx, await reply(ctx, M.askDate))
+  await ctx.deleteMessage()
 }
 
 O.text.state("sale:date").handler = async (ctx) => {
@@ -58,8 +75,11 @@ O.text.state("sale:date").handler = async (ctx) => {
     await reply(ctx, M.dateError)
     return
   }
+  const msg = await reply(ctx, M.askTime)
   setState(ctx, "sale:time")
-  await reply(ctx, M.askTime)
+  await ctx.deleteMessage()
+  await tryDeleteLastMsg(ctx)
+  saveLastMsgId(ctx, msg)
 }
 
 O.text.state("sale:time").handler = async (ctx) => {
@@ -74,8 +94,11 @@ O.text.state("sale:time").handler = async (ctx) => {
   const seller = new Seller(ctx.from.id, ctx.from.first_name)
   const sale = new Sale(seller, channels, [post])
   await sendMessage(REPORT_CHAT_ID, M.sale(sale))
-  await reply(ctx, M.askPost)
+  const msg = await reply(ctx, M.askPost)
   setState(ctx)
+  await ctx.deleteMessage()
+  await tryDeleteLastMsg(ctx)
+  saveLastMsgId(ctx, msg)
 }
 
 O.schedulePost.handler = async (ctx) => {
@@ -90,6 +113,7 @@ O.message.state("sale:post").handler = async (ctx) => {
   if (!messages.length) return
   ctx.session.messageIds = messages
   await reply(ctx, M.postOptions(ctx.session.asForward, ctx.session.noSound))
+  await tryDeleteLastMsg(ctx)
 }
 
 O.asForward.handler = async (ctx) => {
@@ -101,7 +125,6 @@ O.noSound.handler = async (ctx) => {
 }
 
 O.ready.state("sale:post").handler = async (ctx) => {
-  await ctx.reply("Загружаю посты в отлогу...")
   for (const c of ctx.session.channels!) {
     const channel = Channel.fromTitle(c)
     try {
@@ -119,7 +142,7 @@ O.ready.state("sale:post").handler = async (ctx) => {
     }
   }
   setState(ctx)
-  await ctx.reply("Готово")
+  ctx.editMessageText("Пост запланирован")
 }
 
 async function updateOptions(ctx: Context, asForward = false, noSound = false) {
@@ -133,5 +156,7 @@ O.text.handler = async (ctx) => {
   if (!channels.length) return
   ctx.session.channels = channels
   setState(ctx, "sale:date")
-  await reply(ctx, M.askDate)
+  const msg = await reply(ctx, M.askDate)
+  await ctx.deleteMessage()
+  saveLastMsgId(ctx, msg)
 }

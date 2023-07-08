@@ -7,7 +7,7 @@ import { REPORT_CHAT_ID } from "./config.ts"
 
 async function checkAccess(ctx: Context, next: NextFunction) {
   if (ctx.chat?.id != REPORT_CHAT_ID) {
-    if (ctx.chat) await ctx.reply("Мне запрещено общаться в этом чате")
+    if (ctx.message) await ctx.reply("Мне запрещено общаться в этом чате")
     return
   }
   await next()
