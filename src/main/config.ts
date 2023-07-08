@@ -1,3 +1,5 @@
+import env from "env"
+
 const _channelsData = [
   [-1001300460444, "Акиет", "https://t.me/akiet"],
   [-1001583208278, "Геншин", "https://t.me/+kFIe8-bR2DQ1YWFi"],
@@ -18,6 +20,7 @@ const _channelsData = [
   [-1001671652919, "Обои", "https://t.me/wallposter_r"],
   [-1001853961364, "Серийник", "https://t.me/klinok_derevnya"],
   [-1001942180236, "ЯОЙ", "https://t.me/+XnJ8RZIXcfAyYjVi"],
+  // [-1001585027208, "Тест", "https://t.me/test7244c"],
 ] as const
 
 interface Channel {
@@ -26,9 +29,12 @@ interface Channel {
   url: string
 }
 
-const channels: Channel[] = _channelsData
-  .map((c) => ({ id: c[0], title: c[1], url: c[2] }))
+const channels: Channel[] = _channelsData.map((c) => ({
+  id: c[0],
+  title: c[1],
+  url: c[2],
+}))
 
-const REPORT_GROUP_ID = 724477101
+const REPORT_CHAT_ID = Number(env.str("REPORT_CHAT_ID")) // TODO
 
-export { channels, REPORT_GROUP_ID }
+export { channels, REPORT_CHAT_ID }

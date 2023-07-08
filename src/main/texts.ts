@@ -4,7 +4,7 @@ import * as config from "./config.ts"
 function ChannelsText() {
   const links = config.channels.map((c) => link(c.url, c.title))
   const strings = links.map((link) => `🔸 ${link}`)
-  return strings.join("\n\n")
+  return strings.join("\n")
 }
 
 const T = {

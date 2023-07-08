@@ -1,9 +1,7 @@
-import { bold, link, parseEntity, removePrefix } from "core"
+import { bold, link, parseEntity } from "core"
 import { Message } from "tg"
-import { Context } from "../core/types.ts"
 import * as config from "./config.ts"
 import { Channel, Post, Sale, Seller } from "./models.ts"
-import { Prefix } from "./buttons.ts";
 
 function parseChannels(msg: Message): string[] {
   const channels: string[] = []
@@ -88,7 +86,6 @@ function reprSale(sale: Sale) {
   const channels = sale.channels.map(reprChannel).join("\n")
   return [date_time, header, channels].join("\n\n")
 }
-
 
 export {
   Channel,

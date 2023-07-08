@@ -1,7 +1,7 @@
 import { InlineKeyboard } from "grammy"
 import { InlineKeyboardButton, MessageEntity } from "tg"
 import { bot } from "./bot.ts"
-import { Context, State } from "./types.ts"
+import { Context, State } from "types"
 
 class Msg {
   constructor(public text: string, public keyboard?: InlineKeyboard) {}

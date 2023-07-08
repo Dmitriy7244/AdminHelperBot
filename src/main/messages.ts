@@ -11,9 +11,11 @@ const M = {
   channels: new Msg(T.channels),
   dateError: new Msg(T.dateError),
   timeError: new Msg(T.timeError),
-  askPost: new Msg(T.askPost, K.skip),
+  askPost: new Msg(T.askPost, K.schedulePost),
   sale: (s: Sale) => new Msg(reprSale(s)),
   askChannels: new Msg(T.askChannels, K.channels([])), //TODO
+  postOptions: (asForward = false, noSound = false) =>
+    new Msg("Настройки публикации", K.postOptions(asForward, noSound)),
 }
 
 export default M

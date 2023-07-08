@@ -2,7 +2,7 @@ import * as config from "./config.ts"
 
 export class Channel {
   constructor(
-    public chat_id: number,
+    public id: number,
     public title: string,
     public url: string,
   ) {}

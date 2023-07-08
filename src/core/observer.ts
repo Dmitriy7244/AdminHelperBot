@@ -1,5 +1,5 @@
 import { bot } from "./bot.ts"
-import { Command, Composer, Context, State } from "./types.ts"
+import { Command, Composer, Context, State } from "types"
 
 class Observer<C extends Context> {
   constructor(public composer: Composer<C>) {}
@@ -19,6 +19,9 @@ class Observer<C extends Context> {
   }
   text() {
     return new Observer(this.composer.on("message:text"))
+  }
+  message() {
+    return new Observer(this.composer.on("message"))
   }
   button(prefix: string) {
     return new Observer(
