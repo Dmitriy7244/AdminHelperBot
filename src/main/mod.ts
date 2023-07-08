@@ -80,6 +80,8 @@ O.text.state("sale:time").handler = async (ctx) => {
 
 O.schedulePost.handler = async (ctx) => {
   setState(ctx, "sale:post")
+  ctx.session.asForward = false
+  ctx.session.noSound = false
   await ctx.editMessageText("Отправь пост")
 }
 
