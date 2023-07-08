@@ -89,7 +89,7 @@ O.message.state("sale:post").handler = async (ctx) => {
   const messages = await messageCollector.get(ctx)
   if (!messages.length) return
   ctx.session.messageIds = messages
-  await reply(ctx, M.postOptions())
+  await reply(ctx, M.postOptions(ctx.session.asForward, ctx.session.noSound))
 }
 
 O.asForward.handler = async (ctx) => {
