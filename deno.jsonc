@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "dev": "deno run --watch -A --unstable src/main/mod.ts"
+    "dev": "deno run --watch -A --unstable src/main/mod.ts",
+    "start": "deno run -A --unstable src/main/mod.ts"
   },
   "imports": {
     "grammy": "https://deno.land/x/grammy@v1.17.1/mod.ts",
