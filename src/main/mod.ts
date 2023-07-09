@@ -1,4 +1,11 @@
-import { editReplyMarkup, exclude, reply, sendMessage, setState } from "core"
+import {
+  editReplyMarkup,
+  exclude,
+  reply,
+  sendMessage,
+  setState,
+  Time,
+} from "core"
 import { prisma } from "prisma"
 import { Message } from "tg"
 import messageCollector from "../core/messageCollector.ts"
@@ -32,9 +39,6 @@ O.start.handler = async (ctx) => {
   await reply(ctx, M.hello)
 }
 O.channels.handler = (ctx) => reply(ctx, M.channels)
-O.test.handler = async (ctx) => {
-  await prisma.dinosaur.create({ data: { name: "test3", description: "test" } })
-}
 
 O.addSale.handler = async (ctx) => {
   ctx.session.channels = []
@@ -146,6 +150,11 @@ O.ready.state("sale:post").handler = async (ctx) => {
   }
   setState(ctx)
   ctx.editMessageText("Пост запланирован")
+
+  const deleteDelta = 24 * 60 * 60
+  await prisma.post.create({
+    data: { deleteTime: Time(ctx.session.date) + deleteDelta },
+  })
 }
 
 async function updateOptions(ctx: Context, asForward = false, noSound = false) {

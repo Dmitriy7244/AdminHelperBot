@@ -9,8 +9,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Dinosaur {
-  id          Int    @id @default(autoincrement())
-  name        String @unique
-  description String
+model Post {
+  id         Int   @id @default(autoincrement())
+  deleteTime Int
+  messageIds Int[]
 }

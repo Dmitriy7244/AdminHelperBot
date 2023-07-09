@@ -1,7 +1,7 @@
 import { InlineKeyboard } from "grammy"
 import { InlineKeyboardButton, MessageEntity } from "tg"
-import { bot } from "./bot.ts"
 import { Context, State } from "types"
+import { bot } from "./bot.ts"
 
 class Msg {
   constructor(public text: string, public keyboard?: InlineKeyboard) {}
@@ -57,6 +57,11 @@ export function editReplyMarkup(ctx: Context, keyboard: InlineKeyboard) {
   return ctx.editMessageReplyMarkup({ reply_markup: keyboard })
 }
 
+function Time(date?: Date) {
+  if (!date) date = new Date()
+  return date.getTime() / 1000
+}
+
 export {
   addButtons,
   bold,
@@ -68,4 +73,5 @@ export {
   reply,
   sendMessage,
   setState,
+  Time,
 }
