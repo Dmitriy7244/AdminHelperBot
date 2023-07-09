@@ -13,7 +13,7 @@ O.schedulePost.handler = async (ctx) => {
 }
 
 O.salePostMessage.handler = (ctx) => {
-  if (!ctx.session.messageIds) ctx.session.messageIds = []
+  if (!ctx.session.messageIds.length) ctx.session.messageIds = []
   ctx.session.messageIds.push(ctx.msg.message_id)
 }
 
