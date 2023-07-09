@@ -11,6 +11,7 @@ class MessageCollector {
   async get(ctx: Context) {
     const chatId = ctx.chat!.id
     const messageId = ctx.message!.message_id
+    console.log("messageId", messageId)
     const messages = this.messages
     if (!messages[chatId]) messages[chatId] = []
     let result = messages[chatId]
@@ -18,6 +19,7 @@ class MessageCollector {
     await sleep(this.duration)
     if (messageId != result[0]) result = []
     messages[chatId] = []
+    console.log("result", result)
     return result
   }
 }
