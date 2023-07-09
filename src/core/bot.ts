@@ -8,9 +8,11 @@ import { hydrateReply, parseMode } from "grammy_parse_mode"
 import { Context } from "types"
 
 function getSessionKey(ctx: grammy.Context): string | undefined {
-  return ctx.from == undefined || ctx.chat == undefined
+  const key = ctx.from == undefined || ctx.chat == undefined
     ? undefined
     : `${ctx.chat.id}/${ctx.from.id}`
+  console.log("key", key)
+  return key
 }
 
 const bot = new Bot<Context>(env.str("TOKEN"))
