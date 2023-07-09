@@ -1,7 +1,6 @@
 import { editReplyMarkup, exclude, reply, sendMessage, setState } from "core"
 import { Message } from "tg"
 import { Context } from "types"
-import messageCollector from "../core/messageCollector.ts"
 import { copyMessages } from "../core/userbot.ts"
 import { parseQuery } from "./buttons.ts"
 import * as config from "./config.ts"
@@ -107,14 +106,23 @@ O.schedulePost.handler = async (ctx) => {
   await ctx.editMessageText("Отправь пост")
 }
 
+// O.message.state("sale:post").handler = async (ctx) => {
+//   const messages = await messageCollector.get(ctx)
+//   if (!messages.length) return
+//   ctx.session.messageIds = messages
+//   console.log("set", ctx.session.messageIds)
+//   await reply(ctx, M.postOptions(ctx.session.asForward, ctx.session.noSound))
+//   await tryDeleteLastMsg(ctx)
+//   console.log("success")
+// }
+
 O.message.state("sale:post").handler = async (ctx) => {
-  const messages = await messageCollector.get(ctx)
-  if (!messages.length) return
-  ctx.session.messageIds = messages
+  // const messages = await messageCollector.get(ctx)
+  // if (!messages.length) return
+  if (!ctx.session.messageIds) ctx.session.messageIds = []
+  ctx.session.messageIds.push(ctx.msg.message_id)
   console.log("set", ctx.session.messageIds)
   await reply(ctx, M.postOptions(ctx.session.asForward, ctx.session.noSound))
-  await tryDeleteLastMsg(ctx)
-  console.log("success")
 }
 
 O.asForward.handler = async (ctx) => {
