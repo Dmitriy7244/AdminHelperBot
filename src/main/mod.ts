@@ -111,6 +111,7 @@ O.message.state("sale:post").handler = async (ctx) => {
   const messages = await messageCollector.get(ctx)
   if (!messages.length) return
   ctx.session.messageIds = messages
+  console.log("set", ctx.session.messageIds)
   await reply(ctx, M.postOptions(ctx.session.asForward, ctx.session.noSound))
   await tryDeleteLastMsg(ctx)
 }
