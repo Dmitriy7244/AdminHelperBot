@@ -1,11 +1,11 @@
-import { bot } from "./bot.ts"
 import { Command, Composer, Context, State } from "types"
+import { bot } from "./bot.ts"
 
 class Observer<C extends Context> {
   constructor(public composer: Composer<C>) {}
 
   // deno-lint-ignore no-explicit-any
-  set handler(callback: (ctx: C) => Promise<any>) {
+  set handler(callback: (ctx: C) => any) {
     this.composer.use(callback)
   }
 

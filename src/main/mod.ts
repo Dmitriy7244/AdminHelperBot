@@ -109,15 +109,12 @@ O.schedulePost.handler = async (ctx) => {
   })
 }
 
-O.message.state("sale:post").handler = async (ctx) => {
+O.message.state("sale:post").handler = (ctx) => {
   if (!ctx.session.messageIds) ctx.session.messageIds = []
   ctx.session.messageIds.push(ctx.msg.message_id)
-  console.log("set", ctx.session.messageIds)
-  await reply(ctx, M.postOptions(ctx.session.asForward, ctx.session.noSound))
 }
 
 O.asForward.handler = async (ctx) => {
-  console.log("ids", ctx.session.messageIds)
   await updateOptions(ctx, !ctx.session.asForward, ctx.session.noSound)
 }
 
@@ -126,7 +123,6 @@ O.noSound.handler = async (ctx) => {
 }
 
 O.ready.state("sale:post").handler = async (ctx) => {
-  console.log(ctx.session.messageIds)
   for (const c of ctx.session.channels!) {
     const channel = Channel.fromTitle(c)
     try {
