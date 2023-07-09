@@ -114,6 +114,7 @@ O.message.state("sale:post").handler = async (ctx) => {
   console.log("set", ctx.session.messageIds)
   await reply(ctx, M.postOptions(ctx.session.asForward, ctx.session.noSound))
   await tryDeleteLastMsg(ctx)
+  console.log("success")
 }
 
 O.asForward.handler = async (ctx) => {
