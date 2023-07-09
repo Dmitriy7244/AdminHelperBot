@@ -117,6 +117,7 @@ O.message.state("sale:post").handler = async (ctx) => {
 }
 
 O.asForward.handler = async (ctx) => {
+  console.log("ids", ctx.session.messageIds)
   await updateOptions(ctx, !ctx.session.asForward, ctx.session.noSound)
 }
 
