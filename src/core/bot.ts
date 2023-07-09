@@ -11,7 +11,6 @@ function getSessionKey(ctx: grammy.Context): string | undefined {
   const key = ctx.from == undefined || ctx.chat == undefined
     ? undefined
     : `${ctx.chat.id}/${ctx.from.id}`
-  console.log("key", key)
   return key
 }
 
