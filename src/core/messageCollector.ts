@@ -22,6 +22,6 @@ class MessageCollector {
   }
 }
 
-const messageCollector = new MessageCollector(1)
+const messageCollector = new MessageCollector(3)
 
 export default messageCollector
