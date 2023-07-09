@@ -124,7 +124,7 @@ O.noSound.handler = async (ctx) => {
 }
 
 O.ready.state("sale:post").handler = async (ctx) => {
-  console.log(ctx.session.channels)
+  console.log(ctx.session.messageIds)
   for (const c of ctx.session.channels!) {
     const channel = Channel.fromTitle(c)
     try {
