@@ -1,4 +1,5 @@
 import { editReplyMarkup, exclude, reply, sendMessage, setState } from "core"
+import { prisma } from "prisma"
 import { Message } from "tg"
 import messageCollector from "../core/messageCollector.ts"
 import { Context } from "../core/types.ts"
@@ -31,7 +32,11 @@ O.start.handler = async (ctx) => {
   await reply(ctx, M.hello)
 }
 O.channels.handler = (ctx) => reply(ctx, M.channels)
-O.userbot.handler = (ctx) => reply(ctx, M.userbot)
+O.test.handler = async (ctx) => {
+  console.log(new Date())
+  await prisma.dinosaur.create({ data: { name: "test3", description: "test" } })
+  console.log(new Date())
+}
 
 O.addSale.handler = async (ctx) => {
   ctx.session.channels = []

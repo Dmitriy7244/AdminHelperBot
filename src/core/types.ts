@@ -8,7 +8,7 @@ type Context =
   & SessionFlavor<Session>
 
 type State = "sale:channels" | "sale:date" | "sale:time" | "sale:post"
-type Command = "start" | "add_sale" | "channels" | "userbot"
+type Command = "start" | "add_sale" | "channels" | "userbot" | "test"
 
 type Session = {
   state?: State

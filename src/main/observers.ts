@@ -21,7 +21,7 @@ const O = {
   start: observer.command("start"),
   channels: observer.command("channels"),
   addSale: observer.command("add_sale"),
-  userbot: observer.command("userbot"),
+  test: observer.command("test"),
   pickChannel: button("channel"),
   pickAllChannels: button("➕ Выбрать все"),
   ready: button("✅ Готово"),

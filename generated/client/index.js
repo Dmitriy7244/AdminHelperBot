@@ -1,0 +1,187 @@
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+const {
+  PrismaClientKnownRequestError,
+  PrismaClientUnknownRequestError,
+  PrismaClientRustPanicError,
+  PrismaClientInitializationError,
+  PrismaClientValidationError,
+  NotFoundError,
+  decompressFromBase64,
+  getPrismaClient,
+  sqltag,
+  empty,
+  join,
+  raw,
+  Decimal,
+  Debug,
+  objectEnumValues,
+  makeStrictEnum,
+  Extensions,
+  warnOnce,
+  defineDmmfProperty,
+} = require('./runtime/data-proxy')
+
+
+const Prisma = {}
+
+exports.Prisma = Prisma
+
+/**
+ * Prisma Client JS version: 4.14.0
+ * Query Engine version: d9a4c5988f480fa576d43970d5a23641aa77bc9c
+ */
+Prisma.prismaVersion = {
+  client: "4.14.0",
+  engine: "d9a4c5988f480fa576d43970d5a23641aa77bc9c"
+}
+
+Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
+Prisma.PrismaClientUnknownRequestError = PrismaClientUnknownRequestError
+Prisma.PrismaClientRustPanicError = PrismaClientRustPanicError
+Prisma.PrismaClientInitializationError = PrismaClientInitializationError
+Prisma.PrismaClientValidationError = PrismaClientValidationError
+Prisma.NotFoundError = NotFoundError
+Prisma.Decimal = Decimal
+
+/**
+ * Re-export of sql-template-tag
+ */
+Prisma.sql = sqltag
+Prisma.empty = empty
+Prisma.join = join
+Prisma.raw = raw
+Prisma.validator = () => (val) => val
+
+
+/**
+ * Shorthand utilities for JSON filtering
+ */
+Prisma.DbNull = objectEnumValues.instances.DbNull
+Prisma.JsonNull = objectEnumValues.instances.JsonNull
+Prisma.AnyNull = objectEnumValues.instances.AnyNull
+
+Prisma.NullTypes = {
+  DbNull: objectEnumValues.classes.DbNull,
+  JsonNull: objectEnumValues.classes.JsonNull,
+  AnyNull: objectEnumValues.classes.AnyNull
+}
+
+
+  const path = require('path')
+
+/**
+ * Enums
+ */
+
+exports.Prisma.DinosaurScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
+exports.Prisma.SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+};
+
+exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
+  Serializable: 'Serializable'
+});
+
+
+exports.Prisma.ModelName = {
+  Dinosaur: 'Dinosaur'
+};
+/**
+ * Create the Client
+ */
+const config = {
+  "generator": {
+    "name": "client",
+    "provider": {
+      "fromEnvVar": null,
+      "value": "prisma-client-js"
+    },
+    "output": {
+      "value": "D:\\Bots\\AdminHelperBot\\generated\\client",
+      "fromEnvVar": null
+    },
+    "config": {
+      "engineType": "library"
+    },
+    "binaryTargets": [],
+    "previewFeatures": [
+      "deno"
+    ],
+    "isCustomOutput": true
+  },
+  "relativeEnvPaths": {
+    "rootEnvPath": "..\\..\\.env",
+    "schemaEnvPath": "..\\..\\.env"
+  },
+  "relativePath": "..\\..\\prisma",
+  "clientVersion": "4.14.0",
+  "engineVersion": "d9a4c5988f480fa576d43970d5a23641aa77bc9c",
+  "datasourceNames": [
+    "db"
+  ],
+  "activeProvider": "postgresql",
+  "dataProxy": true,
+  "postinstall": false
+}
+
+const fs = require('fs')
+
+config.dirname = __dirname
+if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
+  warnOnce('bundled-warning-1', 'Your generated Prisma Client could not immediately find its `schema.prisma`, falling back to finding it via the current working directory.')
+  warnOnce('bundled-warning-2', 'We are interested in learning about your project setup. We\'d appreciate if you could take the time to share some information with us.')
+  warnOnce('bundled-warning-3', 'Please help us by answering a few questions: https://pris.ly/bundler-investigation')
+  config.dirname = path.join(process.cwd(), "generated\\client")
+  config.isBundled = true
+}
+
+const compressedDMMF = 'N4IgJghgLhC2D2YCmAbEAuUSB2BXWAzhgNoC6ANCAsikesaNnEhiACICW28BEuATiEpgARgDlmGPChSUAZh1Rg6DEE1gt0IDmCEgA1l11aCAYwgoIgyhwIAZW1AxyLBJDYIAlJAEdcHfiRjKH5cd20CAFVsDj9NF1pw2wBJYNCkryQIMAB5bBQAT2dXcIALCAI2JBdcFCgANQswjBCwyigCgAdNEGTsJ2FqvjqMRkktPih4LlNAjX69KwBzFVIAXw8AcRwkfmgg4sSPSM7IKCCAQSd0BLcNsY1WdRZKQ2xjEDMLKz1bBwJrrcMt4/AEDuhWhlorFmhD0h5Uoc3B5vNk8oUkWUKlUanVGihYUD2l0egBlEJcJa/AjbbC7fbGIkRE5nS6Akr3NTjcBIMz8DidKAceDYPRvD5fSzWCL/dlHCIg/yBNJtZkxOKYhGMkoorK5fJFG46kDlSpDWoNJrxY0dbqscn87BUrY7PbnbXy2wshlXTFrCggTr82BWAoAaSQhukshAuHVYQAYooUMoSAG4zCkH1kAAPXlpl10t3goH+4ndVYbT6mUpIEOjbTYTq4KA5EQAKyQpigABUSXRQEHbPX6A8epxuLwBAB1WuBPrNgZUJAwBsEeACUzjrg8PiCKumEUAvZcKADqgQHNifBJpR0aOUWBca+wW8p++1FBVhR3khj1gXGIbDUoqYIesiETXjIEAiCg1qek2LZ9hWf4gLa26Tnus67FmiFLs8BCdBAW6sEOBD1pQKDwOYQoiqwXCLm2nbdsh+YeLKfrkKA6GsBOu4znOuGLnoBFESRWhkRRIBUTRwqiloDEtkxXa9v21IcXCYT+pyzysDknggb4SolsathQZYsHwRBimqSho5oSSvE7lO/DYfOeEicwhHET0kkQHoMnQHJ9F4cpLFqexjgtOk2lcVyjxaGIOQ9oZoLKpqkGfjBcEZTZrEqNxjlaHxLluUJLaeRo3niYG/Lkf5lHUUFdEKaFHYqfl6lRUaiScjxxXOVhgkLhVlCiT5pF1VJgW0fJjaMe14UoZFALRVp6xxbpCm6LqaUmZ6BDmdlVlJHhnX2f1vT9EmdS7JVvJib5U0NdJTWzSFC3MbZbEyt1pZxZdfRLjNwUmOYUpdatPV3Bt/5aLpu3GeBGRHZZuVnWpF1FSADqUjd5zSuNNV+QFb2g/NSmLd9RArXKdwA9juNOqTsktdW3zSn8f0crD8U9MgfICu9iNgblh1ZWj0OnYu52qJdTNLPjd1jV5j2TcOL0g2zNlhdTkN00gfWMxSzONazc2Sj8tN+usvNbewg0CDk/DIPwABCBTThwUClN4lizSNS6Htgx4QKe54hleN7Jqm6AAIyPs+0e/ugAAM34xwVfP0TtCpGaLUseKjOWFxTetY3aWikvA/Cti7yt89VT0ayzzVzTg+CddbUuxXD2ci+lpdmRLJdMnlmNy4zNd16791N+r9Wt+9Wgd7AXe/VDpZ29yAuzELwUD/t1ni9BktjxjdmT5XOPT87s8q1VasSc9S/k6v69c5vPO99nA2YQJOFoRxEDnoYOodw4Nkji+N8scE5UCTq+TOGA44ZxTqoe2OhUpIzFsXE6NgL75grj0IGr82aW05vYbmvVt4JX7nnPayMi4jzwWXWWhVr4K1IRbcGVsN4G20jQjC/F+B312B7L2PsLhLCWIEJYbcQGUDASEMO/QI6XmgUg+OidsAaJTuneQmj0HckwYfRhmVT6j1MgQrO8tb710JqrCaz8W5mzbqwd+EU+E2x0tyBG9DsFDxPhZSxCEZYT3YWSOx99G5P1qi4165t3F4DXp4z+/DBGsF3vyQUB9/EFzHkE466MwmXwifaKJDcibN0Xq45eIAPHLS8T3DJWgAD6h44xLlsKBQeBTcHFKQuEhy18Sp7gAMIbn6KI92BQpEyKQHI84CiYlOLiTUhJbjWqfQ6qkyhX9qE+Noa0iAAA3Z0eTemmUKWfKxJTCFXyES5C4ZzpkezmbI/YyyqkL2mmTbWbUvofz2ekw5PRWmRywfkq5/Sh7WNQpdUZAgACyl5XmzOkR8pZHkH4PVWSTWp5MdZUyBRpLeoLWDgq4JCy5B0YXnzuTY7GiL+BIq4Gi95CzPnYpWcTF+BL/nbKWj9NJ3jNrclaQQfA1Kj4o2YQM8uDynL/34KSfA7KMWcqxcJHF89nHrK1nNIlgLdmku/i0h2yrSQ8NcoJCRpQOWLN5MsjQq5MCfA3PwGqzKQAHiPMoiBbqoHJ3fFIT82jdEhvQNGVBkajG0MAsBUxOC5WwoZfCpljsVXWrKnah1+wCBfMcby+JBqPqU2NY0kVPcGYjMzVajmObvb2o1Y6gt3Lvl6t+YkrZ5admVuBWtQ25r9LSrMcPCxLDx6lOGY8vc9apSNskS2/NhbH54r5RsupRq+3CoHZpId5LErJVHcmid8q2EzqVcI+dVhF3Nvma21duLi36r+YagFO6aZNP+mUv+17s22qbXm84bbtU8uqV2zZZddYku6pCH+GDc7dPzjS4+dLbmDOnYDfoubl0gaVg4tdL7INbo/UKr9Vaf2Xq0CQ/l3COb61FX3PxyGGGnuCZOuFRD7QmyWLhh9+aCNz1ifizdhKyN627lR+WvGuGsHIYx5ph6eSCxyXRJNgT0OhMw/c39ONeP8cxbyITOqRMbtLT21sxKTVUPpnpzhdH5PWsU2S81zKxmBC5WBpRJ5VGQPUcG2OD54E6MCx+GQMbY5xp6CxzIbH91MLPamnTjKOGycc2DBjUnv5itoVk/e6mLngkhIljj56hkycdOciz7MIbZYOW5zN0Qaxdn0EEDzWQtWjRAD5lRZ5/NR0QSnYLT5QtDcjdGgxaC+4mKK2O65ITrJccVTRhYGXau8Mozl5jkgNMlfMWV5LCr7PpbE2Q5z9WYbKfy2p0Ue34QHaKUdi9lXKRycy3V79ZrlPMu9F1oOfrfP9cDQF8bQWw0hYjeDiLU3Y07ceBpvpKb6UpfTWlqr72NsUNNb1GtZJeMwL+0gHI3Q3RyVA91jtaySPicFZJr7Bzcv815HvW7J7NPI4w8d6j+mMfrYU5dw2eOeNVcJ6cfYJP6SzQp/hItEHNZvrLVZitu6cdXca8q5rtZTBtbAET5ZvWA2gCDWD8LMZRtQ7N5FrOiH2dI6Syj7n2HgaK4+5tvd0nsZAzF6ySXZOjxPt1dThX3boPWf7Wrg9TOni7bm+xp7juXvGz52d+jn2tu45O6LmORO/dtxl8J9dJbXdh5VxRj323f4qdZ8LOPHOHdc6T+jt7/OLsM7szzhWPuJek/z4HszxfQ/bvIy5770e/0uQ6/sFF2ACgG8B31tRg2YFm/DWF0NMOQA/jh1X2brGAn28O4nirXu1up6c1l9vUf4cvDr/t8dR/G8n+b6bc/bvse2ev1Xm7tf98F3vwtpxmmtxlXKdjVgLlfgIj9k1uLucDPgUEii2PItyobn5iDsvpoiNggivhvl+LDlFjfnbtCpztpk7sni3m/ljqPpnp3gTjnrAcTr3tLv3kXq+kPhJrBvslduPtXtkr/nFgfsQQ3qQU3vjinuAW3hnh3q9k6N3ucHnswe2nLj8iHlBsPvTlIQehrsIlrq1kEETvAfPiHP6mgcbqDjgVGhDhbuvpYZvtvgQbvkhgIVCrSiQUtsAStldC7qHhAZoUbNfN7vQb7kweTiwcRqoaRnTpwSCjwbFj0jKqVgnk/lhuQa/hIZfn4cLqAdnkoLniEQHkoURvLpjuodEUxt/iznwbkn/qhrKsIe4ajiAbzhQekenhXjQTIYrEET3lLqEYUc+sUetqUTZlwVocpoEbdNKKgcDmYRgcNlYdgZgZ+NbqhPbEZK4EQa4fUdLI0Z4bRpQb4e0dwTNndnXofkkSIc/sQmfq0e7hpPBlkV4ZjocZHghr4vAFAH0JsWhm4TsWQQETcSXi8XBjFI8fsbcR/qMW8bQiMIjkIY/pcSkQCd4VBsCVCeardN8XUQiQ0f8dcSiXUmiTEX3EsF0s4bUYkTcoibpjzuCUCZIUcV/vbKSbfjUQkY9lSbiaIawHST4Qya8eatwGSfEfNlplyVcTyYCXyRkYyf4T0GILyO6BMQTIXuESURwSMSCual3hwJMaAgvkbheHMRNgsWNhYZNlvoYn3OsbQFiZSYtn8dydkS0fSTKQKcplSnCVsTiY6RKc6Wka6W0fcaCVni6dKUGZ/tCTFh8V8V6T8dsfgh4aGQGeGXcSCVpI8Q5gcfyZGRicKShuyQ/hceKUiWIWGaiTmeicppiXGdicWb6aWSLuWYSZWcSVXqSXaRyQ6YmbscmdVoGWmVWTwSyZ2UWZyQ2TSZ0c8a2eUfbMHDAFwOXiKfHuOT2XiU2SmRWW6bmcpgCFYGeHaqOYAeVo2f6f2amZCW2Wse8AQIebWfaUAb2bQeIQOZebOdyNQKyeSYWcec9n6SAAAIphD8AIGIC35U6iY1YNKq47mxEfFHlikTmpZlmbktnblQmPEKkAhBA6l6mmasE04Cq9oj6C5QE8HuaTIzxiLooCb/b6nGFA5L6W7IJr6m7IIrH2S273ldmPnrlVwVKEYDEqGY7QXl7umxGx5smim/FrlOk3y1zTKqmDGUGiXUHHEVGqb8HLn14+myX/nVwKX2JKXCXraqWkW2zQHKrPJLDqq0XlQA4MWL4DbMVaKQ42EoL4E27GJOHaXnGrmsL6UCXGWdoRFvzJJlFKbaEuQoo5i2VGZGHgKmFGkuVwLWFsXxwcXRY5wIUyUBWnnyVUWCVB6QUl5mWQGCmSXfnSUJl5WTlTyGXRIQXmalXhWanvl5aVEFanFSUrndm1XIXlINWVLKEhUiWtUR47lRV7isrYBxWar2X0WJUzHJXuWsUWEeWWnTaOE5U1VTp1UcJBX4VqmmXjUwVDmEHcVjl9V7UDX8VDVFUD5sFQZlV+Hmo/7VFVW9W8VyUGWFXBXB5jWdxtWRWWXXpqr2JvJ4YLWKIGlJUm7rVrWaIbX2FeW0J76fU6X1l6X5W/WKVHXKVQWnViWTXjE4ZAZQ0EAmY9aw3LXw1LEyCI3zF2FWlV42lLkFnVW6X9Vo74nTnoVXnGLdUY1+XXXLZ6a8lbkRlQwPHi1SmS2DkC20JCmxlnHwlY3c1NES1oVS3XAy20ly3a0K3tU9Cwmq3enq03U82SkEnkxEnG2sA1lm3xlc2W2a0G220zlKbDn5nxYi3fX/la0e38321aAjmXW/nH75WB3nbB1e3MbwXh2IXY37W82t6x2e7XxYVKlk1Lp2WU26kqn40mWUHDETXnVV7tKUU7Uu1i085Z1BDKnDVFHF01al1nWK1gqnLnI9WY3+Wu2eH11gAJhUTQBU1NWD5qEall0d0UqSqwDV0W212XSD2N0PUEWhVEXK6fpqVMniqjYL191L3Ywr3XQF1N1CWjVDFT3t0h0gDgqXgH2i1Jl12KkN2n14XgYt0l5t3E1VnakGbk151U3TFMU2FYFmn014GbU75rF+AbGJ25X919l806232elO11mH3P1Tlp2oP7pykbnnny1vlx1V7K1C2+Vq1YNPk4PZmx1620MQk71RkO0+2CHm3UN8XNGoVB14Nko8GO091+0nkp2EMoNG2kPMlsMuHO2L3YOpFEOG0kP8MknnCP3+041gGvnMPmrzkqLs2+1UNP00MKPiPKOV72x7m1y3lNrqMiO3XcOKO8MSMqOs03l3kYMPn2NW1nlmM6PKafl2N/n5VAW7CgXID/UlWh4vWymCkJ2eM8XeNNFZlMOkWYWv1gAKyGbzX50f3j1PWRHEUaGxPKaV2dJBOR2iOJQZOr2RPNXsFRHA2uP2yUoUMc1fVJMD0ZO4WF2f2X0l3X2/0z1tIQoIO7VH2Z3dN0F5MjUA1X2NPT3eL/05Eph5G9EFHeY02gPpWpWLEpzI0s2WMrgVPJFVOON+PmUsOrZQByGMHrMhwJUmG03mFI2M2RoHNbVHPSMUmJPBNnPR1p4uMWOC2zB1g4DfM/lJ0a17Hu0x18PAsdWgvzAQuc1yMmPIkXPlUBMWgCgYhjM13yMYu4NAuM59xgAcAnI6BfmUMcPGNcMAsX7wsNbKYn03Nn1TFbPOVgOmkuUWko2rHchs0nPUkOMMvv7+M8HoNCNGMaP/OwuAskMMOn421wskvqX2zkPCsllysqsKuKZKtEt0NMvqvcim3Su0uyuivyuMtqu70wlqP4tov0vWviuXPe1atIU+NPHEvmOkvtkOsJNXWWtetitUFuvx0osdN/NWu6s2u+vSHH01Pv29P5OEXvoLM30g08GD09MNwgNcvpXgO8vLGeUCu0JCuOucM/VaMXkSsnEevJ0OMpPaPdwGsoVOOqvxt2vRmfFtOGMWudPIM+v6shnPnNnONdtXPSSRu910vVsvm1vhtV6CPC0yuDtjs8Odt1v+sNvQtDtGu2tTth2BsR2nNNs1vEPbtzkigLkhy7tIMbsdt6tLuWMwDWMePmuyNVv6UXtKNXuCvuO2OVtzs/sLuXsvvvEzvCPRtevNuLuQHpPYWZPTMpuzNROT0ZtDNLMstJtQDZOtrAOcvoHFsM1uWFslvQMOGwO4DwMntQsPvO6YuvUel9vsNfsgdR0uthtNJtvW1MclNwW9v3sTOp0HuKujuMfDsQf2vCeEuiepNYsCMBufuYMcc6v8fiWqOyfovyctuKeqPUvtOzvBtu2xuuv6dkPxMqdeMwemcaeRmIfZ14eANGa5OofN39Ot2DP/tHIdJn7We/OVMOOstj1of1MYdFMRXNPipd3adcOD3D3wCj3st1MT2FNb0kUWctNz1xdyUhcpdF2eff3efSdgr73AcmddNIe1OFdzMDOYc+dlcP0VfrvL24ehced1decNeXPmoJcj1ssf35vEfcukdpXmkUf8ucWCtwO2kte2eeGJfQD2fl0YKscyOqeVd6ZLdmfcdVq8daA7crfDNqAxnrc/NButfYxHdSc8cSfXcDfHe31mursDsLfbePe3fMdKeGf9vsdbc843dieNesAdnzdBdetA8KffcGe5f/lQ96cw+WdQdrvveA+ffA9pN6b9dJeDfucX1dfFc9dYt9dTNVb4eCYFfU2OWGl01M3m57MmnM2fMzc0dzd0eIMidiNfcCf1vg9nuwe/sTsjsZn7vQ+8/I8q0BeXdo+MOI97oHfnM8+afLso9vcQ/JNC9bulesO/dsebdXcv5Ptxsg+h1q//eG/ttPeSPcjHvS+nsiuC9gd/s69aB6OLlw+aPO/C+u+fBvsHlAcc/jNyfc+Y9ZcAfKAfuvcW+y+mPK+wURue9nNwfgcIfY9k+UgU/4ZU+psb3puRdNMItgp+fm8G+x+TPVfJvn3FXhfpcwaF9+stPldB8Es6esA5sofV+PVptK71+LM29HKjMt9Ot5cZ+yE59hdpe04F/9+uaxQgAbhQANduokzTe0KhMgV6BTdZVaAKDvBJj8AAjeqUDLCo09AADugkSfDjzKZUYRBNRPM/mb0XtCNcrsHs1/XrzKaKdqfsyBYGufdUsT3273da0yqH/k2j/4Bx+iNfKfpvT77P8i+rAUwAIHXAUIaWMfDXp4Vv6CQgEYQe/l/QaZP8sOA/HoDADayf87O8fVbtyAICGBOglAmFrtztqkDMkjgGYKXxs5YC9MzKG9PwBgQABRZJKlwKZhUga/feDLbBs77ZF+dyBsAikzT/VPyaAdbLIOIHMNlMe/IegECP6ZpnYPYUoPwHgDn9Fg/AFYGWwv5X9+ejvJojgJwgECiuRAjLsUxV72w3+1FRgTwL0EQ1PYkA1AP/0pyT9RB8A8PJm0V7f8fBv/fwdAIAFBCe+lmBASQJf49AUBh/GuJ4J5x2DAgeA6Gn00J5ODEhpvNCBAAoHWDtWMba3skPkz0CMhknMPkj3tjksAQHA2oRmktTWpBBwg2ruhzqQxNgy60MsL8xkEtg5BbqBQcqiUFgUVBlBNQc4Ki4chNBRgeAsfxACn8LBrAS/jhFaFgDhEd/GAd3zz699QhSQpAVoHcEzJths6J2JEL8H+w5IDg/IRFzmHA1wh3g9/r4J9hQD7h+w9ekAPUG+9UhaAy4VelKi4D4wuQwAfM3+Hh9aE5AvXhty4EC8qB9QiXpYxqFlDPWyI8Xq4J3jsDsA3YYERPjnQdCY4QgqVN0Nr5iCUkEgmKFIMC7GhZhrEeQW0OESTCaAmOWYYUNbYxRlMEAKGisLWFr9LBWwjEY2y/6Zo9hsQzrj0On7PDZ+pwhfj4MJEWphEEAz4dEO+FSiCeMokIWXhF5C4vB4Am4eqLuEigHhOo/PnKMQGN9uQgI9IaKL3aZCJRYIzMOaMpG6jt6vvOEcqNDYsCqhJgdEcP2/acdmBntVzIiPlCMiioemYDEgBWGQiZhIw6EX4WUwyINwnQD2AKLMFn8NhVgoMWpxv7Oj7BPw46vV2TGojuQ5wj/g6IY4siXIao+9Jik1GBDpR7oy0VyLu6i8nRRo94Vn2bGy5WxcA9sccKKEiAig92VUDL24Hdj/0HMToeSLyEWikk4gsIaAKuFZo5xpIroYuLbHLjqR1ok1rQnKCUtX89vejlzyJECA+Bd6WMQXgpFDijheor0SUPhEXcHe5QkNlxz9EKi6BAoH0V+LDFmoIxEEKMZXENHCJNgRg3ABmIKA5Akx30EQfEIX7wSOxIArSIsPeA5Csx5goUbmJFF34HsU4pEdgKLHZDwRboh8QkJHG9dpBD2UCZoHAkuQ2RqADkShOomQEMJeucEREIMFGCTBJ/bMesK0CbDAg7OAAueJD6XibUgCciSWIf4FD2JzHAMDL2GFL8dMzInYUxNq7KDWJakq0ScN6hTtECMAWvNvz7igsJcdIbCTmK0BnAXoPdcSZz0kkqjJ8nmOiveOCHDinxafGcS5F0I652sbkiEXEMOFUTvJSk4CeEHokaT1xzE6YTVk5GKTZSymaCW4AUpWTFBAknCTvxAAiTXxxWQie+MxEkTlUZUHIRRM8mPjPRMIlIUFLEmFSJJbfKSVPnck7jKJpeaqZkUYl7h/JuuFqcFMHGVSwpnUisbQmgmsh6pk4oqWKNsEwFWQFUpCT/WYaPFfs+I7XLrn1xyTCBTw1CSU2UnTTkJekpkWMLrF7g4puk4AclJ4IWS4CEAWfNZKEngBoA9kjGo5OD5NSXJ4yIKYYS2mOCdpSU14itMzT9SfpWo2AUNI6mZc0J3baoQKDYDQSUAHAGiLugwFl9pxl0N2PAHgBwQ7plQoCfSMjHwTjpMYuQHIBUhBBPAxgggHBL0mITQph0y6a8WuyoAVwxODKRMKyk2TcpeYhyQ1KckfSshSAcqb9MeF18AZk1WiaqGiknTNJZ07SVMIunlimZPBcaZZLjGZTVhgk3CbZOemTS0ZxE7qQIE2lgyDhfw/SctMNn8Bep+hBggtPplLTfeeUvWZFJmklTdhLo4BCLKXHDSoZe0yWVFKJnRjfJcsvITpNUFsTwpV0vuKrNun3SNZgonKXZOdkEyPxs0zXAwXgLGSAhA47UbuJ9kuCHOls62Xrgzl3S58XsvOZDILk0DaETsmsReM+kAJ3IJs34VCPNk0SU5Aco6UHMugXBSZ5MsAJTPP7Uz4JdMxWe3I4k8EaArM5YfHK1k5S65+YgHuMPdnFiW5pY7rkrIlmdzKA0skmWTO7AUyqZNM9efJKgyJTI5ys60nmBQHnBPAEAfiZrOyl9w4gm/CcfrJsGeEU+LvGqaRCsDMACYBjfXi7MdGXQAAUuuFOLYjt5REwmd3LAk84IFhWaBVCWUyvyCg98x+QnJfnAVxxBEqaY1K4bfyfev8iSP/JdS7AgFCIneaAuxhIKoF8vd0vtKhZ7zEFkCvGYZPNSxiVhZkiuiX1MHZTmFKaVSaMMtkTJOksYk+epI8lISL5I0q+RXVi6cyCwQwuiYHIQUrynkZySReovAohTx5u0hRdlwXEJyhFSWERepJlnrjVUsAHRfAr0WDTZFEc+RZGVKbN9TF/s3ebopikgjpqXAOxXIJkX0y5FvsoxXvWa5PzVgnihmZYstkxUAl0itqRDJCXVz+EU7ZlJBPTEewpFCE0ttrO0C5wPFNC1hXUJQVpKJKCOSJSotgUgTvFVi0PmUr9DMzNKuSIpTUq7miLH2HCu4KU34XKL6AZiw7BYoQn1LmplFBJbkqSVOK9Jhi1xTwWORnIBFUS1RVLLqWWzrKEypkUEoMXizUF8ynLv0rIDRKSlp0q8fgE2WORtl4cmZbsvKV9xWmSy6pb+WGXEzg5yKfxVDRyVbKplwS5xaErmX3Kh+bS55WovsU+KpJ8Sz5d4quWJibll81xVwv7mHzB5x80eXkpyl9KqlAykBScsNaNKe46S4GeMqhVgr0VM2QpfPMGXq1cVuneDimIqW35gVLCtZfrVDHp0FhU8zqmzkOVUr/KNKvjtQLuWKKZAjy7FcUpZWlLGFCK0GloqWAXK7QZK7ajyuOUSqHuuPbpYbEJWWpzlJKwJZRy5mzYmVwi0FZ0slV0rkpU1d5dgHlW35eFXFLFUcpWUdLYlrKjVWsGUx+IjV5ik1S6rl7mqwlHVFpYVi9VDKfVIysXlKtQWWqWUl4G1Vv0ObeVRVjqlSWGteVmrU+9Ki6g6t5UlwXlPcuPiiIDXM4g1pxENU9jzUaKC1+K0sAIkfAKz8lPChNWjQpWCKcVqqvFZGqFUatY8Zavle2qt6CqmlnKktUmpzUsJ+VvjQdQSosqUBVKK/F+A2rrQkilAZI+epQBORWgVABS+6HoHep0RzUG/cJrfg3UEh7kPIXEF0hDg4ACA3sCliwG1KHUQAJ6sIFuoqCmBd1LOEAOah7B7AQ4xEAOOuFNHYA7ASAE5CxPXWbqSAIAVEFxMPCwAnwUAd0HoBg0TJ4N3sJDZQG8DdBnplkGDXoFJC7AOAFgDgAAC8ikM6yjt4DkDnRgA7qx8BAE6CdBKQEcKYQoXJyoQdJUkvQJ0AJB7A0AtkzNF+i0E5DWAwm7iRrLE2Zh9Bhg4waJqMBYTvBvE2TQYn346DrglpVTYfygCNrNNAIaTXxLk26btNimmTY/K0HwFDNYAWeRzJ6x1S3eQUvIOrJs03SkAFm+zZ1lc1lyVh08tRrZJZnyF2ZrIygDHJ6AhbHN3m/zZ5tnyZJIt1moLbGFLnRatAIWuLVpIS1pT1NqU3YK2EC1pa+RdlVgPlqMwrC0x0Ej/qHSgkwTvUgwj4nODY1HgGwnmYwI6vP78hfNxAepDfJbBIBMFegdBb1vWDuqgAA'
+const decompressedDMMF = decompressFromBase64(compressedDMMF)
+// We are parsing 2 times, as we want independent objects, because
+// DMMFClass introduces circular references in the dmmf object
+const dmmf = JSON.parse(decompressedDMMF)
+exports.Prisma.dmmf = JSON.parse(decompressedDMMF)
+config.document = dmmf
+
+
+config.inlineSchema = 'Z2VuZXJhdG9yIGNsaWVudCB7CiAgcHJvdmlkZXIgICAgICAgID0gInByaXNtYS1jbGllbnQtanMiCiAgcHJldmlld0ZlYXR1cmVzID0gWyJkZW5vIl0KICBvdXRwdXQgICAgICAgICAgPSAiLi4vZ2VuZXJhdGVkL2NsaWVudCIKfQoKZGF0YXNvdXJjZSBkYiB7CiAgcHJvdmlkZXIgPSAicG9zdGdyZXNxbCIKICB1cmwgICAgICA9IGVudigiREFUQUJBU0VfVVJMIikKfQoKbW9kZWwgRGlub3NhdXIgewogIGlkICAgICAgICAgIEludCAgICBAaWQgQGRlZmF1bHQoYXV0b2luY3JlbWVudCgpKQogIG5hbWUgICAgICAgIFN0cmluZyBAdW5pcXVlCiAgZGVzY3JpcHRpb24gU3RyaW5nCn0K'
+config.inlineSchemaHash = 'b9f28fbe58aea8558ae5cd2846325de045d0fd2f6b7ebf85c834467ff7d20326'
+
+config.inlineDatasources = {
+  "db": {
+    "url": {
+      "fromEnvVar": "DATABASE_URL",
+      "value": null
+    }
+  }
+}
+
+
+const { warnEnvConflicts } = require('./runtime/data-proxy')
+
+warnEnvConflicts({
+    rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
+    schemaEnvPath: config.relativeEnvPaths.schemaEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.schemaEnvPath)
+})
+
+
+const PrismaClient = getPrismaClient(config)
+exports.PrismaClient = PrismaClient
+Object.assign(exports, Prisma)
+
