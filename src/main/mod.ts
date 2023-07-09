@@ -1,15 +1,7 @@
-import {
-  editReplyMarkup,
-  exclude,
-  reply,
-  sendMessage,
-  setState,
-  Time,
-} from "core"
-import { prisma } from "prisma"
+import { editReplyMarkup, exclude, reply, sendMessage, setState } from "core"
 import { Message } from "tg"
 import messageCollector from "../core/messageCollector.ts"
-import { Context } from "../core/types.ts"
+import { Context } from "types"
 import { copyMessages } from "../core/userbot.ts"
 import { parseQuery } from "./buttons.ts"
 import * as config from "./config.ts"
@@ -151,10 +143,10 @@ O.ready.state("sale:post").handler = async (ctx) => {
   setState(ctx)
   ctx.editMessageText("Пост запланирован")
 
-  const deleteDelta = 24 * 60 * 60
-  await prisma.post.create({
-    data: { deleteTime: Time(ctx.session.date) + deleteDelta },
-  })
+  // const deleteDelta = 24 * 60 * 60
+  // await prisma.post.create({
+  // data: { deleteTime: Time(ctx.session.date) + deleteDelta },
+  // })
 }
 
 async function updateOptions(ctx: Context, asForward = false, noSound = false) {
