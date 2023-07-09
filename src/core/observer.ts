@@ -1,36 +1,36 @@
-import { Command, Composer, Context, State } from "types"
-import { bot } from "./bot.ts"
+import { Composer } from "grammy"
+import { Context } from "core/types.ts"
 
-class Observer<C extends Context> {
+class Observer<
+  C extends Context,
+  Command extends string,
+  State extends string,
+> {
   constructor(public composer: Composer<C>) {}
 
-  // deno-lint-ignore no-explicit-any
+  branch<_C extends C>(composer: Composer<_C>) {
+    return new Observer<_C, Command, State>(composer)
+  }
+
   set handler(callback: (ctx: C) => any) {
     this.composer.use(callback)
   }
 
-  state(value: State) {
-    return new Observer(
-      this.composer.filter((ctx) => ctx.session.state == value),
-    )
+  filter(predicate: (ctx: C) => boolean) {
+    return this.branch(this.composer.filter(predicate))
   }
-  command(value: Command) {
-    return new Observer(this.composer.command(value))
-  }
-  text() {
-    return new Observer(this.composer.on("message:text"))
-  }
-  message() {
-    return new Observer(this.composer.on("message"))
-  }
-  button(prefix: string) {
-    return new Observer(
-      this.composer.filter((ctx) => {
-        const data = ctx.callbackQuery?.data
-        return data ? data.startsWith(prefix) : false
-      }),
-    )
-  }
+
+  state = (value: State) => this.filter((c) => c.session.state == value)
+  command = (value: Command) => this.branch(this.composer.command(value))
+  text = () => this.branch(this.composer.on("message:text"))
+  message = () => this.branch(this.composer.on("message"))
+  button = (text: string) => this.filter((c) => c.message?.text == text)
+
+  query = <Prefix extends string>(prefix: Prefix) =>
+    this.filter((ctx) => {
+      const data = ctx.callbackQuery?.data
+      return data ? data.startsWith(prefix) : false
+    })
 }
 
-export const observer = new Observer(bot)
+export default Observer

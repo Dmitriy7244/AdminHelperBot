@@ -1,6 +1,6 @@
-import { removePrefix } from "core"
+import { removePrefix } from "core/mod.ts"
 import { InlineKeyboardButton } from "tg"
-import { Context } from "types"
+import { MyContext } from "types"
 
 type Prefix =
   | "channel"
@@ -20,7 +20,7 @@ function PrefixButton(prefix: Prefix, text?: string) {
   return CallbackButton(prefix, text)
 }
 
-function parseQuery(ctx: Context, prefix: Prefix) {
+function parseQuery(ctx: MyContext, prefix: Prefix) {
   return removePrefix(ctx.callbackQuery!.data!, prefix + SEP)
 }
 

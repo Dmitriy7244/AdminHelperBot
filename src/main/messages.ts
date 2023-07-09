@@ -1,7 +1,7 @@
-import { Msg } from "core"
-import K from "./kbs.ts"
-import { reprSale, Sale } from "./lib.ts"
-import T from "./texts.ts"
+import { Msg } from "core/mod.ts"
+import K from "kbs"
+import { reprSale, Sale } from "lib"
+import T from "texts"
 
 const M = {
   hello: new Msg(T.start),
@@ -13,7 +13,7 @@ const M = {
   timeError: new Msg(T.timeError),
   askPost: new Msg(T.askPost, K.schedulePost),
   sale: (s: Sale) => new Msg(reprSale(s)),
-  askChannels: new Msg(T.askChannels, K.channels([])), //TODO
+  askChannels: new Msg(T.askChannels, K.channels()), //TODO
   postOptions: (asForward = false, noSound = false) =>
     new Msg("Настройки публикации", K.postOptions(asForward, noSound)),
 }

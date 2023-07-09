@@ -1,7 +1,6 @@
 import { InlineKeyboard } from "grammy"
 import { InlineKeyboardButton, MessageEntity } from "tg"
-import { Context, State } from "types"
-import { bot } from "./bot.ts"
+import { Context } from "core/types.ts"
 
 class Msg {
   constructor(public text: string, public keyboard?: InlineKeyboard) {}
@@ -9,23 +8,21 @@ class Msg {
 
 const sendOptions = { disable_web_page_preview: true }
 
-const sendMessage = (chatId: number, msg: Msg) =>
-  bot.api.sendMessage(
+const sendMessage = (ctx: Context, chatId: number, msg: Msg) =>
+  ctx.api.sendMessage(
     chatId,
     msg.text,
     { ...sendOptions, reply_markup: msg.keyboard },
   )
 
-const reply = (ctx: Context, msg: Msg) => sendMessage(ctx.chat!.id, msg)
+const reply = (ctx: Context, msg: Msg) => sendMessage(ctx, ctx.chat!.id, msg)
 
-const setState = (ctx: Context, state?: State) => ctx.session.state = state
+const setState = <State extends string>(ctx: Context, state?: State) =>
+  ctx.session.state = state
 
 function parseEntity(entity: MessageEntity, text: string) {
   return text.slice(entity.offset, entity.offset + entity.length)
 }
-
-const link = (url: string, text: string) => `<a href="${url}">${text}</a>`
-const bold = (text: string) => `<b>${text}</b>`
 
 function addButtons(
   kb: InlineKeyboard,
@@ -64,9 +61,7 @@ function Time(date?: Date) {
 
 export {
   addButtons,
-  bold,
   exclude,
-  link,
   Msg,
   parseEntity,
   removePrefix,

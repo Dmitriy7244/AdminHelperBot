@@ -1,7 +1,5 @@
-import { Context } from "types"
-
-export const sleep = (secs: number) =>
-  new Promise((x) => setTimeout(x, secs * 1000))
+import { Context } from "core/types.ts"
+import { sleep } from "utils"
 
 class MessageCollector {
   private messages: Record<number, number[]> = {}
@@ -24,6 +22,4 @@ class MessageCollector {
   }
 }
 
-const messageCollector = new MessageCollector(3)
-
-export default messageCollector
+export default MessageCollector

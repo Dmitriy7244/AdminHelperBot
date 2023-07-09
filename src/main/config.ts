@@ -28,7 +28,7 @@ interface Channel {
   url: string
 }
 
-const channels: Channel[] = _channelsData.map((c) => ({
+const CHANNELS: Channel[] = _channelsData.map((c) => ({
   id: c[0],
   title: c[1],
   url: c[2],
@@ -36,4 +36,4 @@ const channels: Channel[] = _channelsData.map((c) => ({
 
 const REPORT_CHAT_ID = Number(env.str("REPORT_CHAT_ID")) // TODO
 
-export { channels, REPORT_CHAT_ID }
+export { CHANNELS, REPORT_CHAT_ID }

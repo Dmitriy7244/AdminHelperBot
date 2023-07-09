@@ -1,33 +1,48 @@
 import env from "env"
 import * as grammy from "grammy"
-import { Bot, session } from "grammy"
+import { hydrateReply, parseMode } from "grammy_parse_mode"
 import { run } from "grammy_runner"
 import { DenoKVAdapter } from "grammy_storage"
+import { Context, Session } from "core/types.ts"
 
-import { hydrateReply, parseMode } from "grammy_parse_mode"
-import { Context } from "types"
+export default class Bot<S extends Session> extends grammy.Bot<Context<S>> {
+  constructor(token: string, defaultSession: S) {
+    super(token)
+    this.initParseModePlugin()
+    this.initSessionPlugin(defaultSession)
+  }
 
-function getSessionKey(ctx: grammy.Context): string | undefined {
-  const key = ctx.from == undefined || ctx.chat == undefined
-    ? undefined
-    : `${ctx.chat.id}/${ctx.from.id}`
-  return key
+  initParseModePlugin() {
+    this.api.config.use(parseMode("HTML"))
+    this.use(hydrateReply)
+  }
+
+  initSessionPlugin(defaultSession: Session) {
+    this.use(createSessionMiddleware(defaultSession))
+  }
+
+  static fromEnv<S extends Session>(defaultSession: S) {
+    return new Bot(env.str("TOKEN"), defaultSession)
+  }
+
+  run() {
+    run(this)
+  }
 }
-
-const bot = new Bot<Context>(env.str("TOKEN"))
 
 // @ts-ignore: TODO
 const kv = await Deno.openKv()
+const storage = new DenoKVAdapter(kv)
 
-bot.api.config.use(parseMode("HTML"))
-bot.use(hydrateReply)
-bot.use(
-  session({
-    initial: () => ({}),
+function getSessionKey(ctx: grammy.Context): string | undefined {
+  if (ctx.from == undefined || ctx.chat == undefined) return
+  return `${ctx.chat.id}/${ctx.from.id}`
+}
+
+function createSessionMiddleware(defaultSession: Session) {
+  return grammy.session({
+    initial: () => structuredClone(defaultSession),
     getSessionKey,
-    storage: new DenoKVAdapter(kv),
-  }),
-) // TODO: initial
-run(bot)
-
-export { bot }
+    storage,
+  })
+}

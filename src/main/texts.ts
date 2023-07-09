@@ -1,8 +1,8 @@
-import { link } from "core"
-import * as config from "./config.ts"
+import * as config from "config"
+import { bold, link } from "utils"
 
 function ChannelsText() {
-  const links = config.channels.map((c) => link(c.url, c.title))
+  const links = config.CHANNELS.map((c) => link(c.url, c.title))
   const strings = links.map((link) => `🔸 ${link}`)
   return strings.join("\n")
 }
@@ -15,7 +15,7 @@ const T = {
 ℹ️ Если что-то пошло не так, ищи команду /start, чтобы перезапустить бота
 `,
   askDate: `Отправь дату (только число)`,
-  askTime: `Отправь время в формате: <b>19 05</b>`,
+  askTime: `Отправь время в формате: ${bold("19 05")}`,
   sale: `Продажа:`,
   userbot: `Юзербот:`,
   channels: ChannelsText(),

@@ -1,7 +1,23 @@
-import { bold, link, parseEntity } from "core"
+import * as config from "config"
+import { parseEntity } from "core/mod.ts"
+import { Channel, Post, Sale, Seller } from "models"
 import { Message } from "tg"
-import * as config from "./config.ts"
-import { Channel, Post, Sale, Seller } from "./models.ts"
+import { MyContext } from "types"
+import { bold, link } from "utils"
+
+export function saveLastMsgId(ctx: MyContext, msg: Message) {
+  ctx.session.lastMessageId = msg.message_id
+}
+
+export async function tryDeleteLastMsg(ctx: MyContext) {
+  const msgId = ctx.session.lastMessageId
+  if (!msgId) return
+  try {
+    await ctx.api.deleteMessage(ctx.chat!.id, msgId)
+  } catch (e) {
+    console.error(e)
+  }
+}
 
 function parseChannels(msg: Message): string[] {
   const channels: string[] = []
@@ -15,7 +31,7 @@ function parseChannels(msg: Message): string[] {
     } else if (entity.type == "text_link") {
       url = entity.url
     } else continue
-    config.channels.forEach((c) => {
+    config.CHANNELS.forEach((c) => {
       if (c.url == url) channels.push(c.title)
     })
   }
