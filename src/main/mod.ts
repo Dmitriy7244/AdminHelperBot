@@ -103,22 +103,13 @@ O.schedulePost.handler = async (ctx) => {
   setState(ctx, "sale:post")
   ctx.session.asForward = false
   ctx.session.noSound = false
-  await ctx.editMessageText("Отправь пост")
+  ctx.session.messageIds = []
+  await ctx.editMessageText(`Отправь пост, затем нажми "Готово"`, {
+    reply_markup: K.postOptions(ctx.session.asForward, ctx.session.noSound),
+  })
 }
 
-// O.message.state("sale:post").handler = async (ctx) => {
-//   const messages = await messageCollector.get(ctx)
-//   if (!messages.length) return
-//   ctx.session.messageIds = messages
-//   console.log("set", ctx.session.messageIds)
-//   await reply(ctx, M.postOptions(ctx.session.asForward, ctx.session.noSound))
-//   await tryDeleteLastMsg(ctx)
-//   console.log("success")
-// }
-
 O.message.state("sale:post").handler = async (ctx) => {
-  // const messages = await messageCollector.get(ctx)
-  // if (!messages.length) return
   if (!ctx.session.messageIds) ctx.session.messageIds = []
   ctx.session.messageIds.push(ctx.msg.message_id)
   console.log("set", ctx.session.messageIds)

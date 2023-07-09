@@ -14,6 +14,7 @@ const K = {
       .add(B.asForward(asForward), B.noSound(noSound)).row()
       .add(B.ready)
   },
+  ready: new InlineKeyboard().add(B.ready),
 }
 
 export default K
