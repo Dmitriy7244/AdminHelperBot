@@ -1,7 +1,7 @@
 import { editReplyMarkup, exclude, reply, sendMessage, setState } from "core"
 import { Message } from "tg"
-import messageCollector from "../core/messageCollector.ts"
 import { Context } from "types"
+import messageCollector from "../core/messageCollector.ts"
 import { copyMessages } from "../core/userbot.ts"
 import { parseQuery } from "./buttons.ts"
 import * as config from "./config.ts"
@@ -124,6 +124,7 @@ O.noSound.handler = async (ctx) => {
 }
 
 O.ready.state("sale:post").handler = async (ctx) => {
+  console.log(ctx.session.channels)
   for (const c of ctx.session.channels!) {
     const channel = Channel.fromTitle(c)
     try {
