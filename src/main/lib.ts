@@ -1,9 +1,13 @@
 import * as config from "config"
-import { parseEntity } from "core/mod.ts"
+import * as core from "core/mod.ts"
+import { editReplyMarkup, parseEntity } from "core/mod.ts"
+import K from "kbs"
 import { Channel, Post, Sale, Seller } from "models"
 import { Message } from "tg"
-import { MyContext } from "types"
+import { MyContext, State } from "types"
 import { bold, link } from "utils"
+
+export const setState = core.setState<State>
 
 export function saveLastMsgId(ctx: MyContext, msg: Message) {
   ctx.session.lastMessageId = msg.message_id
@@ -101,6 +105,22 @@ function reprSale(sale: Sale) {
   const date_time = reprDateTime(sale.posts[0].publish_date)
   const channels = sale.channels.map(reprChannel).join("\n")
   return [date_time, header, channels].join("\n\n")
+}
+
+export async function updatePostOptions(
+  ctx: MyContext,
+  asForward = false,
+  noSound = false,
+) {
+  ctx.session.asForward = asForward
+  ctx.session.noSound = noSound
+  await editReplyMarkup(ctx, K.postOptions(asForward, noSound))
+}
+
+export function resetSalePost(ctx: MyContext) {
+  ctx.session.asForward = false
+  ctx.session.noSound = false
+  ctx.session.messageIds = []
 }
 
 export {

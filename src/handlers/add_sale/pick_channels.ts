@@ -1,8 +1,7 @@
-import { parseQuery } from "buttons"
 import { CHANNELS } from "config"
-import { editReplyMarkup, exclude, reply, setState } from "core/mod.ts"
+import { editReplyMarkup, exclude, parseQuery, reply } from "core/mod.ts"
 import K from "kbs"
-import { saveLastMsgId } from "lib"
+import { saveLastMsgId, setState } from "lib"
 import M from "messages"
 import O from "observers"
 

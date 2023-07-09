@@ -1,4 +1,4 @@
-import * as config from "config"
+import { CHANNELS } from "config"
 
 export class Channel {
   constructor(
@@ -8,7 +8,7 @@ export class Channel {
   ) {}
 
   static fromTitle(title: string) {
-    for (const c of config.CHANNELS) {
+    for (const c of CHANNELS) {
       if (c.title != title) continue
       return new Channel(c.id, title, c.url)
     }

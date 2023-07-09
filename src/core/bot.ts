@@ -1,11 +1,11 @@
+import { BaseContext, Session } from "core/types.ts"
 import env from "env"
 import * as grammy from "grammy"
 import { hydrateReply, parseMode } from "grammy_parse_mode"
 import { run } from "grammy_runner"
 import { DenoKVAdapter } from "grammy_storage"
-import { Context, Session } from "core/types.ts"
 
-export default class Bot<S extends Session> extends grammy.Bot<Context<S>> {
+export default class Bot<S extends Session> extends grammy.Bot<BaseContext<S>> {
   constructor(token: string, defaultSession: S) {
     super(token)
     this.initParseModePlugin()

@@ -1,24 +1,21 @@
-import { Prefix } from "buttons"
 import { observer as o } from "loader"
-
-const query = o.query<Prefix>
 
 class Observers {
   start = o.command("start")
   channels = o.command("channels")
   addSale = o.command("add_sale")
   test = o.command("test")
-  pickChannel = query("channel")
-  pickAllChannels = query("➕ Выбрать все")
-  ready = query("✅ Готово")
+  pickChannel = o.query("channel")
+  pickAllChannels = o.query("➕ Выбрать все")
+  ready = o.query("✅ Готово")
   saleChannelsReady = this.ready.state("sale:channels")
   salePostReady = this.ready.state("sale:post")
-  asForward = query("asForward")
-  noSound = query("noSound")
-  schedulePost = query("Запланировать пост")
+  asForward = o.query("asForward")
+  noSound = o.query("noSound")
+  schedulePost = o.query("Запланировать пост")
   saleDate = o.text().state("sale:date")
   saleTime = o.text().state("sale:time")
-  message = o.message()
+  salePostMessage = o.message().state("sale:post")
   text = o.text()
 }
 

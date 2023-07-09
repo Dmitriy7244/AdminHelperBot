@@ -1,7 +1,15 @@
-import { Context } from "core/types.ts"
+import { BaseContext } from "core/types.ts"
 
 export type State = "sale:channels" | "sale:date" | "sale:time" | "sale:post"
 export type Command = "start" | "add_sale" | "channels" | "userbot" | "test"
+
+export type QueryPrefix =
+  | "channel"
+  | "➕ Выбрать все"
+  | "✅ Готово"
+  | "Запланировать пост"
+  | "asForward"
+  | "noSound"
 
 export type MySession = {
   messageIds: number[]
@@ -13,4 +21,4 @@ export type MySession = {
   lastMessageId?: number
 }
 
-export type MyContext = Context<MySession>
+export type MyContext = BaseContext<MySession>

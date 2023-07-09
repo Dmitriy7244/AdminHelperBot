@@ -1,4 +1,4 @@
-import { Context } from "core/types.ts"
+import { BaseContext } from "core/types.ts"
 import { sleep } from "utils"
 
 class MessageCollector {
@@ -6,7 +6,7 @@ class MessageCollector {
 
   constructor(private duration: number) {}
 
-  async get(ctx: Context) {
+  async get(ctx: BaseContext) {
     const chatId = ctx.chat!.id
     const messageId = ctx.message!.message_id
     console.log("messageId", messageId)

@@ -1,15 +1,16 @@
+import { BaseContext } from "core/types.ts"
 import { Composer } from "grammy"
-import { Context } from "core/types.ts"
 
 class Observer<
-  C extends Context,
+  C extends BaseContext,
   Command extends string,
   State extends string,
+  QueryPrefix extends string,
 > {
   constructor(public composer: Composer<C>) {}
 
   branch<_C extends C>(composer: Composer<_C>) {
-    return new Observer<_C, Command, State>(composer)
+    return new Observer<_C, Command, State, QueryPrefix>(composer)
   }
 
   set handler(callback: (ctx: C) => any) {
@@ -26,7 +27,7 @@ class Observer<
   message = () => this.branch(this.composer.on("message"))
   button = (text: string) => this.filter((c) => c.message?.text == text)
 
-  query = <Prefix extends string>(prefix: Prefix) =>
+  query = (prefix: QueryPrefix) =>
     this.filter((ctx) => {
       const data = ctx.callbackQuery?.data
       return data ? data.startsWith(prefix) : false

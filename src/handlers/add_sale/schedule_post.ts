@@ -1,32 +1,28 @@
-import { editReplyMarkup, setState } from "core/mod.ts"
-import K from "kbs"
+import { editText } from "core/mod.ts"
+import { resetSalePost, setState, updatePostOptions } from "lib"
+import M from "messages"
 import { Channel } from "models"
 import O from "observers"
-import { MyContext } from "types"
 import { copyMessages } from "userbot"
 
 O.schedulePost.handler = async (ctx) => {
   setState(ctx, "sale:post")
-  ctx.session.asForward = false
-  ctx.session.noSound = false
-  ctx.session.messageIds = []
-  await ctx.editMessageText(`Отправь пост, затем нажми "Готово"`, {
-    reply_markup: K.postOptions(ctx.session.asForward, ctx.session.noSound),
-  })
+  resetSalePost(ctx)
+  const m = M.postOptions(ctx.session.asForward, ctx.session.noSound)
+  await editText(ctx, m)
 }
 
-O.message.state("sale:post").handler = (ctx) => {
+O.salePostMessage.handler = (ctx) => {
   if (!ctx.session.messageIds) ctx.session.messageIds = []
   ctx.session.messageIds.push(ctx.msg.message_id)
-  console.log(ctx.session.messageIds)
 }
 
 O.asForward.handler = async (ctx) => {
-  await updateOptions(ctx, !ctx.session.asForward, ctx.session.noSound)
+  await updatePostOptions(ctx, !ctx.session.asForward, ctx.session.noSound)
 }
 
 O.noSound.handler = async (ctx) => {
-  await updateOptions(ctx, ctx.session.asForward, !ctx.session.noSound)
+  await updatePostOptions(ctx, ctx.session.asForward, !ctx.session.noSound)
 }
 
 O.salePostReady.handler = async (ctx) => {
@@ -53,14 +49,4 @@ O.salePostReady.handler = async (ctx) => {
   // await prisma.post.create({
   // data: { deleteTime: Time(ctx.session.date) + deleteDelta },
   // })
-}
-
-async function updateOptions(
-  ctx: MyContext,
-  asForward = false,
-  noSound = false,
-) {
-  ctx.session.asForward = asForward
-  ctx.session.noSound = noSound
-  await editReplyMarkup(ctx, K.postOptions(asForward, noSound))
 }

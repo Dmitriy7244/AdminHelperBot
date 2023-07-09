@@ -160,6 +160,8 @@
     "https://deno.land/x/grammy_types@v3.1.2/settings.ts": "5e989f5bd6c587d55673bd8052293869aa2f372e9223dd7f6e28632bfe021b6e",
     "https://deno.land/x/grammy_types@v3.1.2/update.ts": "b60c2aa5f8060a3fa429dda282cb5c7267899fa17bb9000e248f31abadfb5087",
     "https://deno.land/x/parse_env@v0.0.1/mod.ts": "d8ea538ab4a3996bc8c59abebdd15f53344158362c854dcdb4659e0dead8ad5f",
+    "https://deno.land/x/parse_env@v0.0.2/mod.ts": "6f8ed8ee72951ee4ba6adfa312e563cb13c95060d71ba10aed0241322b3ad7fd",
+    "https://deno.land/x/parse_env@v0.0.3/mod.ts": "925e2d4020216cf6ce28d707b88e309dde419c6f670e6106089dafdd6179a714",
     "https://esm.sh/@grammyjs/types@2.12.1": "426a6127d83eccc72da6ddf82139fe1e18504519bbe5d0877b1999858ac5ab04",
     "https://esm.sh/v128/@grammyjs/types@2.12.1/denonext/types.mjs": "3636f7a1ca7fef89fa735d832b72193a834bc7f5250b6bf182544be53a6ab218"
   }

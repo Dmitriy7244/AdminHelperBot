@@ -34,6 +34,6 @@ const CHANNELS: Channel[] = _channelsData.map((c) => ({
   url: c[2],
 }))
 
-const REPORT_CHAT_ID = Number(env.str("REPORT_CHAT_ID")) // TODO
+const REPORT_CHAT_ID = env.int("REPORT_CHAT_ID")
 
 export { CHANNELS, REPORT_CHAT_ID }

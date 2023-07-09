@@ -8,20 +8,20 @@
     "p-push": "deno run -A npm:prisma db push"
   },
   "imports": {
-    "loader": "./src/main/loader.ts",
+    "buttons": "./src/assets/buttons.ts",
+    "kbs": "./src/assets/kbs.ts",
+    "messages": "./src/assets/messages.ts",
+    "texts": "./src/assets/texts.ts",
+    "observers": "./src/assets/observers.ts",
+    "loader": "./src/base/loader.ts",
     "utils": "./src/core/utils.ts",
     "bot": "./src/core/bot.ts",
     "userbot": "./src/core/userbot.ts",
     "lib": "./src/main/lib.ts",
-    "kbs": "./src/main/kbs.ts",
-    "messages": "./src/main/messages.ts",
     "observer": "./src/core/observer.ts",
-    "observers": "./src/main/observers.ts",
     "config": "./src/main/config.ts",
-    "buttons": "./src/main/buttons.ts",
-    "texts": "./src/main/texts.ts",
     "models": "./src/main/models.ts",
-    "types": "./src/main/types.ts",
+    "types": "./src/base/types.ts",
     "grammy": "https://deno.land/x/grammy@v1.17.1/mod.ts",
     "tg": "https://deno.land/x/grammy@v1.17.1/types.ts",
     "grammy_conversations": "https://deno.land/x/grammy_conversations@v1.1.2/mod.ts",
@@ -29,7 +29,7 @@
     "core/": "./src/core/",
     "grammy_runner": "https://deno.land/x/grammy_runner@v2.0.3/mod.ts",
     "grammy_storage": "https://deno.land/x/grammy_storages@v2.3.0/denokv/src/mod.ts",
-    "env": "https://deno.land/x/parse_env@v0.0.1/mod.ts"
+    "env": "https://deno.land/x/parse_env@v0.0.3/mod.ts"
   },
   "fmt": {
     "semiColons": false

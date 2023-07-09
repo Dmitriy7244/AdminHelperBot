@@ -1,5 +1,5 @@
 import { REPORT_CHAT_ID } from "config"
-import { reply, sendMessage, setState } from "core/mod.ts"
+import { reply, sendMessage } from "core/mod.ts"
 import {
   Channel,
   parseChannels,
@@ -9,13 +9,11 @@ import {
   Sale,
   saveLastMsgId,
   Seller,
+  setState,
   tryDeleteLastMsg,
 } from "lib"
 import M from "messages"
 import O from "observers"
-
-import("./pick_channels.ts")
-import("./schedule_post.ts")
 
 O.addSale.handler = async (ctx) => {
   ctx.session.channels = []
@@ -23,6 +21,8 @@ O.addSale.handler = async (ctx) => {
   setState(ctx, "sale:channels")
   await ctx.deleteMessage()
 }
+
+import("./pick_channels.ts")
 
 O.saleDate.handler = async (ctx) => {
   try {
@@ -56,6 +56,8 @@ O.saleTime.handler = async (ctx) => {
   await tryDeleteLastMsg(ctx)
   saveLastMsgId(ctx, msg)
 }
+
+import("./schedule_post.ts")
 
 O.text.handler = async (ctx) => {
   const channels = parseChannels(ctx.msg)

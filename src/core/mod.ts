@@ -1,6 +1,6 @@
+import { BaseContext } from "core/types.ts"
 import { InlineKeyboard } from "grammy"
 import { InlineKeyboardButton, MessageEntity } from "tg"
-import { Context } from "core/types.ts"
 
 class Msg {
   constructor(public text: string, public keyboard?: InlineKeyboard) {}
@@ -8,16 +8,17 @@ class Msg {
 
 const sendOptions = { disable_web_page_preview: true }
 
-const sendMessage = (ctx: Context, chatId: number, msg: Msg) =>
+const sendMessage = (ctx: BaseContext, chatId: number, msg: Msg) =>
   ctx.api.sendMessage(
     chatId,
     msg.text,
     { ...sendOptions, reply_markup: msg.keyboard },
   )
 
-const reply = (ctx: Context, msg: Msg) => sendMessage(ctx, ctx.chat!.id, msg)
+const reply = (ctx: BaseContext, msg: Msg) =>
+  sendMessage(ctx, ctx.chat!.id, msg)
 
-const setState = <State extends string>(ctx: Context, state?: State) =>
+const setState = <State extends string>(ctx: BaseContext, state?: State) =>
   ctx.session.state = state
 
 function parseEntity(entity: MessageEntity, text: string) {
@@ -50,13 +51,47 @@ function exclude<T>(array: T[], value: T) {
   return array.filter((item) => item !== value)
 }
 
-export function editReplyMarkup(ctx: Context, keyboard: InlineKeyboard) {
+export function editReplyMarkup(ctx: BaseContext, keyboard: InlineKeyboard) {
   return ctx.editMessageReplyMarkup({ reply_markup: keyboard })
+}
+
+export function editText(ctx: BaseContext, msg: Msg) {
+  return ctx.editMessageText(msg.text, { reply_markup: msg.keyboard })
 }
 
 function Time(date?: Date) {
   if (!date) date = new Date()
   return date.getTime() / 1000
+}
+
+const CALLBACK_DATA_SEPARATOR = ":"
+
+export function CallbackData<Prefix extends string>(
+  prefix: Prefix,
+  payload: string,
+) {
+  return `${prefix}${CALLBACK_DATA_SEPARATOR}${payload}`
+}
+
+export function PrefixButton<Prefix extends string>(
+  prefix: Prefix,
+  text?: string,
+) {
+  return CallbackButton(prefix, text)
+}
+
+export function CallbackButton(
+  data: string,
+  text?: string,
+): InlineKeyboardButton {
+  return { text: text ?? data, callback_data: data }
+}
+
+export function parseQuery(ctx: BaseContext, prefix: string) {
+  return removePrefix(
+    ctx.callbackQuery!.data!,
+    prefix + CALLBACK_DATA_SEPARATOR,
+  )
 }
 
 export {
