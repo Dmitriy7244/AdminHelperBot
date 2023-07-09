@@ -33,9 +33,7 @@ O.start.handler = async (ctx) => {
 }
 O.channels.handler = (ctx) => reply(ctx, M.channels)
 O.test.handler = async (ctx) => {
-  console.log(new Date())
   await prisma.dinosaur.create({ data: { name: "test3", description: "test" } })
-  console.log(new Date())
 }
 
 O.addSale.handler = async (ctx) => {
