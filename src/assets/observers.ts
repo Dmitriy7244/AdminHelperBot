@@ -17,6 +17,7 @@ class Observers {
   saleTime = o.text().state("sale:time")
   salePostMessage = o.message().state("sale:post")
   text = o.text()
+  channelPost = o.branch(o.composer.on("channel_post")) // TODO
 }
 
 const O = new Observers()

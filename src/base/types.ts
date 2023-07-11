@@ -20,6 +20,7 @@ export type MySession = Session & {
   state?: State
   date?: Date
   lastMessageId?: number
+  postText?: string
 }
 
 export type MyContext = BaseContext<MySession>

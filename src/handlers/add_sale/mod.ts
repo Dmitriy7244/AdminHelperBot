@@ -3,7 +3,6 @@ import { reply, sendMessage } from "core/mod.ts"
 import {
   Channel,
   parseChannels,
-  Post,
   resolveDate,
   resolveDatetime,
   Sale,
@@ -13,6 +12,7 @@ import {
   tryDeleteLastMsg,
 } from "lib"
 import M from "messages"
+import { Post } from "models"
 import O from "observers"
 
 O.addSale.handler = async (ctx) => {

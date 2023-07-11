@@ -1,13 +1,28 @@
 import * as config from "config"
 import * as core from "core/mod.ts"
-import { editReplyMarkup, parseEntity } from "core/mod.ts"
+import { editReplyMarkup, parseEntity, Time } from "core/mod.ts"
 import K from "kbs"
-import { Channel, Post, Sale, Seller } from "models"
+import { bot } from "loader"
+import { Channel, Sale, Seller } from "models"
+import { Document } from "mongoose"
 import { bold, link } from "my_grammy"
+import { sleep } from "sleep"
 import { Message } from "tg"
 import { MyContext, State } from "types"
+import { Post } from "./models.ts"
 
 export const setState = core.setState<State>
+
+export async function schedulePostDelete(post: Document & Post) {
+  const dt = post.deleteTime - Time()
+  console.log("start schedule", dt)
+  await sleep(dt)
+  console.log("deleting")
+  post.messageIds.forEach((m) => {
+    bot.api.deleteMessage(post.chatId, m)
+  })
+  await post.deleteOne()
+}
 
 export function saveLastMsgId(ctx: MyContext, msg: Message) {
   ctx.session.lastMessageId = msg.message_id
@@ -118,9 +133,11 @@ export async function updatePostOptions(
 }
 
 export function resetSalePost(ctx: MyContext) {
-  ctx.session.asForward = false
-  ctx.session.noSound = false
-  ctx.session.messageIds = []
+  const s = ctx.session
+  s.asForward = false
+  s.noSound = false
+  s.messageIds = []
+  s.postText = undefined
 }
 
 export {

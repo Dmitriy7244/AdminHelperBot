@@ -4,6 +4,7 @@ import M from "messages"
 import { Channel } from "models"
 import O from "observers"
 import { copyMessages } from "userbot"
+import { SaleDoc } from "../../main/models.ts"
 
 O.schedulePost.handler = async (ctx) => {
   setState(ctx, "sale:post")
@@ -13,8 +14,9 @@ O.schedulePost.handler = async (ctx) => {
 }
 
 O.salePostMessage.handler = (ctx) => {
-  if (!ctx.session.messageIds.length) ctx.session.messageIds = []
   ctx.session.messageIds.push(ctx.msg.message_id)
+  const text = ctx.msg.text ?? ctx.msg.caption
+  if (text) ctx.session.postText = text
 }
 
 O.asForward.handler = async (ctx) => {
@@ -26,6 +28,7 @@ O.noSound.handler = async (ctx) => {
 }
 
 O.salePostReady.handler = async (ctx) => {
+  await SaleDoc.create({ text: ctx.session.postText })
   for (const c of ctx.session.channels!) {
     const channel = Channel.fromTitle(c)
     try {
@@ -43,10 +46,5 @@ O.salePostReady.handler = async (ctx) => {
     }
   }
   setState(ctx)
-  ctx.editMessageText("Пост запланирован")
-
-  // const deleteDelta = 24 * 60 * 60
-  // await prisma.post.create({
-  // data: { deleteTime: Time(ctx.session.date) + deleteDelta },
-  // })
+  await ctx.editMessageText("Пост запланирован")
 }

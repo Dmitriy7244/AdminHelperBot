@@ -1,36 +1,25 @@
-import { CHANNELS } from "config"
+import env from "env"
+import { getModelForClass, mongoose, prop } from "typegoose"
 
-export class Channel {
-  constructor(
-    public id: number,
-    public title: string,
-    public url: string,
-  ) {}
+mongoose.connect(
+  `mongodb://root:${env.str("MONGO_PASSWORD")}@${env.str("MONGO_HOST")}:27017/${
+    env.str("MONGO_DB")
+  }?authSource=admin`,
+)
 
-  static fromTitle(title: string) {
-    for (const c of CHANNELS) {
-      if (c.title != title) continue
-      return new Channel(c.id, title, c.url)
-    }
-    throw new Error("Unknown title")
-  }
-}
-
-export class Seller {
-  constructor(
-    public user_id: number,
-    public name: string,
-  ) {}
+class Sale {
+  @prop()
+  text!: string
 }
 
 export class Post {
-  constructor(public publish_date: Date) {}
+  @prop()
+  chatId!: number
+  @prop({ type: [Number] })
+  messageIds!: number[]
+  @prop()
+  deleteTime!: number
 }
 
-export class Sale {
-  constructor(
-    public seller: Seller,
-    public channels: Channel[],
-    public posts: Post[],
-  ) {}
-}
+export const SaleDoc = getModelForClass(Sale)
+export const PostDoc = getModelForClass(Post)
