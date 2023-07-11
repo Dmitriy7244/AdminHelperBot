@@ -1,10 +1,6 @@
-import { BaseContext } from "core/types.ts"
 import { InlineKeyboard } from "grammy"
+import { BaseContext, Msg } from "my_grammy"
 import { InlineKeyboardButton, MessageEntity } from "tg"
-
-class Msg {
-  constructor(public text: string, public keyboard?: InlineKeyboard) {}
-}
 
 const sendOptions = { disable_web_page_preview: true }
 

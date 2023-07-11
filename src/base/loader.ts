@@ -1,7 +1,5 @@
-import Bot from "core/bot.ts"
 import * as core from "core/mod.ts"
-import { BaseContext } from "core/types.ts"
-import Observer from "observer"
+import { BaseContext, Bot, Observer } from "my_grammy"
 import { Command, MySession, QueryPrefix, State } from "types"
 
 const defaultSession: MySession = {
@@ -9,6 +7,7 @@ const defaultSession: MySession = {
   noSound: false,
   channels: [],
   messageIds: [],
+  state: undefined,
 }
 
 export type MyContext = BaseContext<MySession>

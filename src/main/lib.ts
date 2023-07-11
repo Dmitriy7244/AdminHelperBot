@@ -3,9 +3,9 @@ import * as core from "core/mod.ts"
 import { editReplyMarkup, parseEntity } from "core/mod.ts"
 import K from "kbs"
 import { Channel, Post, Sale, Seller } from "models"
+import { bold, link } from "my_grammy"
 import { Message } from "tg"
 import { MyContext, State } from "types"
-import { bold, link } from "utils"
 
 export const setState = core.setState<State>
 

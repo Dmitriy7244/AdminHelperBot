@@ -1,11 +1,9 @@
 {
   "tasks": {
-    "dev": "deno run --watch -A --unstable src/main/mod.ts",
     "start": "deno run -A --unstable src/main/mod.ts",
+    "dev": "deno run --watch -A --unstable src/main/mod.ts",
     "lint": "deno lint && deno check src/main/mod.ts",
-    "p-init": "deno run -A npm:prisma db init",
-    "p-gen": "deno run -A --unstable npm:prisma generate --data-proxy",
-    "p-push": "deno run -A npm:prisma db push"
+    "reload": "deno run -A --unstable --reload src/main/mod.ts"
   },
   "imports": {
     "buttons": "./src/assets/buttons.ts",
@@ -13,32 +11,19 @@
     "messages": "./src/assets/messages.ts",
     "texts": "./src/assets/texts.ts",
     "observers": "./src/assets/observers.ts",
-    "loader": "./src/base/loader.ts",
-    "utils": "./src/core/utils.ts",
-    "bot": "./src/core/bot.ts",
-    "userbot": "./src/core/userbot.ts",
     "lib": "./src/main/lib.ts",
-    "observer": "./src/core/observer.ts",
     "config": "./src/main/config.ts",
     "models": "./src/main/models.ts",
+    "loader": "./src/base/loader.ts",
     "types": "./src/base/types.ts",
-    "grammy": "https://deno.land/x/grammy@v1.17.1/mod.ts",
-    "tg": "https://deno.land/x/grammy@v1.17.1/types.ts",
-    "grammy_conversations": "https://deno.land/x/grammy_conversations@v1.1.2/mod.ts",
-    "grammy_parse_mode": "https://deno.land/x/grammy_parse_mode@1.7.1/mod.ts",
+    "userbot": "./src/core/userbot.ts",
+    "my_grammy": "https://deno.land/x/my_grammy@v0.0.7/mod.ts",
+    "grammy": "https://deno.land/x/grammy@v1.17.2/mod.ts",
+    "tg": "https://deno.land/x/grammy@v1.17.2/types.ts",
     "core/": "./src/core/",
-    "grammy_runner": "https://deno.land/x/grammy_runner@v2.0.3/mod.ts",
-    "grammy_storage": "https://deno.land/x/grammy_storages@v2.3.0/denokv/src/mod.ts",
     "env": "https://deno.land/x/parse_env@v0.0.3/mod.ts"
   },
   "fmt": {
     "semiColons": false
-  },
-  "lint": {
-    "rules": {
-      "exclude": [
-        "no-explicit-any"
-      ]
-    }
   }
 }
