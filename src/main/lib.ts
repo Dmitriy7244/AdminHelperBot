@@ -1,3 +1,4 @@
+import { ADMIN_ID, CHANNELS } from "config"
 import * as core from "core/mod.ts"
 import { editReplyMarkup, parseEntity, Time } from "core/mod.ts"
 import K from "kbs"
@@ -9,7 +10,6 @@ import { sleep } from "sleep"
 import { BotCommand, Message } from "tg"
 import { Command, MyContext, State } from "types"
 import { Post } from "./models.ts"
-import { CHANNELS } from "config";
 
 export const setState = core.setState<State>
 
@@ -17,13 +17,17 @@ function Command(command: Command, description: string): BotCommand {
   return { command, description }
 }
 
+const COMMANDS = [
+  Command("start", "Перезапустить бота"),
+  Command("add_sale", "Добавить продажу"),
+  Command("channels", "Список каналов"),
+  Command("check_rights", "Проверить права"),
+]
+
 export async function setCommands() {
-  await bot.api.setMyCommands([
-    Command("start", "Перезапустить бота"),
-    Command("add_sale", "Добавить продажу"),
-    Command("channels", "Список каналов"),
-    Command("check_rights", "Проверить права"),
-  ])
+  const scope = { chat_id: ADMIN_ID, type: "chat" } as const
+  await bot.api.setMyCommands(COMMANDS, { scope })
+  await bot.api.setMyCommands(COMMANDS)
 }
 
 export async function schedulePostDelete(post: Document & Post) {
