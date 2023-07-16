@@ -2,7 +2,6 @@ import env from "env"
 
 const _channelsData = [
   [-1001300460444, "Акиет", "https://t.me/akiet"],
-  [-1001583208278, "Геншин", "https://t.me/+kFIe8-bR2DQ1YWFi"],
   [-1001738529532, "Баблкам", "https://t.me/+IhzX5VBVjk00ODIy"],
   [-1001446620325, "Диундер", "https://t.me/diunder"],
   [-1001515205062, "Коды АМ", "https://t.me/alight_motion_capcut"],
