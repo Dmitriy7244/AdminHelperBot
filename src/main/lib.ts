@@ -1,6 +1,6 @@
-import { ADMIN_ID, CHANNELS } from "config"
+import { ADMIN_ID, CHANNELS, REPORT_CHAT_ID } from "config"
 import * as core from "core/mod.ts"
-import { editReplyMarkup, parseEntity, Time } from "core/mod.ts"
+import { Time, editReplyMarkup, parseEntity } from "core/mod.ts"
 import K from "kbs"
 import { bot } from "loader"
 import { Channel, Sale, Seller } from "models"
@@ -24,10 +24,14 @@ const COMMANDS = [
   Command("check_rights", "Проверить права"),
 ]
 
+function ChatScope(chat_id: number) {
+  return { chat_id, type: "chat" } as const
+}
+
 export async function setCommands() {
-  const scope = { chat_id: ADMIN_ID, type: "chat" } as const
-  await bot.api.setMyCommands(COMMANDS, { scope })
   await bot.api.setMyCommands(COMMANDS)
+  await bot.api.setMyCommands(COMMANDS, { scope: ChatScope(ADMIN_ID) })
+  await bot.api.setMyCommands(COMMANDS, { scope: ChatScope(REPORT_CHAT_ID) })
 }
 
 export async function schedulePostDelete(post: Document & Post) {
@@ -158,12 +162,9 @@ export function resetSalePost(ctx: MyContext) {
 }
 
 export {
-  Channel,
-  parseChannels,
-  Post,
-  reprSale,
+  Channel, Post, Sale,
+  Seller, parseChannels, reprSale,
   resolveDate,
-  resolveDatetime,
-  Sale,
-  Seller,
+  resolveDatetime
 }
+
