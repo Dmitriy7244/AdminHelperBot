@@ -1,5 +1,7 @@
+import { CHANNELS } from "config"
 import { reply, Time } from "core/mod.ts"
 import { schedulePostDelete, setState } from "lib"
+import { bot } from "loader"
 import M from "messages"
 import O from "observers"
 import { getPostMessages } from "userbot"
@@ -32,3 +34,26 @@ O.channelPost.handler = async (ctx) => {
 }
 
 const AD_DURATION = 60 * 60 * 24
+
+O.checkRights.handler = async (ctx) => {
+  const noRightsChannels = []
+  for (const channel of CHANNELS) {
+    try {
+      const member = await bot.api.getChatMember(channel.id, bot.botInfo.id)
+      if (member.status == "administrator") {
+        if (member.can_delete_messages == true) continue
+      }
+      noRightsChannels.push(channel)
+    } catch {
+      noRightsChannels.push(channel)
+    }
+  }
+  let text: string
+  if (noRightsChannels.length) {
+    text = "У меня нет нужных прав в этих чатах:\n\n"
+    text += noRightsChannels.map((c) => c.url).join("\n")
+  } else {
+    text = "У меня есть нужные права во всех чатах"
+  }
+  await ctx.reply(text)
+}

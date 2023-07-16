@@ -5,6 +5,7 @@ class Observers {
   channels = o.command("channels")
   addSale = o.command("add_sale")
   test = o.command("test")
+  checkRights = o.command("check_rights")
   pickChannel = o.query("channel")
   pickAllChannels = o.query("➕ Выбрать все")
   ready = o.query("✅ Готово")

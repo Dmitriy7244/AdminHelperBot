@@ -35,5 +35,6 @@ const CHANNELS: Channel[] = _channelsData.map((c) => ({
 }))
 
 const REPORT_CHAT_ID = env.int("REPORT_CHAT_ID")
+const ADMIN_ID = 724477101
 
-export { CHANNELS, REPORT_CHAT_ID }
+export { ADMIN_ID, CHANNELS, REPORT_CHAT_ID }

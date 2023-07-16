@@ -1,8 +1,13 @@
-import { Session } from "https://deno.land/x/my_grammy@v0.0.4/types.ts"
+import { Session } from "https://deno.land/x/my_grammy@v0.0.4/types.ts" // TODO
 import { BaseContext, Observer } from "my_grammy"
 
 export type State = "sale:channels" | "sale:date" | "sale:time" | "sale:post"
-export type Command = "start" | "add_sale" | "channels" | "userbot" | "test"
+export type Command =
+  | "start"
+  | "add_sale"
+  | "channels"
+  | "check_rights"
+  | "test"
 
 export type QueryPrefix =
   | "channel"

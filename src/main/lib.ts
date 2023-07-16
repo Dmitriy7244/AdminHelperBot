@@ -1,4 +1,3 @@
-import * as config from "config"
 import * as core from "core/mod.ts"
 import { editReplyMarkup, parseEntity, Time } from "core/mod.ts"
 import K from "kbs"
@@ -7,11 +6,25 @@ import { Channel, Sale, Seller } from "models"
 import { Document } from "mongoose"
 import { bold, link } from "my_grammy"
 import { sleep } from "sleep"
-import { Message } from "tg"
-import { MyContext, State } from "types"
+import { BotCommand, Message } from "tg"
+import { Command, MyContext, State } from "types"
 import { Post } from "./models.ts"
+import { CHANNELS } from "config";
 
 export const setState = core.setState<State>
+
+function Command(command: Command, description: string): BotCommand {
+  return { command, description }
+}
+
+export async function setCommands() {
+  await bot.api.setMyCommands([
+    Command("start", "Перезапустить бота"),
+    Command("add_sale", "Добавить продажу"),
+    Command("channels", "Список каналов"),
+    Command("check_rights", "Проверить права"),
+  ])
+}
 
 export async function schedulePostDelete(post: Document & Post) {
   const dt = post.deleteTime - Time()
@@ -50,7 +63,7 @@ function parseChannels(msg: Message): string[] {
     } else if (entity.type == "text_link") {
       url = entity.url
     } else continue
-    config.CHANNELS.forEach((c) => {
+    CHANNELS.forEach((c) => {
       if (c.url == url) channels.push(c.title)
     })
   }

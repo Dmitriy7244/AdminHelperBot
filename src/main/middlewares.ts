@@ -1,8 +1,10 @@
-import { REPORT_CHAT_ID } from "config"
+import { ADMIN_ID, REPORT_CHAT_ID } from "config"
 import { Context, NextFunction } from "grammy"
 
+const allowedChats = [REPORT_CHAT_ID, ADMIN_ID]
+
 export async function checkAccess(ctx: Context, next: NextFunction) {
-  if (ctx.message && ctx.chat!.id != REPORT_CHAT_ID) {
+  if (ctx.message && !allowedChats.includes(ctx.chat!.id)) {
     await ctx.reply("Мне запрещено общаться в этом чате")
     return
   }
