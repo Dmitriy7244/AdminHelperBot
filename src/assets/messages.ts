@@ -1,6 +1,7 @@
-import { Msg } from "core/mod.ts"
 import K from "kbs"
-import { reprSale, Sale } from "lib"
+import { reprSale } from "lib"
+import { Sale } from "models"
+import { Msg } from "my_grammy"
 import T from "texts"
 
 class Messages {
@@ -11,14 +12,14 @@ class Messages {
   channels = new Msg(T.channels)
   dateError = new Msg(T.dateError)
   timeError = new Msg(T.timeError)
-  askPost = new Msg(T.askPost, K.schedulePost)
+  askPost = new Msg(T.suggestPost, K.schedulePost)
   sale = (s: Sale) => new Msg(reprSale(s))
   askChannels = new Msg(T.askChannels, K.channels())
   postOptions = (asForward = false, noSound = false) =>
-    new Msg(
-      `Отправь пост, затем нажми "Готово"`,
-      K.postOptions(asForward, noSound),
-    )
+    new Msg(T.askPost, K.postOptions(asForward, noSound))
+  postScheduled = new Msg("Пост запланирован", K.addButtons)
+  askButtons = new Msg(T.askButtons)
+  buttonsAdded = (preview: string) => new Msg(`Добавлены кнопки:\n\n${preview}`)
 }
 
 const M = new Messages()

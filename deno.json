@@ -13,12 +13,12 @@
     "observers": "./src/assets/observers.ts",
     "lib": "./src/main/lib.ts",
     "config": "./src/main/config.ts",
-    "models": "./src/main/_models.ts",
+    "models": "./src/main/models.ts",
     "loader": "./src/base/loader.ts",
     "types": "./src/base/types.ts",
     "userbot": "./src/core/userbot.ts",
     "core/": "./src/core/",
-    "my_grammy": "https://deno.land/x/my_grammy@v0.0.7/mod.ts",
+    "my_grammy": "https://deno.land/x/my_grammy@v0.0.10/mod.ts",
     "grammy": "https://deno.land/x/grammy@v1.17.2/mod.ts",
     "tg": "https://deno.land/x/grammy@v1.17.2/types.ts",
     "sleep": "https://deno.land/x/sleep@v1.2.1/sleep.ts",
@@ -30,6 +30,7 @@
     "semiColons": false
   },
   "compilerOptions": {
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false
   }
 }

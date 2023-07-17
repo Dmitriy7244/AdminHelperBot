@@ -1,18 +1,16 @@
 import { REPORT_CHAT_ID } from "config"
 import { reply, sendMessage } from "core/mod.ts"
 import {
-  Channel,
+  findChannel,
   parseChannels,
   resolveDate,
   resolveDatetime,
-  Sale,
   saveLastMsgId,
-  Seller,
   setState,
   tryDeleteLastMsg,
 } from "lib"
 import M from "messages"
-import { Post } from "models"
+import { Sale, Seller } from "models"
 import O from "observers"
 
 O.addSale.handler = async (ctx) => {
@@ -45,10 +43,10 @@ O.saleTime.handler = async (ctx) => {
     await reply(ctx, M.timeError)
     return
   }
-  const channels = ctx.session.channels!.map((c) => Channel.fromTitle(c))
-  const post = new Post(ctx.session.date!)
+  const channels = ctx.session.channels!.map((c) => findChannel(c))
   const seller = new Seller(ctx.from.id, ctx.from.first_name)
-  const sale = new Sale(seller, channels, [post])
+  const sale = new Sale(ctx.session.date!, channels, seller)
+  ctx.session.sale = sale
   await sendMessage(ctx, REPORT_CHAT_ID, M.sale(sale))
   const msg = await reply(ctx, M.askPost)
   setState(ctx)

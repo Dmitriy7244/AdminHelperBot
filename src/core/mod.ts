@@ -1,6 +1,6 @@
 import { InlineKeyboard } from "grammy"
 import { BaseContext, Msg } from "my_grammy"
-import { InlineKeyboardButton, MessageEntity } from "tg"
+import { InlineKeyboardButton, InlineKeyboardMarkup, MessageEntity } from "tg"
 
 const sendOptions = { disable_web_page_preview: true }
 
@@ -47,12 +47,17 @@ function exclude<T>(array: T[], value: T) {
   return array.filter((item) => item !== value)
 }
 
-export function editReplyMarkup(ctx: BaseContext, keyboard: InlineKeyboard) {
+type ReplyMarkup = InlineKeyboardMarkup
+
+export function editReplyMarkup(ctx: BaseContext, keyboard: ReplyMarkup) {
   return ctx.editMessageReplyMarkup({ reply_markup: keyboard })
 }
 
 export function editText(ctx: BaseContext, msg: Msg) {
-  return ctx.editMessageText(msg.text, { reply_markup: msg.keyboard })
+  return ctx.editMessageText(msg.text, {
+    reply_markup: msg.keyboard,
+    disable_web_page_preview: true,
+  })
 }
 
 function Time(date?: Date) {

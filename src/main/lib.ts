@@ -3,15 +3,28 @@ import * as core from "core/mod.ts"
 import { Time, editReplyMarkup, parseEntity } from "core/mod.ts"
 import K from "kbs"
 import { bot } from "loader"
-import { Channel, Sale, Seller } from "models"
+import { Channel, Post, Sale, SaleDoc } from "models"
 import { Document } from "mongoose"
 import { bold, link } from "my_grammy"
 import { sleep } from "sleep"
 import { BotCommand, Message } from "tg"
 import { Command, MyContext, State } from "types"
-import { Post } from "./models.ts"
 
 export const setState = core.setState<State>
+
+export async function findSale(text: string) {
+  const sales = await SaleDoc.find({ text }).exec()
+  if (!sales.length) return
+  return sales[sales.length - 1]
+}
+
+export function findChannel(title: string) {
+  for (const c of CHANNELS) {
+    if (c.title != title) continue
+    return new Channel(c.id, title, c.url)
+  }
+  throw new Error("Unknown title")
+}
 
 function Command(command: Command, description: string): BotCommand {
   return { command, description }
@@ -36,9 +49,7 @@ export async function setCommands() {
 
 export async function schedulePostDelete(post: Document & Post) {
   const dt = post.deleteTime - Time()
-  console.log("start schedule", dt)
   await sleep(dt)
-  console.log("deleting")
   post.messageIds.forEach((m) => {
     bot.api.deleteMessage(post.chatId, m)
   })
@@ -138,7 +149,7 @@ function reprChannel(c: Channel) {
 
 function reprSale(sale: Sale) {
   const header = `${bold("Продажа")} (👤 ${sale.seller.name})`
-  const date_time = reprDateTime(sale.posts[0].publish_date)
+  const date_time = reprDateTime(sale.publishDate)
   const channels = sale.channels.map(reprChannel).join("\n")
   return [date_time, header, channels].join("\n\n")
 }
@@ -161,10 +172,5 @@ export function resetSalePost(ctx: MyContext) {
   s.postText = undefined
 }
 
-export {
-  Channel, Post, Sale,
-  Seller, parseChannels, reprSale,
-  resolveDate,
-  resolveDatetime
-}
+export { parseChannels, reprSale, resolveDate, resolveDatetime }
 

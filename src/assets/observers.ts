@@ -14,11 +14,13 @@ class Observers {
   asForward = o.query("asForward")
   noSound = o.query("noSound")
   schedulePost = o.query("Запланировать пост")
+  addButtons = o.query("Добавить кнопки")
+  buttonsToAdd = o.text().state("sale:buttons")
   saleDate = o.text().state("sale:date")
   saleTime = o.text().state("sale:time")
+  channelPost = o.channelPost()
   salePostMessage = o.message().state("sale:post")
   text = o.text()
-  channelPost = o.branch(o.composer.on("channel_post")) // TODO
 }
 
 const O = new Observers()

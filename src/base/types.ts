@@ -1,7 +1,12 @@
-import { Session } from "https://deno.land/x/my_grammy@v0.0.4/types.ts" // TODO
-import { BaseContext, Observer } from "my_grammy"
+import { Sale } from "models"
+import { BaseContext, BaseSession, Observer } from "my_grammy"
 
-export type State = "sale:channels" | "sale:date" | "sale:time" | "sale:post"
+export type State =
+  | "sale:channels"
+  | "sale:date"
+  | "sale:time"
+  | "sale:post"
+  | "sale:buttons"
 export type Command =
   | "start"
   | "add_sale"
@@ -16,8 +21,9 @@ export type QueryPrefix =
   | "Запланировать пост"
   | "asForward"
   | "noSound"
+  | "Добавить кнопки"
 
-export type MySession = Session & {
+export type MySession = BaseSession & {
   messageIds: number[]
   channels: string[]
   asForward: boolean
@@ -26,6 +32,7 @@ export type MySession = Session & {
   date?: Date
   lastMessageId?: number
   postText?: string
+  sale?: Sale
 }
 
 export type MyContext = BaseContext<MySession>

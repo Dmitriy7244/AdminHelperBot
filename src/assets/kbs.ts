@@ -15,6 +15,7 @@ class Keyboards {
       .add(B.ready)
   }
   ready = new InlineKeyboard().add(B.ready)
+  addButtons = new InlineKeyboard().add(B.addButtons)
 }
 
 const K = new Keyboards()

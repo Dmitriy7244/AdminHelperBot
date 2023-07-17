@@ -1,10 +1,18 @@
-import { editText } from "core/mod.ts"
-import { resetSalePost, setState, updatePostOptions } from "lib"
+import { editText, reply } from "core/mod.ts"
+import {
+  findChannel,
+  findSale,
+  resetSalePost,
+  saveLastMsgId,
+  setState,
+  tryDeleteLastMsg,
+  updatePostOptions,
+} from "lib"
 import M from "messages"
-import { Channel } from "models"
+import { Button, SaleDoc } from "models"
+import { link } from "my_grammy"
 import O from "observers"
 import { copyMessages } from "userbot"
-import { SaleDoc } from "../../main/models.ts"
 
 O.schedulePost.handler = async (ctx) => {
   setState(ctx, "sale:post")
@@ -16,7 +24,9 @@ O.schedulePost.handler = async (ctx) => {
 O.salePostMessage.handler = (ctx) => {
   ctx.session.messageIds.push(ctx.msg.message_id)
   const text = ctx.msg.text ?? ctx.msg.caption
+  const buttons = (ctx.msg.reply_markup?.inline_keyboard ?? []) as Button[][]
   if (text) ctx.session.postText = text
+  ctx.session.sale!.buttons.push(...buttons)
 }
 
 O.asForward.handler = async (ctx) => {
@@ -28,14 +38,17 @@ O.noSound.handler = async (ctx) => {
 }
 
 O.salePostReady.handler = async (ctx) => {
-  await SaleDoc.create({ text: ctx.session.postText })
+  const sale = ctx.session.sale!
+  const messageIds = ctx.session.messageIds!
+  sale.text = ctx.session.postText
+  await SaleDoc.create(sale)
   for (const c of ctx.session.channels!) {
-    const channel = Channel.fromTitle(c)
+    const channel = findChannel(c)
     try {
       await copyMessages(
         channel.id,
         ctx.chat!.id,
-        ctx.session.messageIds!,
+        messageIds,
         ctx.session.date!,
         ctx.session.asForward,
         ctx.session.noSound,
@@ -46,5 +59,58 @@ O.salePostReady.handler = async (ctx) => {
     }
   }
   setState(ctx)
-  await ctx.editMessageText("Пост запланирован")
+  await editText(ctx, M.postScheduled)
+  for (const id of messageIds) {
+    await ctx.api.deleteMessage(ctx.chat!.id, id)
+  }
+}
+
+O.addButtons.handler = async (ctx) => {
+  setState(ctx, "sale:buttons")
+  saveLastMsgId(ctx, ctx.msg!)
+  await editText(ctx, M.askButtons)
+}
+
+O.buttonsToAdd.handler = async (ctx) => {
+  const text = ctx.msg.text
+  let buttons: Button[][]
+  try {
+    buttons = parseButtons(text)
+  } catch {
+    await ctx.reply("Ошибка в формате кнопок, попробуй снова")
+    return
+  }
+  const sale = await findSale(ctx.session.sale?.text!)
+  if (!sale) {
+    await ctx.reply("Ошибка, зовите Дмитрия!")
+    return
+  }
+  sale.buttons = buttons
+  await sale.save()
+  const preview = ButtonsPreview(buttons)
+  await reply(ctx, M.buttonsAdded(preview))
+  await ctx.deleteMessage()
+  await tryDeleteLastMsg(ctx)
+}
+
+function parseButtons(text: string): Button[][] {
+  return text.split("\n")
+    .map((str) =>
+      str.split("|")
+        .map((i) => i.trim().split(" "))
+        .map(
+          (i) => {
+            if (i.length < 2) throw ""
+            return [i.slice(0, -1).join(" "), i[i.length - 1]]
+          },
+        ).map((i) => ({ text: i[0], url: i[1] }))
+    )
+}
+
+function ButtonsPreview(buttons: Button[][]) {
+  return buttons.map((row) =>
+    row
+      .map((b) => link(b.url, b.text))
+  )
+    .map((row) => row.join(" ")).join("\n")
 }

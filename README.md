@@ -1,7 +1,5 @@
 TODO:
 - reset state on start?
-- Set commands
-- new link to Пошлые Опросы
 
 ```py
 seller = models.Seller(user_id=msg.from_user.id, name=msg.from_user.full_name).save()

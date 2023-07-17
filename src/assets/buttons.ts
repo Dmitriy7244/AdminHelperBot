@@ -20,6 +20,7 @@ class Buttons {
       "noSound",
       "Без звука: " + (value ? "да" : "нет"),
     )
+  addButtons = PrefixButton("Добавить кнопки")
 }
 
 const B = new Buttons()

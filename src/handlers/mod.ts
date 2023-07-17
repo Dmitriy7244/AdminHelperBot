@@ -1,11 +1,11 @@
 import { CHANNELS } from "config"
-import { reply, Time } from "core/mod.ts"
-import { schedulePostDelete, setState } from "lib"
+import { editReplyMarkup, reply, Time } from "core/mod.ts"
+import { findSale, schedulePostDelete, setState } from "lib"
 import { bot } from "loader"
 import M from "messages"
+import { PostDoc } from "models"
 import O from "observers"
 import { getPostMessages } from "userbot"
-import { PostDoc, SaleDoc } from "../main/models.ts"
 import("./add_sale/mod.ts")
 
 O.start.handler = async (ctx) => {
@@ -20,9 +20,10 @@ O.test.handler = (ctx) => {
 
 O.channelPost.handler = async (ctx) => {
   const text = ctx.msg.text ?? ctx.msg.caption
+  if (!text) return
   const chatId = ctx.chat.id
   const messageId = ctx.msg.message_id
-  const sale = await SaleDoc.findOne({ text }).exec()
+  const sale = await findSale(text)
   if (!sale) return
   let messageIds = [messageId]
   if (ctx.msg.media_group_id) {
@@ -31,6 +32,11 @@ O.channelPost.handler = async (ctx) => {
   const deleteTime = Time() + AD_DURATION
   const p = await PostDoc.create({ chatId, messageIds, deleteTime })
   schedulePostDelete(p)
+  if (!sale.buttons.length) return
+  const buttons = sale.buttons.map((row) =>
+    row.map((b) => ({ text: b.text, url: b.url }))
+  )
+  await editReplyMarkup(ctx, { inline_keyboard: buttons })
 }
 
 const AD_DURATION = 60 * 60 * 24

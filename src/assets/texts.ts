@@ -21,8 +21,18 @@ class Texts {
   channels = ChannelsText()
   dateError = "Ошибка в дате, отправь верное число"
   timeError = "Ошибка, отправь время в верном формате"
-  askPost = "Теперь ты можешь отправить пост для публикации"
+  suggestPost = "Теперь ты можешь отправить пост для публикации"
+  askPost = `Отправь пост, затем нажми "Готово"`
   askChannels = "Отметь каналы:"
+  askButtons = `
+Отправьте боту название кнопки и адрес ссылки. Например, так: 
+
+Telegram telegram.org
+
+Чтобы отправить несколько кнопок за раз, используйте разделитель «|». Каждый новый ряд – с новой строки. Например, так: 
+
+Telegram telegram.org | Новости telegram.org/blog
+FAQ telegram.org/faq | Скачать telegram.org/apps`
 }
 
 const T = new Texts()
