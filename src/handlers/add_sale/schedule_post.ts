@@ -87,6 +87,7 @@ O.buttonsToAdd.handler = async (ctx) => {
   }
   sale.buttons = buttons
   await sale.save()
+  setState(ctx)
   const preview = ButtonsPreview(buttons)
   await reply(ctx, M.buttonsAdded(preview))
   await ctx.deleteMessage()
