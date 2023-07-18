@@ -10,7 +10,7 @@ import {
 } from "lib"
 import M from "messages"
 import { Button, SaleDoc } from "models"
-import { link } from "my_grammy"
+import { BaseContext, link } from "my_grammy"
 import O from "observers"
 import { copyMessages } from "userbot"
 
@@ -37,9 +37,17 @@ O.noSound.handler = async (ctx) => {
   await updatePostOptions(ctx, ctx.session.asForward, !ctx.session.noSound)
 }
 
+function answerQuery(ctx: BaseContext, text: string, alert = true) {
+  return ctx.answerCallbackQuery({ text, show_alert: alert })
+}
+
 O.salePostReady.handler = async (ctx) => {
-  const sale = ctx.session.sale!
   const messageIds = ctx.session.messageIds!
+  if (!messageIds.length) {
+    await answerQuery(ctx, "Сначала отправь пост, потом вернись к этой кнопке")
+    return
+  }
+  const sale = ctx.session.sale!
   sale.text = ctx.session.postText
   await SaleDoc.create(sale)
   for (const c of ctx.session.channels!) {
