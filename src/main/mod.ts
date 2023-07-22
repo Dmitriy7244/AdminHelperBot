@@ -11,9 +11,11 @@ run(bot, {
 });
 
 bot.use(checkAccess);
+bot.catch(console.error)
+
 import("../handlers/mod.ts");
 setCommands();
-// bot.run()
+// bot.run() // TODO
 
 PostDoc.find()
   .exec()
@@ -28,3 +30,6 @@ async function fixKeyboard() {
     },
   });
 }
+
+// await fixKeyboard();
+console.log("started");
