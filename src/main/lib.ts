@@ -1,6 +1,6 @@
-import { ADMIN_ID, CHANNELS, REPORT_CHAT_ID } from "config"
+import { ADMIN_ID, CHANNELS } from "config"
 import * as core from "core/mod.ts"
-import { Time, editReplyMarkup, parseEntity } from "core/mod.ts"
+import { editReplyMarkup, parseEntity, Time } from "core/mod.ts"
 import K from "kbs"
 import { bot } from "loader"
 import { Channel, Post, Sale, SaleDoc } from "models"
@@ -44,7 +44,7 @@ function ChatScope(chat_id: number) {
 export async function setCommands() {
   await bot.api.setMyCommands(COMMANDS)
   await bot.api.setMyCommands(COMMANDS, { scope: ChatScope(ADMIN_ID) })
-  await bot.api.setMyCommands(COMMANDS, { scope: ChatScope(REPORT_CHAT_ID) })
+  // await bot.api.setMyCommands(COMMANDS, { scope: ChatScope(REPORT_CHAT_ID) })
 }
 
 export async function schedulePostDelete(post: Document & Post) {
@@ -56,6 +56,15 @@ export async function schedulePostDelete(post: Document & Post) {
   await post.deleteOne()
 }
 
+// TODO: more log info
+export async function tryDeleteMsg(chatId: number, msgId: number) {
+  try {
+    await bot.api.deleteMessage(chatId, msgId)
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export function saveLastMsgId(ctx: MyContext, msg: Message) {
   ctx.session.lastMessageId = msg.message_id
 }
@@ -63,11 +72,7 @@ export function saveLastMsgId(ctx: MyContext, msg: Message) {
 export async function tryDeleteLastMsg(ctx: MyContext) {
   const msgId = ctx.session.lastMessageId
   if (!msgId) return
-  try {
-    await ctx.api.deleteMessage(ctx.chat!.id, msgId)
-  } catch (e) {
-    console.error(e)
-  }
+  await tryDeleteMsg(ctx.chat!.id, msgId)
 }
 
 function parseChannels(msg: Message): string[] {
@@ -173,4 +178,3 @@ export function resetSalePost(ctx: MyContext) {
 }
 
 export { parseChannels, reprSale, resolveDate, resolveDatetime }
-

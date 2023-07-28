@@ -1,35 +1,29 @@
-import { run } from "https://deno.land/x/grammy_runner@v2.0.3/runner.ts";
-import { schedulePostDelete, setCommands } from "lib";
-import { bot } from "loader";
-import { PostDoc } from "models";
-import { checkAccess } from "./middlewares.ts";
+import { schedulePostDelete, setCommands } from "lib"
+import { bot } from "loader"
+import { PostDoc } from "models"
+import { checkAccess } from "./middlewares.ts"
 
-run(bot, {
-  runner: {
-    fetch: { allowed_updates: ["channel_post", "message", "callback_query"] },
-  },
-});
-
-bot.use(checkAccess);
+bot.use(checkAccess)
 bot.catch(console.error)
+bot.run()
 
-import("../handlers/mod.ts");
-setCommands();
+import("../handlers/mod.ts")
+setCommands()
 // bot.run() // TODO
 
 PostDoc.find()
   .exec()
-  .then((posts) => posts.forEach((p) => schedulePostDelete(p)));
+  .then((posts) => posts.forEach((p) => schedulePostDelete(p)))
 
-async function fixKeyboard() {
-  await bot.api.editMessageReplyMarkup("@diunder", 19610, {
+export async function fixKeyboard() {
+  await bot.api.editMessageReplyMarkup(-1001988740515, 1125, {
     reply_markup: {
       inline_keyboard: [
-        // [{ text: "Подписаться!", url: "https://t.me/+u1nhZj1hvsZiN2Y9" }],
+        [{ text: "⤷ П Е Р Е Й Т И", url: "https://t.me/+Ni7jbO3txRI5MmYy" }],
       ],
     },
-  });
+  })
 }
 
 // await fixKeyboard();
-console.log("started");
+console.log("started")
