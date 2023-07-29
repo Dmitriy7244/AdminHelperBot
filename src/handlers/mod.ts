@@ -47,7 +47,7 @@ O.channelPost.handler = async (ctx) => {
 }
 
 const AD_DURATION = 60 * 60 * 24
-const AD_TOP_DURATION = 60 * 60 * 0 // TODO
+const AD_TOP_DURATION = 60 * 60 // TODO
 
 O.checkRights.handler = async (ctx) => {
   const noRightsChannels = []
