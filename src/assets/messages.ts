@@ -14,12 +14,19 @@ class Messages {
   timeError = new Msg(T.timeError)
   askPost = new Msg(T.suggestPost, K.schedulePost)
   sale = (s: Sale) => new Msg(reprSale(s))
-  askChannels = new Msg(T.askChannels, K.channels())
+  askChannels = new Msg(T.askChannels, K.pickChannels())
   postOptions = (asForward = false, noSound = false) =>
     new Msg(T.askPost, K.postOptions(asForward, noSound))
-  postScheduled = new Msg("Пост запланирован", K.addButtons)
+  postScheduled = new Msg("Пост запланирован", K.addPostButtons)
   askButtons = new Msg(T.askButtons)
   buttonsAdded = (preview: string) => new Msg(`Добавлены кнопки:\n\n${preview}`)
+  content = {
+    askChannel: new Msg("Выбери канал", K.pickChannel),
+    askPosts: new Msg(
+      "Отправь все посты (только одиночные фото, можно с подписью), затем нажми кнопку",
+      K.ready,
+    ),
+  }
 }
 
 const M = new Messages()

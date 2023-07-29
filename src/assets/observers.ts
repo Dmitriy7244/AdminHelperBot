@@ -6,7 +6,13 @@ class Observers {
   addSale = o.command("add_sale")
   test = o.command("test")
   checkRights = o.command("check_rights")
-  pickChannel = o.query("channel")
+  content = {
+    command: o.command("content"),
+    pickChannel: o.query("channel").state("content:channel"),
+    photo: o.photo().state("content:posts"),
+    ready: o.query("✅ Готово").state("content:posts"),
+  }
+  pickSaleChannel = o.query("channel")
   pickAllChannels = o.query("➕ Выбрать все")
   ready = o.query("✅ Готово")
   saleChannelsReady = this.ready.state("sale:channels")

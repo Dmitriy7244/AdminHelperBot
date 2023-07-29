@@ -7,12 +7,15 @@ export type State =
   | "sale:time"
   | "sale:post"
   | "sale:buttons"
+  | "content:channel"
+  | "content:posts"
 export type Command =
   | "start"
   | "add_sale"
   | "channels"
   | "check_rights"
   | "test"
+  | "content"
 
 export type QueryPrefix =
   | "channel"
@@ -25,9 +28,11 @@ export type QueryPrefix =
 
 export type MySession = BaseSession & {
   messageIds: number[]
+  filedIds: string[]
   channels: string[]
   asForward: boolean
   noSound: boolean
+  channelId?: number
   state?: State
   date?: Date
   lastMessageId?: number

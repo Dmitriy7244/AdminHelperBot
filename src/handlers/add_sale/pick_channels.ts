@@ -5,13 +5,13 @@ import M from "messages"
 import { editReplyMarkup, exclude, parseQuery, reply } from "my_grammy_lib"
 import O from "observers"
 
-O.pickChannel.handler = async (ctx) => {
+O.pickSaleChannel.handler = async (ctx) => {
   const channel = parseQuery(ctx, "channel")
   let channels = ctx.session.channels
   if (channels.includes(channel)) channels = exclude(channels, channel)
   else channels.push(channel)
   ctx.session.channels = channels
-  await editReplyMarkup(ctx, K.channels(channels))
+  await editReplyMarkup(ctx, K.pickChannels(channels))
 }
 
 O.pickAllChannels.handler = async (ctx) => {
@@ -19,7 +19,7 @@ O.pickAllChannels.handler = async (ctx) => {
   if (channels.length == CHANNELS.length) channels = []
   else channels = CHANNELS.map((c) => c.title)
   ctx.session.channels = channels
-  await editReplyMarkup(ctx, K.channels(channels))
+  await editReplyMarkup(ctx, K.pickChannels(channels))
 }
 
 O.saleChannelsReady.handler = async (ctx) => {

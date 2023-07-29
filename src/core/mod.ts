@@ -1,12 +1,7 @@
-import { InlineKeyboardButton } from "tg";
-import { bot } from "loader";
+import { BaseContext } from "my_grammy"
 
-export function setKeyboard(
-  chatId: number | string,
-  msgId: number,
-  inline_keyboard: InlineKeyboardButton[][],
-) {
-  return bot.api.editMessageReplyMarkup(chatId, msgId, {
-    reply_markup: { inline_keyboard },
-  })
+export function getPhotoId(src: BaseContext) {
+  const photo = src.message?.photo
+  if (!photo) throw new Error("No message photo")
+  return photo[photo.length - 1].file_id
 }

@@ -66,5 +66,15 @@ export class Post {
   deleteTime: number
 }
 
+export class ContentPost {
+  @prop()
+  chatId: number
+  @prop()
+  photoId: string
+  @prop()
+  date?: number
+}
+
 export const SaleDoc = getModelForClass(Sale)
 export const PostDoc = getModelForClass(Post)
+export const ContentPostDoc = getModelForClass(ContentPost)

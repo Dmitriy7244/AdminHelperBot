@@ -1,12 +1,18 @@
 import { CHANNELS } from "config"
-import { findSale, schedulePostDelete, setState } from "lib"
+import {
+  findSale,
+  scheduleNewContentPost,
+  schedulePostDelete,
+  setState,
+} from "lib"
 import { bot } from "loader"
 import M from "messages"
 import { PostDoc } from "models"
-import { editReplyMarkup, reply, Time } from "my_grammy_lib"
+import { Time, editReplyMarkup, reply } from "my_grammy_lib"
 import O from "observers"
 import { getPostMessages } from "userbot"
 import("./add_sale/mod.ts")
+import("./content.ts")
 
 O.start.handler = async (ctx) => {
   setState(ctx)
@@ -32,6 +38,7 @@ O.channelPost.handler = async (ctx) => {
   const deleteTime = Time() + AD_DURATION
   const p = await PostDoc.create({ chatId, messageIds, deleteTime })
   schedulePostDelete(p)
+  scheduleNewContentPost(chatId, AD_TOP_DURATION)
   if (!sale.buttons.length) return
   const buttons = sale.buttons.map((row) =>
     row.map((b) => ({ text: b.text, url: b.url }))
@@ -40,6 +47,7 @@ O.channelPost.handler = async (ctx) => {
 }
 
 const AD_DURATION = 60 * 60 * 24
+const AD_TOP_DURATION = 60 * 60
 
 O.checkRights.handler = async (ctx) => {
   const noRightsChannels = []

@@ -1,20 +1,24 @@
-import { ADMIN_ID, CHANNELS } from "config"
+import { ADMIN_ID, CHANNELS, REPORT_CHAT_ID } from "config"
 import K from "kbs"
 import { bot } from "loader"
-import { Channel, Post, Sale, SaleDoc } from "models"
+import {
+  Channel,
+  ContentPost,
+  ContentPostDoc,
+  Post,
+  Sale,
+  SaleDoc,
+} from "models"
 import { Document } from "mongoose"
 import { bold, link } from "my_grammy"
-import {
-  editReplyMarkup,
-  parseEntity,
-  setState as _setState,
-  Time,
-} from "my_grammy_lib"
+import * as mgl from "my_grammy_lib"
+import { editReplyMarkup, parseEntity, Time } from "my_grammy_lib"
 import { sleep } from "sleep"
 import { BotCommand, Message } from "tg"
-import { Command, MyContext, State } from "types"
+import { Command, MyContext, QueryPrefix, State } from "types"
 
-export const setState = _setState<State>
+export const setState = mgl.setState<State>
+export const parseQuery = mgl.parseQuery<QueryPrefix>
 
 export async function findSale(text: string) {
   const sales = await SaleDoc.find({ text }).exec()
@@ -39,6 +43,7 @@ const COMMANDS = [
   Command("add_sale", "Добавить продажу"),
   Command("channels", "Список каналов"),
   Command("check_rights", "Проверить права"),
+  Command("content", "Запланировать контент"),
 ]
 
 function ChatScope(chat_id: number) {
@@ -48,15 +53,34 @@ function ChatScope(chat_id: number) {
 export async function setCommands() {
   await bot.api.setMyCommands(COMMANDS)
   await bot.api.setMyCommands(COMMANDS, { scope: ChatScope(ADMIN_ID) })
-  // await bot.api.setMyCommands(COMMANDS, { scope: ChatScope(REPORT_CHAT_ID) })
+  await bot.api.setMyCommands(COMMANDS, { scope: ChatScope(REPORT_CHAT_ID) })
 }
 
 export async function schedulePostDelete(post: Document & Post) {
   const dt = post.deleteTime - Time()
   await sleep(dt)
   post.messageIds.forEach((m) => {
-    bot.api.deleteMessage(post.chatId, m)
+    tryDeleteMsg(post.chatId, m)
   })
+  await post.deleteOne()
+}
+
+export async function scheduleNewContentPost(chatId: number, delay: number) {
+  const post = await ContentPostDoc.findOne({ chatId, date: undefined })
+  if (!post) {
+    console.log("No content post", { chatId })
+    return
+  }
+  post.date = Time() + delay
+  await post.save()
+  await scheduleContentPost(post)
+}
+
+export async function scheduleContentPost(post: ContentPost & Document) {
+  if (!post.date) return
+  const delay = post.date - Time()
+  await sleep(delay)
+  await bot.api.sendPhoto(post.chatId, post.photoId)
   await post.deleteOne()
 }
 

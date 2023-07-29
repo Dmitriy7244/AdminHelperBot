@@ -8,6 +8,7 @@ const defaultSession: MySession = {
   noSound: false,
   channels: [],
   messageIds: [],
+  filedIds: [],
   state: undefined,
 }
 
