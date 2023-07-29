@@ -1,3 +1,4 @@
+import { MessageEntity } from "https://deno.land/x/grammy_parse_mode@1.7.1/deps.deno.ts"
 import { connectToMongoFromEnv } from "my_mongo"
 import { getModelForClass, prop } from "typegoose"
 
@@ -73,6 +74,10 @@ export class ContentPost {
   photoId: string
   @prop()
   date?: number
+  @prop()
+  entities?: MessageEntity[]
+  @prop()
+  text?: string
 }
 
 export const SaleDoc = getModelForClass(Sale)

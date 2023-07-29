@@ -12,7 +12,7 @@ import {
 import { Document } from "mongoose"
 import { bold, link } from "my_grammy"
 import * as mgl from "my_grammy_lib"
-import { editReplyMarkup, parseEntity, Time } from "my_grammy_lib"
+import { editReplyMarkup, parseEntity, sendPhoto, Time } from "my_grammy_lib"
 import { sleep } from "sleep"
 import { BotCommand, Message } from "tg"
 import { Command, MyContext, QueryPrefix, State } from "types"
@@ -80,11 +80,10 @@ export async function scheduleContentPost(post: ContentPost & Document) {
   if (!post.date) return
   const delay = post.date - Time()
   await sleep(delay)
-  await bot.api.sendPhoto(post.chatId, post.photoId)
+  await sendPhoto(bot, post.chatId, post.photoId, post.text, post.entities)
   await post.deleteOne()
 }
 
-// TODO: more log info
 export async function tryDeleteMsg(chatId: number, msgId: number) {
   try {
     await bot.api.deleteMessage(chatId, msgId)

@@ -1,8 +1,7 @@
-import { getPhotoId } from "core/mod.ts"
 import { findChannel, parseQuery, setState } from "lib"
 import M from "messages"
 import { ContentPostDoc } from "models"
-import { editText, reply } from "my_grammy_lib"
+import { editText, getPhotoId, reply } from "my_grammy_lib"
 import O from "observers"
 
 const o = O.content
@@ -21,16 +20,20 @@ o.pickChannel.handler = async (ctx) => {
   await editText(ctx, M.content.askPosts)
 }
 
-o.photo.handler = (ctx) => {
+o.photo.handler = async (ctx) => {
+  const chatId = ctx.session.channelId!
   const photoId = getPhotoId(ctx)
-  ctx.session.filedIds.push(photoId)
-  console.log(ctx.session.filedIds)
+  const entities = ctx.message.caption_entities ?? []
+  const text = ctx.message.caption
+  await ContentPostDoc.create({
+    chatId,
+    photoId,
+    entities,
+    text,
+  })
 }
 
 o.ready.handler = async (ctx) => {
-  const chatId = ctx.session.channelId!
-  ctx.session.filedIds.forEach((photoId) =>
-    ContentPostDoc.create({ chatId, photoId })
-  )
+  setState(ctx)
   await ctx.editMessageText("Контент добавлен")
 }

@@ -8,7 +8,7 @@ import {
 import { bot } from "loader"
 import M from "messages"
 import { PostDoc } from "models"
-import { Time, editReplyMarkup, reply } from "my_grammy_lib"
+import { editReplyMarkup, reply, Time } from "my_grammy_lib"
 import O from "observers"
 import { getPostMessages } from "userbot"
 import("./add_sale/mod.ts")
@@ -47,7 +47,7 @@ O.channelPost.handler = async (ctx) => {
 }
 
 const AD_DURATION = 60 * 60 * 24
-const AD_TOP_DURATION = 60 * 60
+const AD_TOP_DURATION = 60 * 60 * 0 // TODO
 
 O.checkRights.handler = async (ctx) => {
   const noRightsChannels = []
