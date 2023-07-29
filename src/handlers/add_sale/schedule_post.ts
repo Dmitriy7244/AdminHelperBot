@@ -1,3 +1,4 @@
+import { ButtonsPreview, parseButtons } from "api"
 import {
   parseQuery,
   resetSalePost,
@@ -8,7 +9,7 @@ import {
 } from "lib"
 import M from "messages"
 import { Button, SaleDoc } from "models"
-import { BaseContext, link } from "my_grammy"
+import { BaseContext } from "my_grammy"
 import { editText, reply } from "my_grammy_lib"
 import O from "observers"
 import { copyMessages } from "userbot"
@@ -110,26 +111,4 @@ O.buttonsToAdd.handler = async (ctx) => {
   await reply(ctx, M.buttonsAdded(preview))
   await ctx.deleteMessage()
   await tryDeleteLastMsg(ctx)
-}
-
-function parseButtons(text: string): Button[][] {
-  return text.split("\n").map((str) =>
-    str
-      .split("|")
-      .map((i) => i.trim().split(" "))
-      .map((i) => {
-        if (i.length < 2) throw new Error("Url not found")
-        let text = i.slice(0, -1).join(" ")
-        if (text.endsWith("-")) text = text.slice(0, -1).trim()
-        return [text, i[i.length - 1]]
-      })
-      .map((i) => ({ text: i[0], url: i[1] }))
-  )
-}
-
-function ButtonsPreview(buttons: Button[][]) {
-  return buttons
-    .map((row) => row.map((b) => link(b.url, b.text)))
-    .map((row) => row.join(" "))
-    .join("\n")
 }

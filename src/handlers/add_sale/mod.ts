@@ -1,9 +1,7 @@
-import { REPORT_CHAT_ID } from "config"
+import { REPORT_CHAT_ID, resolveDate, resolveDatetime } from "api"
 import {
   findChannel,
   parseChannels,
-  resolveDate,
-  resolveDatetime,
   saveLastMsgId,
   setState,
   tryDeleteLastMsg,

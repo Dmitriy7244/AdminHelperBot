@@ -1,5 +1,5 @@
-import { MessageEntity } from "https://deno.land/x/grammy_parse_mode@1.7.1/deps.deno.ts"
 import { connectToMongoFromEnv } from "my_mongo"
+import { MessageEntity } from "tg"
 import { getModelForClass, prop } from "typegoose"
 
 connectToMongoFromEnv()

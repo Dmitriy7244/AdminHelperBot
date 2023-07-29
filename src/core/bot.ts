@@ -1,5 +1,4 @@
-import { BaseSession, Bot } from "my_grammy"
+import { BaseSession, Bot as _Bot } from "my_grammy"
 
-// TODO: to my_grammy
-export class MyBot<S extends BaseSession> extends Bot<S> {
+export class MyBot<S extends BaseSession> extends _Bot<S> {
 }

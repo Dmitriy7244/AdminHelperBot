@@ -1,5 +1,5 @@
 import B, { channelButtons } from "buttons"
-import { CHANNELS } from "config"
+import { CHANNELS } from "api"
 import { InlineKeyboard } from "grammy"
 import { addButtons } from "my_grammy_lib"
 

@@ -1,4 +1,4 @@
-import { CHANNELS } from "config"
+import { CHANNELS } from "api"
 import { CallbackData, PrefixButton } from "loader"
 import { CallbackButton } from "my_grammy_lib"
 

@@ -1,4 +1,4 @@
-import { ADMIN_ID, REPORT_CHAT_ID } from "config"
+import { ADMIN_ID, REPORT_CHAT_ID } from "api"
 import { Context, NextFunction } from "grammy"
 
 const allowedChats = [REPORT_CHAT_ID, ADMIN_ID]

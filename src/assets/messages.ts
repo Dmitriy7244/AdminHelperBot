@@ -1,5 +1,5 @@
 import K from "kbs"
-import { reprSale } from "lib"
+import { reprSale } from "api"
 import { Sale } from "models"
 import { Msg } from "my_grammy"
 import T from "texts"
