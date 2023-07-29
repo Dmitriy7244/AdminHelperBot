@@ -1,7 +1,7 @@
 import B from "buttons"
 import { CHANNELS } from "config"
-import { addButtons } from "core/mod.ts"
 import { InlineKeyboard } from "grammy"
+import { addButtons } from "my_grammy_lib"
 
 class Keyboards {
   schedulePost = new InlineKeyboard().add(B.schedulePost)

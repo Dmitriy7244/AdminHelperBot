@@ -1,5 +1,4 @@
 import { REPORT_CHAT_ID } from "config"
-import { reply, sendMessage } from "core/mod.ts"
 import {
   findChannel,
   parseChannels,
@@ -11,6 +10,7 @@ import {
 } from "lib"
 import M from "messages"
 import { Sale, Seller } from "models"
+import { reply, sendMessage } from "my_grammy_lib"
 import O from "observers"
 
 O.addSale.handler = async (ctx) => {

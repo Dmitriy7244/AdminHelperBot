@@ -18,12 +18,14 @@
     "types": "./src/base/types.ts",
     "userbot": "./src/core/userbot.ts",
     "core/": "./src/core/",
-    "my_grammy": "https://deno.land/x/my_grammy@v0.0.12/mod.ts",
+    "my_grammy": "https://deno.land/x/my_grammy@v0.0.13/mod.ts",
+    "my_grammy_lib": "https://deno.land/x/my_grammy@v0.0.13/lib.ts",
     "grammy": "https://deno.land/x/grammy@v1.17.2/mod.ts",
     "tg": "https://deno.land/x/grammy@v1.17.2/types.ts",
     "sleep": "https://deno.land/x/sleep@v1.2.1/sleep.ts",
     "mongoose": "npm:mongoose",
     "typegoose": "npm:@typegoose/typegoose",
+    "my_mongo": "https://deno.land/x/my_mongo@v0.0.1/mod.ts",
     "env": "https://deno.land/x/parse_env@v0.0.3/mod.ts"
   },
   "fmt": {

@@ -1,11 +1,7 @@
-import env from "env"
-import { getModelForClass, mongoose, prop } from "typegoose"
+import { connectToMongoFromEnv } from "my_mongo"
+import { getModelForClass, prop } from "typegoose"
 
-mongoose.connect(
-  `mongodb://root:${env.str("MONGO_PASSWORD")}@${env.str("MONGO_HOST")}:27017/${
-    env.str("MONGO_DB")
-  }?authSource=admin`,
-)
+connectToMongoFromEnv()
 
 export class Channel {
   @prop()

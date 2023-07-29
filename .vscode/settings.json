@@ -11,7 +11,10 @@
     "**/__pycache__": true,
     "generated": true,
     "node_modules": true,
-    "generated\\client": true
+    "generated\\client": true,
+    "[!s]*/**": true,
+    "s[!r]*/**": true,
+    "sr[!c]*/**": true
   },
   "workspace.isHidden": true,
   "editor.defaultFormatter": "denoland.vscode-deno"

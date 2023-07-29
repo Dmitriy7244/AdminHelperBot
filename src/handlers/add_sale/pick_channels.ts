@@ -1,8 +1,8 @@
 import { CHANNELS } from "config"
-import { editReplyMarkup, exclude, parseQuery, reply } from "core/mod.ts"
 import K from "kbs"
 import { saveLastMsgId, setState } from "lib"
 import M from "messages"
+import { editReplyMarkup, exclude, parseQuery, reply } from "my_grammy_lib"
 import O from "observers"
 
 O.pickChannel.handler = async (ctx) => {

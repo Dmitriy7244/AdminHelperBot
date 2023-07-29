@@ -1,5 +1,5 @@
-import { CallbackButton } from "core/mod.ts"
 import { CallbackData, PrefixButton } from "loader"
+import { CallbackButton } from "my_grammy_lib"
 
 class Buttons {
   channel = (title: string, selected: string[]) =>

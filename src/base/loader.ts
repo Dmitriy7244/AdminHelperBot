@@ -1,6 +1,6 @@
 import { MyBot } from "core/bot.ts"
-import * as core from "core/mod.ts"
 import { BaseContext, Observer } from "my_grammy"
+import * as mgl from "my_grammy_lib"
 import { Command, MySession, QueryPrefix, State } from "types"
 
 const defaultSession: MySession = {
@@ -13,8 +13,8 @@ const defaultSession: MySession = {
 
 export type MyContext = BaseContext<MySession>
 export const bot = new MyBot(null, defaultSession)
-export const CallbackData = core.CallbackData<QueryPrefix>
-export const PrefixButton = core.PrefixButton<QueryPrefix>
+export const CallbackData = mgl.CallbackData<QueryPrefix>
+export const PrefixButton = mgl.PrefixButton<QueryPrefix>
 
 export const observer = new Observer<
   MyContext,

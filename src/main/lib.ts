@@ -1,16 +1,20 @@
 import { ADMIN_ID, CHANNELS } from "config"
-import * as core from "core/mod.ts"
-import { editReplyMarkup, parseEntity, Time } from "core/mod.ts"
 import K from "kbs"
 import { bot } from "loader"
 import { Channel, Post, Sale, SaleDoc } from "models"
 import { Document } from "mongoose"
 import { bold, link } from "my_grammy"
+import {
+  editReplyMarkup,
+  parseEntity,
+  setState as _setState,
+  Time,
+} from "my_grammy_lib"
 import { sleep } from "sleep"
 import { BotCommand, Message } from "tg"
 import { Command, MyContext, State } from "types"
 
-export const setState = core.setState<State>
+export const setState = _setState<State>
 
 export async function findSale(text: string) {
   const sales = await SaleDoc.find({ text }).exec()
