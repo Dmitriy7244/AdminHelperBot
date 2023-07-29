@@ -4,7 +4,8 @@ import { InlineKeyboard } from "grammy"
 import { addButtons } from "my_grammy_lib"
 
 class Keyboards {
-  schedulePost = new InlineKeyboard().add(B.schedulePost)
+  schedulePost = (saleId: string) =>
+    new InlineKeyboard().add(B.schedulePost(saleId))
   pickChannels = (selected: string[] = []) => {
     const buttons = CHANNELS.map((c) => B.pickChannel(c.title, selected))
     return addButtons(new InlineKeyboard(), buttons, 2).add(B.pickAll, B.ready)
@@ -16,7 +17,7 @@ class Keyboards {
       .add(B.ready)
   }
   ready = new InlineKeyboard().add(B.ready)
-  addPostButtons = new InlineKeyboard().add(B.addButtons)
+  addPostButtons=(saleId:string) => new InlineKeyboard().add(B.addButtons(saleId))
 }
 
 const K = new Keyboards()

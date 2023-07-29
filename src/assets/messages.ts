@@ -12,12 +12,13 @@ class Messages {
   channels = new Msg(T.channels)
   dateError = new Msg(T.dateError)
   timeError = new Msg(T.timeError)
-  askPost = new Msg(T.suggestPost, K.schedulePost)
+  askPost = (saleId: string) => new Msg(T.suggestPost, K.schedulePost(saleId))
   sale = (s: Sale) => new Msg(reprSale(s))
   askChannels = new Msg(T.askChannels, K.pickChannels())
   postOptions = (asForward = false, noSound = false) =>
     new Msg(T.askPost, K.postOptions(asForward, noSound))
-  postScheduled = new Msg("Пост запланирован", K.addPostButtons)
+  postScheduled = (saleId: string) =>
+    new Msg("Пост запланирован", K.addPostButtons(saleId))
   askButtons = new Msg(T.askButtons)
   buttonsAdded = (preview: string) => new Msg(`Добавлены кнопки:\n\n${preview}`)
   content = {

@@ -14,7 +14,11 @@ class Buttons {
     )
   pickAll = PrefixButton("➕ Выбрать все")
   ready = PrefixButton("✅ Готово")
-  schedulePost = PrefixButton("Запланировать пост")
+  schedulePost = (saleId: string) =>
+    CallbackButton(
+      CallbackData("Запланировать пост", saleId),
+      "Запланировать пост",
+    )
   asForward = (value = false) =>
     PrefixButton(
       "asForward",
@@ -25,7 +29,11 @@ class Buttons {
       "noSound",
       "Без звука: " + (value ? "да" : "нет"),
     )
-  addButtons = PrefixButton("Добавить кнопки")
+  addButtons = (saleId: string) =>
+    CallbackButton(
+      CallbackData("Добавить кнопки", saleId),
+      "Добавить кнопки",
+    )
   channel = (title: string) => ChannelButton(title)
 }
 

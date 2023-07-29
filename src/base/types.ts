@@ -1,4 +1,4 @@
-import { Sale } from "models"
+import { Button } from "models"
 import { BaseContext, BaseSession, Observer } from "my_grammy"
 
 export type State =
@@ -37,7 +37,8 @@ export type MySession = BaseSession & {
   date?: Date
   lastMessageId?: number
   postText?: string
-  sale?: Sale
+  saleId?: string
+  saleButtons: Button[][]
 }
 
 export type MyContext = BaseContext<MySession>

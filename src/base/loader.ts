@@ -10,6 +10,7 @@ const defaultSession: MySession = {
   messageIds: [],
   filedIds: [],
   state: undefined,
+  saleButtons: [],
 }
 
 export type MyContext = BaseContext<MySession>

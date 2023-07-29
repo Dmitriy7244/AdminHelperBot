@@ -9,7 +9,7 @@ import {
   tryDeleteLastMsg,
 } from "lib"
 import M from "messages"
-import { Sale, Seller } from "models"
+import { Sale, SaleDoc, Seller } from "models"
 import { reply, sendMessage } from "my_grammy_lib"
 import O from "observers"
 
@@ -46,9 +46,9 @@ O.saleTime.handler = async (ctx) => {
   const channels = ctx.session.channels!.map((c) => findChannel(c))
   const seller = new Seller(ctx.from.id, ctx.from.first_name)
   const sale = new Sale(ctx.session.date!, channels, seller)
-  ctx.session.sale = sale
+  const saleDoc = await SaleDoc.create(sale)
   await sendMessage(ctx, REPORT_CHAT_ID, M.sale(sale))
-  const msg = await reply(ctx, M.askPost)
+  const msg = await reply(ctx, M.askPost(saleDoc.id))
   setState(ctx)
   await ctx.deleteMessage()
   await tryDeleteLastMsg(ctx)

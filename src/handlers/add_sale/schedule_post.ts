@@ -1,6 +1,5 @@
 import {
-  findChannel,
-  findSale,
+  parseQuery,
   resetSalePost,
   saveLastMsgId,
   setState,
@@ -15,6 +14,9 @@ import O from "observers"
 import { copyMessages } from "userbot"
 
 O.schedulePost.handler = async (ctx) => {
+  const saleId = parseQuery(ctx, "Запланировать пост")
+  ctx.session.saleId = saleId
+  ctx.session.saleButtons = []
   setState(ctx, "sale:post")
   resetSalePost(ctx)
   const m = M.postOptions(ctx.session.asForward, ctx.session.noSound)
@@ -26,7 +28,7 @@ O.salePostMessage.handler = (ctx) => {
   const text = ctx.msg.text ?? ctx.msg.caption
   const buttons = (ctx.msg.reply_markup?.inline_keyboard ?? []) as Button[][]
   if (text) ctx.session.postText = text
-  ctx.session.sale!.buttons.push(...buttons)
+  ctx.session.saleButtons.push(...buttons)
 }
 
 O.asForward.handler = async (ctx) => {
@@ -43,18 +45,25 @@ function answerQuery(ctx: BaseContext, text: string, alert = true) {
 
 O.salePostReady.handler = async (ctx) => {
   const messageIds = ctx.session.messageIds!
+
   if (!messageIds.length) {
     await answerQuery(ctx, "Сначала отправь пост, потом вернись к этой кнопке")
     return
   }
-  const sale = ctx.session.sale!
+
+  const saleId = ctx.session.saleId!
+  const sale = await SaleDoc.findById(saleId)
+  if (!sale) {
+    ctx.reply("Ошибка, зовите Дмитрия")
+    return
+  }
   sale.text = ctx.session.postText
-  await SaleDoc.create(sale)
-  for (const c of ctx.session.channels!) {
-    const channel = findChannel(c)
+  await sale.save()
+
+  for (const c of sale.channels) {
     try {
       await copyMessages(
-        channel.id,
+        c.id,
         ctx.chat!.id,
         messageIds,
         ctx.session.date!,
@@ -67,13 +76,14 @@ O.salePostReady.handler = async (ctx) => {
     }
   }
   setState(ctx)
-  await editText(ctx, M.postScheduled)
+  await editText(ctx, M.postScheduled(saleId))
   for (const id of messageIds) {
     await ctx.api.deleteMessage(ctx.chat!.id, id)
   }
 }
 
 O.addButtons.handler = async (ctx) => {
+  ctx.session.saleId = parseQuery(ctx, "Добавить кнопки")
   setState(ctx, "sale:buttons")
   saveLastMsgId(ctx, ctx.msg!)
   await editText(ctx, M.askButtons)
@@ -88,7 +98,7 @@ O.buttonsToAdd.handler = async (ctx) => {
     await ctx.reply("Ошибка в формате кнопок, попробуй снова")
     return
   }
-  const sale = await findSale(ctx.session.sale?.text!)
+  const sale = await SaleDoc.findById(ctx.session.saleId)
   if (!sale) {
     await ctx.reply("Ошибка, зовите Дмитрия!")
     return
