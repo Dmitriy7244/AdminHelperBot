@@ -34,7 +34,6 @@ O.channelPost.handler = async (ctx) => {
   const deleteTime = Time() + AD_DURATION
   const p = await PostDoc.create({ chatId, messageIds, deleteTime })
   schedulePostDelete(p)
-  scheduleNewContentPost(chatId, AD_TOP_DURATION)
   if (!sale.buttons.length) return
   const buttons = sale.buttons.map((row) =>
     row.map((b) => ({ text: b.text, url: b.url }))
@@ -43,7 +42,6 @@ O.channelPost.handler = async (ctx) => {
 }
 
 const AD_DURATION = 60 * 60 * 24
-const AD_TOP_DURATION = env.int("AD_TOP_DURATION")
 
 O.checkRights.handler = async (ctx) => {
   const noRightsChannels = []

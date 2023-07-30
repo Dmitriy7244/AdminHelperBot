@@ -33,6 +33,8 @@ Telegram telegram.org
 
 Telegram telegram.org | Новости telegram.org/blog
 FAQ telegram.org/faq | Скачать telegram.org/apps`
+  askContentPost =
+    "Отправь любое количество сообщений, все они будут считаться за один пост, затем нажми кнопку"
 }
 
 const T = new Texts()

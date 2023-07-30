@@ -9,7 +9,7 @@ class Observers {
   content = {
     command: o.command("content"),
     pickChannel: o.query("channel").state("content:channel"),
-    photo: o.photo().state("content:posts"),
+    postMessage: o.message().state("content:posts"),
     ready: o.query("✅ Готово").state("content:posts"),
   }
   pickSaleChannel = o.query("channel")

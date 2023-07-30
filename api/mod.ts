@@ -33,5 +33,5 @@ export async function findSale(text: string) {
 
 export { ADMIN_ID, CHANNELS, REPORT_CHAT_ID } from "config"
 export { ButtonsPreview, parseButtons } from "./buttons.ts"
-export { resolveDate, resolveDatetime } from "./dates.ts"
+export { nextYear, resolveDate, resolveDatetime } from "./dates.ts"
 export { reprSale } from "./repr_sale.ts"

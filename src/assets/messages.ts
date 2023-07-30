@@ -1,5 +1,5 @@
-import K from "kbs"
 import { reprSale } from "api"
+import K from "kbs"
 import { Sale } from "models"
 import { Msg } from "my_grammy"
 import T from "texts"
@@ -23,10 +23,7 @@ class Messages {
   buttonsAdded = (preview: string) => new Msg(`Добавлены кнопки:\n\n${preview}`)
   content = {
     askChannel: new Msg("Выбери канал", K.pickChannel),
-    askPosts: new Msg(
-      "Отправь все посты (только одиночные фото, можно с подписью), затем нажми кнопку",
-      K.ready,
-    ),
+    askPosts: new Msg(T.askContentPost, K.ready),
   }
 }
 

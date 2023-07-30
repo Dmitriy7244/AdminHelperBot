@@ -6,10 +6,10 @@ const USERBOT_TOKEN = env.str("USERBOT_TOKEN")
 interface Result {
   ok: boolean
   error: string | null
-  result: object | null
+  result: Record<string, any>
 }
 
-type Method = "copyMessages" | "getPostMessages"
+type Method = "copyMessages" | "getPostMessages" | "reschedulePost"
 
 async function post(method: Method, data: object) {
   const body = JSON.stringify(data)
@@ -29,10 +29,10 @@ async function copyMessages(
   from_chat_id: number,
   message_ids: number[],
   date: Date,
-  as_forward: boolean,
-  no_sound: boolean,
+  as_forward = false,
+  no_sound = false,
 ) {
-  await post("copyMessages", {
+  const result = await post("copyMessages", {
     chat_id,
     from_chat_id,
     message_ids,
@@ -40,11 +40,24 @@ async function copyMessages(
     no_sound,
     schedule_date: date.getTime() / 1000,
   })
+
+  const messageIds = result.message_ids
+  if (!messageIds) throw new Error("Bad result")
+  return messageIds as number[]
 }
 
 async function getPostMessages(chat_id: number, message_id: number) {
   const data = { chat_id, message_id }
   return await post("getPostMessages", data) as number[]
+}
+
+export async function reschedulePost(
+  chat_id: number,
+  message_ids: number[],
+  date: number,
+) {
+  const data = { chat_id, message_ids, date }
+  await post("reschedulePost", data)
 }
 
 export { copyMessages, getPostMessages }

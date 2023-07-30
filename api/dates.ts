@@ -10,6 +10,11 @@ function nextMonth(date: Date) {
   date.setMonth(date.getMonth() + 1)
 }
 
+export function nextYear(date: Date) {
+  date.setFullYear(date.getFullYear() + 1)
+  return date
+}
+
 export function resolveDatetime(time: string, base_date: Date) {
   let [hour, minute] = time.split(" ").map(Number)
   minute = minute || 0

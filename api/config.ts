@@ -27,13 +27,13 @@ interface Channel {
   url: string
 }
 
-const CHANNELS: Channel[] = _channelsData.map((c) => ({
+export const CHANNELS: Channel[] = _channelsData.map((c) => ({
   id: c[0],
   title: c[1],
   url: c[2],
 }))
 
-const REPORT_CHAT_ID = env.int("REPORT_CHAT_ID")
-const ADMIN_ID = 724477101
-
-export { ADMIN_ID, CHANNELS, REPORT_CHAT_ID }
+export const REPORT_CHAT_ID = env.int("REPORT_CHAT_ID")
+export const CONTENT_CHAT_ID = env.int("CONTENT_CHAT_ID")
+export const ADMIN_ID = 724477101
+export const AD_TOP_DURATION = env.int("AD_TOP_DURATION")

@@ -80,6 +80,14 @@ export class ContentPost {
   text?: string
 }
 
+export class ScheduledPost {
+  @prop()
+  chatId: number
+  @prop({ type: Number })
+  messageIds: number[]
+}
+
 export const SaleDoc = getModelForClass(Sale)
 export const PostDoc = getModelForClass(Post)
 export const ContentPostDoc = getModelForClass(ContentPost)
+export const ScheduledPostDoc = getModelForClass(ScheduledPost)

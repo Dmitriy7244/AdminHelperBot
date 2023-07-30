@@ -35,5 +35,6 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false
-  }
+  },
+  "lint": { "rules": { "exclude": ["no-explicit-any"] } }
 }

@@ -2,13 +2,21 @@ import * as api from "api"
 import { ADMIN_ID, CHANNELS, REPORT_CHAT_ID } from "api"
 import K from "kbs"
 import { bot } from "loader"
-import { Channel, ContentPost, ContentPostDoc, Post } from "models"
+import {
+  Channel,
+  ContentPost,
+  ContentPostDoc,
+  Post,
+  ScheduledPost,
+  ScheduledPostDoc,
+} from "models"
 import { Document } from "mongoose"
 import * as mgl from "my_grammy_lib"
 import { editReplyMarkup, sendPhoto, Time } from "my_grammy_lib"
 import { sleep } from "sleep"
 import { BotCommand, Message } from "tg"
 import { Command, MyContext, QueryPrefix, State } from "types"
+import { reschedulePost } from "userbot"
 
 export const setState = mgl.setState<State>
 export const parseQuery = mgl.parseQuery<QueryPrefix>
@@ -48,7 +56,24 @@ export async function schedulePostDelete(post: Document & Post) {
   await post.deleteOne()
 }
 
-export async function scheduleNewContentPost(chatId: number, delay: number) {
+export async function scheduleNewContentPost(chatId: number, date: number) {
+  const post = await ScheduledPostDoc.findOne({ chatId })
+  if (!post) {
+    console.log("No content post", { chatId })
+    return
+  }
+  await scheduleContentPost(post, date)
+}
+
+export async function scheduleContentPost(
+  post: ScheduledPost & Document,
+  date: number,
+) {
+  await reschedulePost(post.chatId, post.messageIds, date)
+  await post.deleteOne()
+}
+
+export async function _scheduleNewContentPost(chatId: number, delay: number) {
   const post = await ContentPostDoc.findOne({ chatId, date: undefined })
   if (!post) {
     console.log("No content post", { chatId })
@@ -56,10 +81,10 @@ export async function scheduleNewContentPost(chatId: number, delay: number) {
   }
   post.date = Time() + delay
   await post.save()
-  await scheduleContentPost(post)
+  await _scheduleContentPost(post)
 }
 
-export async function scheduleContentPost(post: ContentPost & Document) {
+export async function _scheduleContentPost(post: ContentPost & Document) {
   if (!post.date) return
   const delay = post.date - Time()
   await sleep(delay)
