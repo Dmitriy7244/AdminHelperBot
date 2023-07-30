@@ -3,6 +3,7 @@ import { ADMIN_ID, CHANNELS, REPORT_CHAT_ID } from "api"
 import K from "kbs"
 import { bot } from "loader"
 import {
+  Button,
   Channel,
   ContentPost,
   ContentPostDoc,
@@ -11,9 +12,10 @@ import {
   ScheduledPostDoc,
 } from "models"
 import { Document } from "mongoose"
+import { BaseContext } from "my_grammy"
 import * as mgl from "my_grammy_lib"
 import { editReplyMarkup, sendPhoto, Time } from "my_grammy_lib"
-import { sleep } from "sleep"
+import { sleep, sleepRandomAmountOfSeconds } from "sleep"
 import { BotCommand, Message } from "tg"
 import { Command, MyContext, QueryPrefix, State } from "types"
 import { reschedulePost } from "userbot"
@@ -45,6 +47,25 @@ export async function setCommands() {
   await bot.api.setMyCommands(COMMANDS)
   await bot.setChatCommands(COMMANDS, ADMIN_ID)
   await bot.setChatCommands(COMMANDS, REPORT_CHAT_ID)
+}
+
+export async function trySetButtons(
+  ctx: BaseContext,
+  chatId: number,
+  messageId: number,
+  buttons: Button[][],
+) {
+  console.log("Trying add button", { chatId, messageId })
+  for (let attempts = 0; attempts < 3; attempts++) {
+    await sleepRandomAmountOfSeconds(1, 5)
+    try {
+      await editReplyMarkup(ctx, { inline_keyboard: buttons })
+      console.log("Buttons set", { attempts, chatId, messageId })
+      return
+    } catch (e) {
+      console.log("Failed to set buttons", { attempts, chatId, messageId }, e)
+    }
+  }
 }
 
 export async function schedulePostDelete(post: Document & Post) {

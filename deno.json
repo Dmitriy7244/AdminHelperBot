@@ -3,7 +3,8 @@
     "start": "deno run -A --unstable src/main/mod.ts",
     "dev": "deno run --watch -A --unstable src/main/mod.ts",
     "lint": "deno lint && deno check src/main/mod.ts",
-    "reload": "deno run -A --unstable --reload src/main/mod.ts"
+    "reload": "deno run -A --unstable --reload src/main/mod.ts",
+    "test": "deno run -A --unstable tests/test.ts"
   },
   "imports": {
     "buttons": "./src/assets/buttons.ts",
