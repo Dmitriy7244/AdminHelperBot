@@ -66,6 +66,7 @@ export async function trySetButtons(
       console.log("Failed to set buttons", { attempts, chatId, messageId }, e)
     }
   }
+  await bot.api.sendMessage(ADMIN_ID, "Ошибка с кнопками")
 }
 
 export async function schedulePostDelete(post: Document & Post) {
