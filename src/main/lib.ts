@@ -46,7 +46,7 @@ const COMMANDS = [
 export async function setCommands() {
   await bot.api.setMyCommands(COMMANDS)
   await bot.setChatCommands(COMMANDS, ADMIN_ID)
-  await bot.setChatCommands(COMMANDS, REPORT_CHAT_ID)
+  // await bot.setChatCommands(COMMANDS, REPORT_CHAT_ID)
 }
 
 export async function trySetButtons(

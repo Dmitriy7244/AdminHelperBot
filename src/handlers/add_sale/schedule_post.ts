@@ -30,6 +30,7 @@ O.salePostMessage.handler = (ctx) => {
   const buttons = (ctx.msg.reply_markup?.inline_keyboard ?? []) as Button[][]
   if (text) ctx.session.postText = text
   ctx.session.saleButtons.push(...buttons)
+  console.log(ctx.session.saleButtons)
 }
 
 O.asForward.handler = async (ctx) => {
@@ -59,6 +60,7 @@ O.salePostReady.handler = async (ctx) => {
     return
   }
   sale.text = ctx.session.postText
+  sale.buttons = ctx.session.saleButtons
   await sale.save()
 
   for (const c of sale.channels) {
