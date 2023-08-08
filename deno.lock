@@ -290,6 +290,8 @@
     "https://deno.land/x/my_mongo@v0.0.1/mod.ts": "974205dbc9ea69a5e9df9cc5deb3ee4e874443cf616f699efa8b358613d553fd",
     "https://deno.land/x/my_mongo@v0.0.2/deps.ts": "6714e95f819c510db789ea248bc21ad115297f11aa89dfa1ee368f8dd4a67c17",
     "https://deno.land/x/my_mongo@v0.0.2/mod.ts": "748ae40bd0712749f4263431c79346ac5127b442a4d230d57d00443cbb4ef422",
+    "https://deno.land/x/my_mongo@v0.1.0/deps.ts": "6714e95f819c510db789ea248bc21ad115297f11aa89dfa1ee368f8dd4a67c17",
+    "https://deno.land/x/my_mongo@v0.1.0/mod.ts": "82d0c1b0f9311a3f3388281bb8393bfc003f1babcc32352352e481f4b6e23709",
     "https://deno.land/x/parse_env@v0.0.1/mod.ts": "d8ea538ab4a3996bc8c59abebdd15f53344158362c854dcdb4659e0dead8ad5f",
     "https://deno.land/x/parse_env@v0.0.2/mod.ts": "6f8ed8ee72951ee4ba6adfa312e563cb13c95060d71ba10aed0241322b3ad7fd",
     "https://deno.land/x/parse_env@v0.0.3/mod.ts": "925e2d4020216cf6ce28d707b88e309dde419c6f670e6106089dafdd6179a714",

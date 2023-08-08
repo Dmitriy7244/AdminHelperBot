@@ -21,11 +21,23 @@ export async function fixKeyboard(postUrl: string) {
   const [chatId, msgIdRaw] = postUrl.split("/")
   const msgId = Number(msgIdRaw)
   console.log(chatId, msgId)
-  await bot.setKeyboard(chatId, msgId, [[{
-    text: "Избавиться от проблем за пару дней 👈",
-    url: "https://t.me/+bVoyq_fTo4JhMmZi",
-  }]])
+  await bot.setKeyboard(chatId, msgId, [
+    [
+      {
+        text: "ТУТ",
+        url: "https://t.me/+lHsEag3M4fU0Y2Qy",
+      },
+      {
+        text: "ТУТ",
+        url: "https://t.me/+lHsEag3M4fU0Y2Qy",
+      },
+      {
+        text: "ТУТ",
+        url: "https://t.me/+lHsEag3M4fU0Y2Qy",
+      },
+    ],
+  ])
 }
 
-// await fixKeyboard("https://t.me/c/1988740515/1230")
+// await fixKeyboard("https://t.me/c/1988740515/1287");
 console.log("started")

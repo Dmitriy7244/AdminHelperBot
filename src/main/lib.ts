@@ -1,5 +1,5 @@
 import * as api from "api"
-import { ADMIN_ID, CHANNELS, REPORT_CHAT_ID } from "api"
+import { ADMIN_ID, CHANNELS } from "api"
 import K from "kbs"
 import { bot } from "loader"
 import {
