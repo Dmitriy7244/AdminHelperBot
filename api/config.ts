@@ -19,6 +19,7 @@ const _channelsData = [
   [-1001671652919, "Обои", "https://t.me/wallposter_r"],
   [-1001942180236, "ЯОЙ", "https://t.me/+XnJ8RZIXcfAyYjVi"],
   [-1001585027208, "Тест", "https://t.me/test7244c"],
+  [-1001706599226, "Темки", "http://t.me/meruemtemki"],
 ] as const
 
 interface Channel {
