@@ -25,6 +25,7 @@ export type QueryPrefix =
   | "asForward"
   | "noSound"
   | "Добавить кнопки"
+  | "Сегодня"
 
 export type MySession = BaseSession & {
   messageIds: number[]

@@ -16,7 +16,7 @@ export function nextYear(date: Date) {
 }
 
 export function resolveDatetime(time: string, base_date: Date) {
-  let [hour, minute] = time.split(" ").map(Number)
+  let [hour, minute] = time.replace(":", " ").split(" ").map(Number)
   minute = minute || 0
   if (!Number.isInteger(hour) || !Number.isInteger(minute)) {
     throw new Error("Bad time")

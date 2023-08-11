@@ -35,6 +35,7 @@ class Buttons {
       "Добавить кнопки",
     )
   channel = (title: string) => ChannelButton(title)
+  today = PrefixButton("Сегодня")
 }
 
 const B = new Buttons()

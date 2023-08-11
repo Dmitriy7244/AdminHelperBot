@@ -23,6 +23,7 @@ class Observers {
   addButtons = o.query("Добавить кнопки")
   buttonsToAdd = o.text().state("sale:buttons")
   saleDate = o.text().state("sale:date")
+  saleDateToday = o.query("Сегодня").state("sale:date")
   saleTime = o.text().state("sale:time")
   channelPost = o.channelPost()
   salePostMessage = o.message().state("sale:post")

@@ -18,6 +18,7 @@ class Keyboards {
   }
   ready = new InlineKeyboard().add(B.ready)
   addPostButtons=(saleId:string) => new InlineKeyboard().add(B.addButtons(saleId))
+  today = new InlineKeyboard().add(B.today)
 }
 
 const K = new Keyboards()

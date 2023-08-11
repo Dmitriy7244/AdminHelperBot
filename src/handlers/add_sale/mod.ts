@@ -12,6 +12,7 @@ import M from "messages"
 import { Sale, SaleDoc, Seller } from "models"
 import { reply, sendMessage } from "my_grammy_lib"
 import O from "observers"
+import { MyContext } from "types"
 
 O.addSale.handler = async (ctx) => {
   ctx.session.channels = []
@@ -29,6 +30,15 @@ O.saleDate.handler = async (ctx) => {
     await reply(ctx, M.dateError)
     return
   }
+  await onSaleDate(ctx)
+}
+
+O.saleDateToday.handler = async (ctx) => {
+  ctx.session.date = new Date()
+  await onSaleDate(ctx)
+}
+
+async function onSaleDate(ctx: MyContext) {
   const msg = await reply(ctx, M.askTime)
   setState(ctx, "sale:time")
   await ctx.deleteMessage()
