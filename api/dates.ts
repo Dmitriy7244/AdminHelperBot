@@ -16,10 +16,17 @@ export function nextYear(date: Date) {
 }
 
 export function resolveDatetime(time: string, base_date: Date) {
-  let [hour, minute] = time.replace(":", " ").split(" ").map(Number)
+  let [hour, minute] = reformatTime(time).split(" ").map(Number)
   minute = minute || 0
   if (!Number.isInteger(hour) || !Number.isInteger(minute)) {
     throw new Error("Bad time")
   }
   base_date.setHours(hour, minute)
+}
+
+function reformatTime(time: string) {
+  const re = /(\w{2})(\w{2})/
+  const result = time.replace(re, "$1 $2").replace(":", " ")
+  console.log(result)
+  return result
 }

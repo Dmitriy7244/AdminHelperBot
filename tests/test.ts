@@ -1,12 +1,8 @@
-import * as sentry from "npm:@sentry/node"
-
-sentry.init({
-  dsn:
-    "https://f4cbd92171ed07444554c7b855a3649a@o4505617237213184.ingest.sentry.io/4505617248550912",
-})
-
-try {
-  throw new Error("123")
-} catch (e) {
-  sentry.captureException(e)
+function reformatTime(time: string) {
+  const re = /(\w{2})(\w{2})/
+  return time.replace(re, "$1 $2")
 }
+
+const a = "0923"
+const r = reformatTime(a)
+console.log(r)

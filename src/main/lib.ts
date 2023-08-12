@@ -49,6 +49,11 @@ export async function setCommands() {
   // await bot.setChatCommands(COMMANDS, REPORT_CHAT_ID)
 }
 
+export function reformatTime(time: string) {
+  const re = /(\w{2})(\w{2})/
+  return time.replace(re, "$1 $2")
+}
+
 export async function trySetButtons(
   ctx: BaseContext,
   chatId: number,
