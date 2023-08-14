@@ -18,7 +18,7 @@ class Keyboards {
   ) => {
     return new InlineKeyboard()
       .add(B.asForward(asForward), B.noSound(noSound)).row()
-      .add(B.deleteTimer(deleteTimerHours))
+      .add(B.deleteTimer(deleteTimerHours)).row()
       .add(B.ready)
   }
   ready = new InlineKeyboard().add(B.ready)
