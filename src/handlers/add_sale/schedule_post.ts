@@ -18,7 +18,7 @@ O.schedulePost.handler = async (ctx) => {
   const saleId = parseQuery(ctx, "Запланировать пост")
   ctx.session.saleId = saleId
   ctx.session.saleButtons = []
-  ctx.session.deleteTimerHours = 24
+  ctx.session.deleteTimerHours = 48
   setState(ctx, "sale:post")
   resetSalePost(ctx)
   const m = M.postOptions(
