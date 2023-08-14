@@ -18,9 +18,14 @@ O.schedulePost.handler = async (ctx) => {
   const saleId = parseQuery(ctx, "Запланировать пост")
   ctx.session.saleId = saleId
   ctx.session.saleButtons = []
+  ctx.session.deleteTimerHours = 24
   setState(ctx, "sale:post")
   resetSalePost(ctx)
-  const m = M.postOptions(ctx.session.asForward, ctx.session.noSound)
+  const m = M.postOptions(
+    ctx.session.deleteTimerHours,
+    ctx.session.asForward,
+    ctx.session.noSound,
+  )
   await editText(ctx, m)
 }
 
@@ -39,6 +44,15 @@ O.asForward.handler = async (ctx) => {
 
 O.noSound.handler = async (ctx) => {
   await updatePostOptions(ctx, ctx.session.asForward, !ctx.session.noSound)
+}
+
+O.deleteTimer.handler = async (ctx) => {
+  let hours = ctx.session.deleteTimerHours
+  if (hours == 24) hours = 48
+  else if (hours == 48) hours = 2
+  else hours = 24
+  ctx.session.deleteTimerHours = hours
+  await updatePostOptions(ctx, ctx.session.asForward, ctx.session.noSound)
 }
 
 function answerQuery(ctx: BaseContext, text: string, alert = true) {
@@ -61,6 +75,7 @@ O.salePostReady.handler = async (ctx) => {
   }
   sale.text = ctx.session.postText
   sale.buttons = ctx.session.saleButtons
+  sale.deleteTimerHours = ctx.session.deleteTimerHours
   await sale.save()
 
   for (const c of sale.channels) {

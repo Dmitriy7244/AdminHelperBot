@@ -138,9 +138,13 @@ export async function updatePostOptions(
   asForward = false,
   noSound = false,
 ) {
+  const deleteTimerHours = ctx.session.deleteTimerHours
   ctx.session.asForward = asForward
   ctx.session.noSound = noSound
-  await editReplyMarkup(ctx, K.postOptions(asForward, noSound))
+  await editReplyMarkup(
+    ctx,
+    K.postOptions(deleteTimerHours, asForward, noSound),
+  )
 }
 
 export function resetSalePost(ctx: MyContext) {

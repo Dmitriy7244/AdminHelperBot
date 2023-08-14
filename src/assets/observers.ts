@@ -19,6 +19,7 @@ class Observers {
   salePostReady = this.ready.state("sale:post")
   asForward = o.query("asForward")
   noSound = o.query("noSound")
+  deleteTimer = o.query("Таймер удаления")
   schedulePost = o.query("Запланировать пост")
   addButtons = o.query("Добавить кнопки")
   buttonsToAdd = o.text().state("sale:buttons")

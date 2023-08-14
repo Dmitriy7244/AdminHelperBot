@@ -15,8 +15,11 @@ class Messages {
   askPost = (saleId: string) => new Msg(T.suggestPost, K.schedulePost(saleId))
   sale = (s: Sale) => new Msg(reprSale(s))
   askChannels = new Msg(T.askChannels, K.pickChannels())
-  postOptions = (asForward = false, noSound = false) =>
-    new Msg(T.askPost, K.postOptions(asForward, noSound))
+  postOptions = (
+    deleteTimerHours: number,
+    asForward = false,
+    noSound = false,
+  ) => new Msg(T.askPost, K.postOptions(deleteTimerHours, asForward, noSound))
   postScheduled = (saleId: string) =>
     new Msg("Пост запланирован", K.addPostButtons(saleId))
   askButtons = new Msg(T.askButtons)

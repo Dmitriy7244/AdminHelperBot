@@ -11,6 +11,7 @@ const defaultSession: MySession = {
   filedIds: [],
   state: undefined,
   saleButtons: [],
+  deleteTimerHours: 24,
 }
 
 export type MyContext = BaseContext<MySession>

@@ -26,6 +26,7 @@ export type QueryPrefix =
   | "noSound"
   | "Добавить кнопки"
   | "Сегодня"
+  | "Таймер удаления"
 
 export type MySession = BaseSession & {
   messageIds: number[]
@@ -40,6 +41,7 @@ export type MySession = BaseSession & {
   postText?: string
   saleId?: string
   saleButtons: Button[][]
+  deleteTimerHours: number
 }
 
 export type MyContext = BaseContext<MySession>

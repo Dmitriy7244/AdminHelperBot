@@ -32,7 +32,7 @@ O.channelPost.handler = async (ctx) => {
   if (ctx.msg.media_group_id) {
     messageIds = await getPostMessages(chatId, ctx.msg.message_id)
   }
-  const deleteTime = Time() + AD_DURATION
+  const deleteTime = Time() + (sale.deleteTimerHours ?? 24) * 60 * 60
   const p = await PostDoc.create({ chatId, messageIds, deleteTime })
   schedulePostDelete(p)
   if (!sale.buttons.length) return
@@ -41,8 +41,6 @@ O.channelPost.handler = async (ctx) => {
   )
   trySetButtons(ctx, chatId, messageId, buttons)
 }
-
-const AD_DURATION = 60 * 60 * 24
 
 O.checkRights.handler = async (ctx) => {
   const noRightsChannels = []

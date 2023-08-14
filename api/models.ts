@@ -49,6 +49,8 @@ export class Sale {
   text?: string
   @prop({ type: [[Button]] })
   buttons: Button[][]
+  @prop()
+  deleteTimerHours?: number
 
   constructor(publishDate: Date, channels: Channel[], seller: Seller) {
     this.publishDate = publishDate
