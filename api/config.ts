@@ -21,6 +21,7 @@ const _channelsData = [
   [-1001706599226, "Темки", "http://t.me/meruemtemki"],
   [-1001350184422, "Цитатник", "https://t.me/singgattamedog"],
   [-1001701678664, "Кпоп", "https://t.me/koreancaverdance"],
+  [-1001688994342, "Tyanочки", "https://t.me/anime4_girls"],
   [-1001585027208, "Тест", "https://t.me/test7244c"],
 ] as const
 
