@@ -1,9 +1,10 @@
 import { schedulePostDelete, setCommands } from "lib"
 import { bot } from "loader"
 import { PostDoc } from "models"
-import { checkAccess } from "./middlewares.ts"
+import { checkAccess, spyAfterRoma } from "./middlewares.ts"
 
 bot.use(checkAccess)
+bot.use(spyAfterRoma)
 bot.catch(console.error)
 bot.run()
 

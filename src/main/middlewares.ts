@@ -11,3 +11,10 @@ export async function checkAccess(ctx: Context, next: NextFunction) {
   }
   await next()
 }
+
+export async function spyAfterRoma(ctx: Context, next: NextFunction) {
+  if (ctx.from?.id == 936845322) {
+    console.log("Roma:", ctx.message?.text ?? ctx.callbackQuery?.data)
+  }
+  await next()
+}
