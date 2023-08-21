@@ -1,6 +1,6 @@
 import env from "env"
 
-const USERBOT_URL = "https://my-bots.ru/userbot/"
+const USERBOT_URL = "https://tw2.my-bots.ru/userbot/"
 const USERBOT_TOKEN = env.str("USERBOT_TOKEN")
 
 interface Result {
