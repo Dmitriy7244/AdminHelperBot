@@ -1,5 +1,5 @@
 import * as api from "api"
-import { ADMIN_ID, CHANNELS } from "api"
+import { ADMIN_ID, CHANNELS, reschedulePost } from "api"
 import K from "kbs"
 import { bot } from "loader"
 import {
@@ -14,11 +14,10 @@ import {
 import { Document } from "mongoose"
 import { BaseContext } from "my_grammy"
 import * as mgl from "my_grammy_lib"
-import { editReplyMarkup, sendPhoto, Time } from "my_grammy_lib"
+import { Time, editReplyMarkup, sendPhoto } from "my_grammy_lib"
 import { sleep, sleepRandomAmountOfSeconds } from "sleep"
 import { BotCommand, Message } from "tg"
 import { Command, MyContext, QueryPrefix, State } from "types"
-import { reschedulePost } from "userbot"
 
 export const setState = mgl.setState<State>
 export const parseQuery = mgl.parseQuery<QueryPrefix>

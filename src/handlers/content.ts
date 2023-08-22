@@ -3,13 +3,13 @@ import { findChannel, parseQuery, setState } from "lib"
 import M from "messages"
 import { ScheduledPostDoc } from "models"
 import { editText, reply } from "my_grammy_lib"
-import O from "observers"
+import observers from "observers"
 import { MyContext } from "types"
-import { copyMessages } from "userbot"
+import { copyMessages } from "api"
 
-const o = O.content
+const o = observers.content
 
-o.command.handler = async (ctx) => {
+o._.handler = async (ctx) => {
   setState(ctx, "content:channel")
   await reply(ctx, M.content.askChannel)
 }

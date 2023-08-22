@@ -1,20 +1,14 @@
-import { ButtonsPreview, parseButtons } from "api"
-import {
-  parseQuery,
-  resetSalePost,
-  saveLastMsgId,
-  setState,
-  tryDeleteLastMsg,
-  updatePostOptions,
-} from "lib"
+import { parseQuery, resetSalePost, setState, updatePostOptions } from "lib"
 import M from "messages"
 import { Button, SaleDoc } from "models"
 import { BaseContext } from "my_grammy"
-import { editText, reply } from "my_grammy_lib"
-import O from "observers"
-import { copyMessages } from "userbot"
+import { editText } from "my_grammy_lib"
+import observers from "observers"
+import { copyMessages } from "api"
 
-O.schedulePost.handler = async (ctx) => {
+const o = observers.addSale.schedulePost
+
+o._.handler = async (ctx) => {
   const saleId = parseQuery(ctx, "Запланировать пост")
   ctx.session.saleId = saleId
   ctx.session.saleButtons = []
@@ -29,24 +23,15 @@ O.schedulePost.handler = async (ctx) => {
   await editText(ctx, m)
 }
 
-O.salePostMessage.handler = (ctx) => {
-  ctx.session.messageIds.push(ctx.msg.message_id)
-  const text = ctx.msg.text ?? ctx.msg.caption
-  const buttons = (ctx.msg.reply_markup?.inline_keyboard ?? []) as Button[][]
-  if (text) ctx.session.postText = text
-  ctx.session.saleButtons.push(...buttons)
-  console.log(ctx.session.saleButtons)
-}
-
-O.asForward.handler = async (ctx) => {
+o.asForward.handler = async (ctx) => {
   await updatePostOptions(ctx, !ctx.session.asForward, ctx.session.noSound)
 }
 
-O.noSound.handler = async (ctx) => {
+o.noSound.handler = async (ctx) => {
   await updatePostOptions(ctx, ctx.session.asForward, !ctx.session.noSound)
 }
 
-O.deleteTimer.handler = async (ctx) => {
+o.deleteTimer.handler = async (ctx) => {
   let hours = ctx.session.deleteTimerHours
   if (hours == 24) hours = 48
   else if (hours == 48) hours = 2
@@ -59,7 +44,16 @@ function answerQuery(ctx: BaseContext, text: string, alert = true) {
   return ctx.answerCallbackQuery({ text, show_alert: alert })
 }
 
-O.salePostReady.handler = async (ctx) => {
+o.postMessage.handler = (ctx) => {
+  ctx.session.messageIds.push(ctx.msg.message_id)
+  const text = ctx.msg.text ?? ctx.msg.caption
+  const buttons = (ctx.msg.reply_markup?.inline_keyboard ?? []) as Button[][]
+  if (text) ctx.session.postText = text
+  ctx.session.saleButtons.push(...buttons)
+  console.log(ctx.session.saleButtons)
+}
+
+o.ready.handler = async (ctx) => {
   const messageIds = ctx.session.messageIds!
 
   if (!messageIds.length) {
@@ -98,34 +92,4 @@ O.salePostReady.handler = async (ctx) => {
   for (const id of messageIds) {
     await ctx.api.deleteMessage(ctx.chat!.id, id)
   }
-}
-
-O.addButtons.handler = async (ctx) => {
-  ctx.session.saleId = parseQuery(ctx, "Добавить кнопки")
-  setState(ctx, "sale:buttons")
-  saveLastMsgId(ctx, ctx.msg!)
-  await editText(ctx, M.askButtons)
-}
-
-O.buttonsToAdd.handler = async (ctx) => {
-  const text = ctx.msg.text
-  let buttons: Button[][]
-  try {
-    buttons = parseButtons(text)
-  } catch {
-    await ctx.reply("Ошибка в формате кнопок, попробуй снова")
-    return
-  }
-  const sale = await SaleDoc.findById(ctx.session.saleId)
-  if (!sale) {
-    await ctx.reply("Ошибка, зовите Дмитрия!")
-    return
-  }
-  sale.buttons = buttons
-  await sale.save()
-  setState(ctx)
-  const preview = ButtonsPreview(buttons)
-  await reply(ctx, M.buttonsAdded(preview))
-  await ctx.deleteMessage()
-  await tryDeleteLastMsg(ctx)
 }

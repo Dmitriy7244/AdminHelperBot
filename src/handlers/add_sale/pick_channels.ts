@@ -3,9 +3,11 @@ import K from "kbs"
 import { saveLastMsgId, setState } from "lib"
 import M from "messages"
 import { editReplyMarkup, exclude, parseQuery, reply } from "my_grammy_lib"
-import O from "observers"
+import observers from "observers"
 
-O.pickSaleChannel.handler = async (ctx) => {
+const o = observers.addSale.pickChannels
+
+o.pick.handler = async (ctx) => {
   const channel = parseQuery(ctx, "channel")
   let channels = ctx.session.channels
   if (channels.includes(channel)) channels = exclude(channels, channel)
@@ -14,7 +16,7 @@ O.pickSaleChannel.handler = async (ctx) => {
   await editReplyMarkup(ctx, K.pickChannels(channels))
 }
 
-O.pickAllChannels.handler = async (ctx) => {
+o.pickAll.handler = async (ctx) => {
   let channels = ctx.session.channels
   if (channels.length == CHANNELS.length) channels = []
   else channels = CHANNELS.map((c) => c.title)
@@ -22,7 +24,7 @@ O.pickAllChannels.handler = async (ctx) => {
   await editReplyMarkup(ctx, K.pickChannels(channels))
 }
 
-O.saleChannelsReady.handler = async (ctx) => {
+o.ready.handler = async (ctx) => {
   const channels = ctx.session.channels
   if (!channels.length) {
     await ctx.answerCallbackQuery("Выбери хотя бы один канал")

@@ -2,7 +2,6 @@ import { REPORT_CHAT_ID, resolveDate, resolveDatetime } from "api"
 import { AD_TOP_DURATION } from "config"
 import {
   findChannel,
-  parseChannels,
   saveLastMsgId,
   scheduleNewContentPost,
   setState,
@@ -11,10 +10,12 @@ import {
 import M from "messages"
 import { Sale, SaleDoc, Seller } from "models"
 import { reply, sendMessage } from "my_grammy_lib"
-import O from "observers"
+import observers from "observers"
 import { MyContext } from "types"
 
-O.addSale.handler = async (ctx) => {
+const o = observers.addSale
+
+o._.handler = async (ctx) => {
   ctx.session.channels = []
   await reply(ctx, M.askChannels)
   setState(ctx, "sale:channels")
@@ -23,7 +24,7 @@ O.addSale.handler = async (ctx) => {
 
 import("./pick_channels.ts")
 
-O.saleDate.handler = async (ctx) => {
+o.date.handler = async (ctx) => {
   try {
     ctx.session.date = resolveDate(ctx.msg.text)
   } catch {
@@ -33,20 +34,13 @@ O.saleDate.handler = async (ctx) => {
   await onSaleDate(ctx)
 }
 
-O.saleDateToday.handler = async (ctx) => {
+o.dateToday.handler = async (ctx) => {
   ctx.session.date = new Date()
+  ctx.session.lastMessageId = undefined
   await onSaleDate(ctx)
 }
 
-async function onSaleDate(ctx: MyContext) {
-  const msg = await reply(ctx, M.askTime)
-  setState(ctx, "sale:time")
-  await ctx.deleteMessage()
-  await tryDeleteLastMsg(ctx)
-  saveLastMsgId(ctx, msg)
-}
-
-O.saleTime.handler = async (ctx) => {
+o.time.handler = async (ctx) => {
   const date = ctx.session.date!
   try {
     resolveDatetime(ctx.msg.text, date)
@@ -71,13 +65,12 @@ O.saleTime.handler = async (ctx) => {
 }
 
 import("./schedule_post.ts")
+import("./add_buttons.ts")
 
-O.text.handler = async (ctx) => {
-  const channels = parseChannels(ctx.msg)
-  if (!channels.length) return
-  ctx.session.channels = channels
-  setState(ctx, "sale:date")
-  const msg = await reply(ctx, M.askDate)
+async function onSaleDate(ctx: MyContext) {
+  const msg = await reply(ctx, M.askTime)
+  setState(ctx, "sale:time")
   await ctx.deleteMessage()
+  await tryDeleteLastMsg(ctx)
   saveLastMsgId(ctx, msg)
 }

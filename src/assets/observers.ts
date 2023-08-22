@@ -1,35 +1,55 @@
 import { observer as o } from "loader"
 
-class Observers {
-  start = o.command("start")
-  channels = o.command("channels")
-  addSale = o.command("add_sale")
-  test = o.command("test")
-  checkRights = o.command("check_rights")
-  content = {
-    command: o.command("content"),
+const start = o.command("start")
+const ready = o.query("✅ Готово")
+const content = o.command("content")
+const addSale = o.command("add_sale")
+const checkRights = o.command("check_rights")
+const channels = o.command("channels")
+const test = o.command("test")
+const asForward = o.query("asForward")
+const noSound = o.query("noSound")
+const deleteTimer = o.query("Таймер удаления")
+const schedulePost = o.query("Запланировать пост")
+const addButtons = o.query("Добавить кнопки")
+
+// TODO: add states
+const observers = {
+  start,
+  test,
+  channels,
+  checkRights,
+  addSale: {
+    _: addSale,
+    pickChannels: {
+      pick: o.query("channel").state("sale:channels"),
+      pickAll: o.query("➕ Выбрать все").state("sale:channels"),
+      ready: ready.state("sale:channels"),
+    },
+    date: o.text().state("sale:date"),
+    dateToday: o.query("Сегодня").state("sale:date"),
+    time: o.text().state("sale:time"),
+    schedulePost: {
+      _: schedulePost,
+      asForward,
+      noSound,
+      deleteTimer,
+      postMessage: o.message().state("sale:post"),
+      ready: ready.state("sale:post"),
+    },
+    addButtons: {
+      _: addButtons,
+      buttonsToAdd: o.text().state("sale:buttons"),
+    },
+  },
+  content: {
+    _: content,
     pickChannel: o.query("channel").state("content:channel"),
     postMessage: o.message().state("content:posts"),
     ready: o.query("✅ Готово").state("content:posts"),
-  }
-  pickSaleChannel = o.query("channel")
-  pickAllChannels = o.query("➕ Выбрать все")
-  ready = o.query("✅ Готово")
-  saleChannelsReady = this.ready.state("sale:channels")
-  salePostReady = this.ready.state("sale:post")
-  asForward = o.query("asForward")
-  noSound = o.query("noSound")
-  deleteTimer = o.query("Таймер удаления")
-  schedulePost = o.query("Запланировать пост")
-  addButtons = o.query("Добавить кнопки")
-  buttonsToAdd = o.text().state("sale:buttons")
-  saleDate = o.text().state("sale:date")
-  saleDateToday = o.query("Сегодня").state("sale:date")
-  saleTime = o.text().state("sale:time")
-  channelPost = o.channelPost()
-  salePostMessage = o.message().state("sale:post")
-  text = o.text()
+  },
+  channelPost: o.channelPost(),
+  text: o.text(),
 }
 
-const O = new Observers()
-export default O
+export default observers
