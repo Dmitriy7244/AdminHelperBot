@@ -6,10 +6,10 @@ import { Button, Post, ScheduledPost, scheduledPostModel } from "models"
 import { Document } from "mongoose"
 import { BaseContext } from "my_grammy"
 import * as mgl from "my_grammy_lib"
-import { editReplyMarkup, Time } from "my_grammy_lib"
+import { editReplyMarkup, Msg, Time } from "my_grammy_lib"
 import { sleep, sleepRandomAmountOfSeconds } from "sleep"
 import { BotCommand, Message } from "tg"
-import { Command, MyContext, QueryPrefix, State } from "types"
+import { Command, MyContext, MySession, QueryPrefix, State } from "types"
 import { reschedulePost } from "userbot"
 
 export const setState = mgl.setState<State>
@@ -119,3 +119,33 @@ export function resetSalePost(ctx: MyContext) {
   s.messageIds = []
   s.postText = undefined
 }
+
+export async function finish(ctx: BaseContext, msg: Msg) {
+  setState(ctx)
+  await mgl.reply(ctx, msg)
+}
+
+export async function askNext(
+  ctx: BaseContext,
+  msg: Msg,
+  state: State,
+  dataToSave: Partial<MySession>,
+) {
+  ctx.session = { ...ctx.session, ...dataToSave }
+  setState(ctx, state)
+  await mgl.reply(ctx, msg)
+}
+
+export async function replyError(
+  ctx: BaseContext,
+  text: string,
+): Promise<never> {
+  await ctx.reply(text)
+  cancelHandlers()
+}
+
+export function cancelHandlers(): never {
+  throw new CancelException()
+}
+
+export class CancelException extends Error {}

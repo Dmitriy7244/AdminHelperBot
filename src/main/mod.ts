@@ -1,12 +1,15 @@
-import { schedulePostDelete, setCommands } from "lib"
+import { CancelException, schedulePostDelete, setCommands } from "lib"
 import { bot } from "loader"
 import { postModel } from "models"
 import { checkAccess, spyAfterRoma } from "./middlewares.ts"
 
 bot.use(checkAccess)
 bot.use(spyAfterRoma)
-bot.catch(console.error)
-bot.run()
+await bot.run()
+bot.catch((err) => {
+  if (err.error instanceof CancelException) return
+  console.error(err)
+})
 
 import("../handlers/mod.ts")
 setCommands()
