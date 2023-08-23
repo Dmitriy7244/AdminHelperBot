@@ -1,4 +1,5 @@
 import { findSale } from "api"
+import { CHANNELS } from "db"
 import {
   parseChannels,
   saveLastMsgId,
@@ -12,7 +13,6 @@ import { postModel } from "models"
 import { reply, Time } from "my_grammy_lib"
 import observers from "observers"
 import { getPostMessages } from "userbot"
-import { CHANNELS } from "db";
 
 const o = observers
 
@@ -21,11 +21,10 @@ o.start.handler = async (ctx) => {
   await reply(ctx, M.hello)
 }
 
-o.test.handler = (ctx) => {
-  ctx.reply(JSON.stringify(ctx.session))
-}
+// o.test.handler = (ctx) => {}
 
-o.channels.handler = (ctx) => reply(ctx, M.channels)
+o.channels._.handler = (ctx) => reply(ctx, M.channels())
+import("./channels.ts")
 
 o.checkRights.handler = async (ctx) => {
   const noRightsChannels = []

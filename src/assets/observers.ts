@@ -17,7 +17,15 @@ const addButtons = o.query("Добавить кнопки")
 const observers = {
   start,
   test,
-  channels,
+  channels: {
+    _: channels,
+    addChannel: {
+      _: o.query("Добавить канал"),
+      channelPost: o.message().state("channels_post"),
+      link: o.text().state("channels_link"),
+      title: o.text().state("channels_title"),
+    },
+  },
   checkRights,
   addSale: {
     _: addSale,

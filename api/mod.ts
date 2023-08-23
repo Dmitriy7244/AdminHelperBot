@@ -3,21 +3,33 @@ import { saleModel } from "models"
 import { parseEntity } from "my_grammy_lib"
 import { MessageEntity } from "tg"
 
+function _parseLink(text: string, entity: MessageEntity) {
+  if (entity.type == "mention") {
+    const mention = parseEntity(entity, text)
+    return mention.replace("@", "https://t.me/")
+  } else if (entity.type == "url") {
+    return parseEntity(entity, text)
+  } else if (entity.type == "text_link") {
+    return entity.url
+  }
+}
+
+export function parseLink(text: string, entities: MessageEntity[]) {
+  for (const entity of entities) {
+    const link = _parseLink(text, entity)
+    if (link) return link
+  }
+}
+
 export function parseChannels(
   text: string,
   entities: MessageEntity[],
 ) {
   const channels: string[] = []
-  let url: string
+  let url: string | undefined
   for (const entity of entities) {
-    if (entity.type == "mention") {
-      const mention = parseEntity(entity, text)
-      url = mention.replace("@", "https://t.me/")
-    } else if (entity.type == "url") {
-      url = parseEntity(entity, text)
-    } else if (entity.type == "text_link") {
-      url = entity.url
-    } else continue
+    url = parseLink(text, [entity])
+    if (!url) continue
     CHANNELS.forEach((c) => {
       if (c.url == url) channels.push(c.title)
     })

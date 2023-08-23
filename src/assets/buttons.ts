@@ -39,6 +39,7 @@ class Buttons {
   tomorrow = PrefixButton("Завтра")
   deleteTimer = (hours: number) =>
     PrefixButton("Таймер удаления", `Таймер удаления: ${hours}ч`)
+  addChannel = PrefixButton("Добавить канал")
 }
 
 const B = new Buttons()

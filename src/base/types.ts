@@ -9,6 +9,9 @@ export type State =
   | "sale:buttons"
   | "content:channel"
   | "content:posts"
+  | "channels_post"
+  | "channels_link"
+  | "channels_title"
 export type Command =
   | "start"
   | "add_sale"
@@ -28,6 +31,7 @@ export type QueryPrefix =
   | "Сегодня"
   | "Завтра"
   | "Таймер удаления"
+  | "Добавить канал"
 
 export type MySession = BaseSession & {
   messageIds: number[]
@@ -36,6 +40,7 @@ export type MySession = BaseSession & {
   asForward: boolean
   noSound: boolean
   channelId?: number
+  link?: string
   state?: State
   date?: Date
   lastMessageId?: number

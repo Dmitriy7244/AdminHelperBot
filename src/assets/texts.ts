@@ -18,7 +18,7 @@ class Texts {
   askTime = `Отправь время в формате: ${bold("19 05")}`
   sale = `Продажа:`
   userbot = `Юзербот:`
-  channels = ChannelsText()
+  channels = () => ChannelsText()
   dateError = "Ошибка в дате, отправь верное число"
   timeError = "Ошибка, отправь время в верном формате"
   suggestPost = "Теперь ты можешь отправить пост для публикации"

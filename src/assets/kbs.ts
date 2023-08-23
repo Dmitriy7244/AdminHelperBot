@@ -25,6 +25,7 @@ class Keyboards {
   addPostButtons = (saleId: string) =>
     new InlineKeyboard().add(B.addButtons(saleId))
   dates = addButtons(new InlineKeyboard(), [B.today, B.tomorrow])
+  addChannel = new InlineKeyboard().add(B.addChannel)
 }
 
 const K = new Keyboards()

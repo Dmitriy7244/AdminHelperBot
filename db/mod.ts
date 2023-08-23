@@ -20,6 +20,12 @@ async function getChannels() {
   return docs.map((doc) => new Channel(doc.id, doc.title, doc.url))
 }
 
-const CHANNELS = await getChannels() // TODO: update
+async function addChannel(id: number, title: string, url: string) {
+  const channel = new Channel(id, title, url)
+  await channelModel.create(channel)
+  CHANNELS.push(channel)
+}
 
-export { CHANNELS, findChannel, findChannels, getChannels }
+const CHANNELS = await getChannels()
+
+export { addChannel, CHANNELS, findChannel, findChannels, getChannels }
