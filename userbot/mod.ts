@@ -1,28 +1,4 @@
-import env from "env"
-
-const USERBOT_URL = "https://tw2.my-bots.ru/userbot/"
-const USERBOT_TOKEN = env.str("USERBOT_TOKEN")
-
-interface Result {
-  ok: boolean
-  error: string | null
-  result: Record<string, any>
-}
-
-type Method = "copyMessages" | "getPostMessages" | "reschedulePost"
-
-async function post(method: Method, data: object) {
-  const body = JSON.stringify(data)
-  const r = await fetch(USERBOT_URL + method, {
-    method: "POST",
-    headers: { "token": USERBOT_TOKEN, "Content-Type": "application/json" },
-    body,
-  })
-  const json = await r.json() as Result
-  if (!json.ok) throw new Error(json.error!)
-  console.log(json)
-  return json.result
-}
+import { post } from "./request.ts"
 
 async function copyMessages(
   chat_id: number,
@@ -51,7 +27,7 @@ async function getPostMessages(chat_id: number, message_id: number) {
   return await post("getPostMessages", data) as number[]
 }
 
-export async function reschedulePost(
+async function reschedulePost(
   chat_id: number,
   message_ids: number[],
   date: number,
@@ -60,5 +36,4 @@ export async function reschedulePost(
   await post("reschedulePost", data)
 }
 
-export { copyMessages, getPostMessages }
-
+export { copyMessages, getPostMessages, reschedulePost }

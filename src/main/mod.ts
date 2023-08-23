@@ -1,6 +1,6 @@
 import { schedulePostDelete, setCommands } from "lib"
 import { bot } from "loader"
-import { PostDoc } from "models"
+import { postModel } from "models"
 import { checkAccess, spyAfterRoma } from "./middlewares.ts"
 
 bot.use(checkAccess)
@@ -11,7 +11,7 @@ bot.run()
 import("../handlers/mod.ts")
 setCommands()
 
-PostDoc.find()
+postModel.find()
   .exec()
   .then((posts) => posts.forEach((p) => schedulePostDelete(p)))
 

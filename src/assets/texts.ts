@@ -1,4 +1,4 @@
-import { CHANNELS } from "config"
+import { CHANNELS } from "db"
 import { bold, link } from "my_grammy"
 
 function ChannelsText() {

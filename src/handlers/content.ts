@@ -1,11 +1,12 @@
 import { nextYear } from "api"
-import { findChannel, parseQuery, setState } from "lib"
+import { findChannel } from "db"
+import { parseQuery, setState } from "lib"
 import M from "messages"
-import { ScheduledPostDoc } from "models"
+import { scheduledPostModel } from "models"
 import { editText, reply } from "my_grammy_lib"
 import observers from "observers"
 import { MyContext } from "types"
-import { copyMessages } from "api"
+import { copyMessages } from "userbot"
 
 const o = observers.content
 
@@ -16,7 +17,7 @@ o._.handler = async (ctx) => {
 
 o.pickChannel.handler = async (ctx) => {
   const title = parseQuery(ctx, "channel")
-  const channel = findChannel(title)
+  const channel = await findChannel(title)
   setState(ctx, "content:posts")
   ctx.session.channelId = channel.id
   ctx.session.filedIds = []
@@ -41,7 +42,7 @@ o.ready.handler = async (ctx) => {
   const result = await tryCopyMessages(ctx, chatId, messageIds, date)
   if (!result) return
   await ctx.editMessageText("Контент добавлен")
-  await ScheduledPostDoc.create({ chatId, messageIds: result })
+  await scheduledPostModel.create({ chatId, messageIds: result })
 }
 
 async function tryCopyMessages(

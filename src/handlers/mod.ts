@@ -1,4 +1,4 @@
-import { CHANNELS, findSale, getPostMessages } from "api"
+import { findSale } from "api"
 import {
   parseChannels,
   saveLastMsgId,
@@ -8,9 +8,11 @@ import {
 } from "lib"
 import { bot } from "loader"
 import M from "messages"
-import { PostDoc } from "models"
+import { postModel } from "models"
 import { reply, Time } from "my_grammy_lib"
 import observers from "observers"
+import { getPostMessages } from "userbot"
+import { CHANNELS } from "db";
 
 const o = observers
 
@@ -72,7 +74,7 @@ o.channelPost.handler = async (ctx) => {
     messageIds = await getPostMessages(chatId, ctx.msg.message_id)
   }
   const deleteTime = Time() + (sale.deleteTimerHours ?? 24) * 60 * 60
-  const p = await PostDoc.create({ chatId, messageIds, deleteTime })
+  const p = await postModel.create({ chatId, messageIds, deleteTime })
   schedulePostDelete(p)
   if (!sale.buttons.length) return
   const buttons = sale.buttons.map((row) =>

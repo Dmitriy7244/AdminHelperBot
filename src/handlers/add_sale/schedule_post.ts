@@ -1,10 +1,10 @@
 import { parseQuery, resetSalePost, setState, updatePostOptions } from "lib"
 import M from "messages"
-import { Button, SaleDoc } from "models"
+import { Button, saleModel } from "models"
 import { BaseContext } from "my_grammy"
 import { editText } from "my_grammy_lib"
 import observers from "observers"
-import { copyMessages } from "api"
+import { copyMessages } from "userbot"
 
 const o = observers.addSale.schedulePost
 
@@ -62,7 +62,7 @@ o.ready.handler = async (ctx) => {
   }
 
   const saleId = ctx.session.saleId!
-  const sale = await SaleDoc.findById(saleId)
+  const sale = await saleModel.findById(saleId)
   if (!sale) {
     ctx.reply("Ошибка, зовите Дмитрия")
     return

@@ -89,7 +89,16 @@ export class ScheduledPost {
   messageIds: number[]
 }
 
-export const SaleDoc = getModelForClass(Sale)
-export const PostDoc = getModelForClass(Post)
-export const ContentPostDoc = getModelForClass(ContentPost)
-export const ScheduledPostDoc = getModelForClass(ScheduledPost)
+const saleModel = getModelForClass(Sale)
+const postModel = getModelForClass(Post)
+const contentPostModel = getModelForClass(ContentPost)
+const scheduledPostModel = getModelForClass(ScheduledPost)
+const channelModel = getModelForClass(Channel)
+
+export {
+  channelModel,
+  contentPostModel,
+  postModel,
+  saleModel,
+  scheduledPostModel,
+}

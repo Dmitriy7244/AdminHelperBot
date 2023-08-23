@@ -1,4 +1,4 @@
-import { CHANNELS } from "config"
+import { CHANNELS } from "db"
 import K from "kbs"
 import { saveLastMsgId, setState } from "lib"
 import M from "messages"

@@ -1,7 +1,7 @@
-import { CHANNELS } from "api"
 import B, { channelButtons } from "buttons"
 import { InlineKeyboard } from "grammy"
 import { addButtons } from "my_grammy_lib"
+import { CHANNELS } from "db";
 
 class Keyboards {
   schedulePost = (saleId: string) =>

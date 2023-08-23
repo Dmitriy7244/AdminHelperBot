@@ -1,14 +1,14 @@
 import { REPORT_CHAT_ID, resolveDate, resolveDatetime } from "api"
 import { AD_TOP_DURATION } from "config"
+import { findChannels } from "db"
 import {
-  findChannel,
   saveLastMsgId,
   scheduleNewContentPost,
   setState,
   tryDeleteLastMsg,
 } from "lib"
 import M from "messages"
-import { Sale, SaleDoc, Seller } from "models"
+import { Sale, saleModel, Seller } from "models"
 import { reply, sendMessage } from "my_grammy_lib"
 import observers from "observers"
 import { MyContext } from "types"
@@ -48,10 +48,10 @@ o.time.handler = async (ctx) => {
     await reply(ctx, M.timeError)
     return
   }
-  const channels = ctx.session.channels!.map((c) => findChannel(c))
+  const channels = await findChannels(ctx.session.channels)
   const seller = new Seller(ctx.from.id, ctx.from.first_name)
   const sale = new Sale(date, channels, seller)
-  const saleDoc = await SaleDoc.create(sale)
+  const saleDoc = await saleModel.create(sale)
   await sendMessage(ctx, REPORT_CHAT_ID, M.sale(sale))
   const msg = await reply(ctx, M.askPost(saleDoc.id))
   setState(ctx)

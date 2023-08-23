@@ -1,7 +1,7 @@
 import { ButtonsPreview, parseButtons } from "api"
 import { parseQuery, saveLastMsgId, setState, tryDeleteLastMsg } from "lib"
 import M from "messages"
-import { Button, SaleDoc } from "models"
+import { Button, saleModel } from "models"
 import { editText, reply } from "my_grammy_lib"
 import observers from "observers"
 
@@ -23,7 +23,7 @@ o.buttonsToAdd.handler = async (ctx) => {
     await ctx.reply("Ошибка в формате кнопок, попробуй снова")
     return
   }
-  const sale = await SaleDoc.findById(ctx.session.saleId)
+  const sale = await saleModel.findById(ctx.session.saleId)
   if (!sale) {
     await ctx.reply("Ошибка, зовите Дмитрия!")
     return

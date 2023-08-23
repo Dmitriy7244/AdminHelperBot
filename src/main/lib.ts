@@ -1,34 +1,19 @@
 import * as api from "api"
-import { ADMIN_ID, CHANNELS, reschedulePost } from "api"
+import { ADMIN_ID } from "api"
 import K from "kbs"
 import { bot } from "loader"
-import {
-  Button,
-  Channel,
-  ContentPost,
-  ContentPostDoc,
-  Post,
-  ScheduledPost,
-  ScheduledPostDoc,
-} from "models"
+import { Button, Post, ScheduledPost, scheduledPostModel } from "models"
 import { Document } from "mongoose"
 import { BaseContext } from "my_grammy"
 import * as mgl from "my_grammy_lib"
-import { Time, editReplyMarkup, sendPhoto } from "my_grammy_lib"
+import { editReplyMarkup, Time } from "my_grammy_lib"
 import { sleep, sleepRandomAmountOfSeconds } from "sleep"
 import { BotCommand, Message } from "tg"
 import { Command, MyContext, QueryPrefix, State } from "types"
+import { reschedulePost } from "userbot"
 
 export const setState = mgl.setState<State>
 export const parseQuery = mgl.parseQuery<QueryPrefix>
-
-export function findChannel(title: string) {
-  for (const c of CHANNELS) {
-    if (c.title != title) continue
-    return new Channel(c.id, title, c.url)
-  }
-  throw new Error("Unknown title")
-}
 
 function Command(command: Command, description: string): BotCommand {
   return { command, description }
@@ -83,7 +68,7 @@ export async function schedulePostDelete(post: Document & Post) {
 }
 
 export async function scheduleNewContentPost(chatId: number, date: number) {
-  const post = await ScheduledPostDoc.findOne({ chatId })
+  const post = await scheduledPostModel.findOne({ chatId })
   if (!post) {
     console.log("No content post", { chatId })
     return
@@ -96,25 +81,6 @@ export async function scheduleContentPost(
   date: number,
 ) {
   await reschedulePost(post.chatId, post.messageIds, date)
-  await post.deleteOne()
-}
-
-export async function _scheduleNewContentPost(chatId: number, delay: number) {
-  const post = await ContentPostDoc.findOne({ chatId, date: undefined })
-  if (!post) {
-    console.log("No content post", { chatId })
-    return
-  }
-  post.date = Time() + delay
-  await post.save()
-  await _scheduleContentPost(post)
-}
-
-export async function _scheduleContentPost(post: ContentPost & Document) {
-  if (!post.date) return
-  const delay = post.date - Time()
-  await sleep(delay)
-  await sendPhoto(bot, post.chatId, post.photoId, post.text, post.entities)
   await post.deleteOne()
 }
 

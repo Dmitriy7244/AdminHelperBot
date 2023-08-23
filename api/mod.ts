@@ -1,12 +1,12 @@
-import { CHANNELS } from "config"
-import { SaleDoc } from "models"
+import { CHANNELS } from "db"
+import { saleModel } from "models"
 import { parseEntity } from "my_grammy_lib"
 import { MessageEntity } from "tg"
 
 export function parseChannels(
   text: string,
   entities: MessageEntity[],
-): string[] {
+) {
   const channels: string[] = []
   let url: string
   for (const entity of entities) {
@@ -26,13 +26,12 @@ export function parseChannels(
 }
 
 export async function findSale(text: string) {
-  const sales = await SaleDoc.find({ text }).exec()
+  const sales = await saleModel.find({ text }).exec()
   if (!sales.length) return
   return sales[sales.length - 1]
 }
 
-export { ADMIN_ID, CHANNELS, REPORT_CHAT_ID } from "config"
+export { ADMIN_ID, REPORT_CHAT_ID } from "config"
 export { ButtonsPreview, parseButtons } from "./buttons.ts"
 export { nextYear, resolveDate, resolveDatetime } from "./dates.ts"
 export { reprSale } from "./repr_sale.ts"
-export { copyMessages, getPostMessages, reschedulePost } from "./userbot.ts"
