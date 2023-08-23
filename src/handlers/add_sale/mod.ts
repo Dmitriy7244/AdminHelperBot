@@ -40,6 +40,14 @@ o.dateToday.handler = async (ctx) => {
   await onSaleDate(ctx)
 }
 
+o.dateTomorrow.handler = async (ctx) => {
+  const date = new Date()
+  date.setDate(date.getDate() + 1)
+  ctx.session.date = date
+  ctx.session.lastMessageId = undefined
+  await onSaleDate(ctx)
+}
+
 o.time.handler = async (ctx) => {
   const date = ctx.session.date!
   try {

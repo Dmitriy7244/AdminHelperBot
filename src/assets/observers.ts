@@ -28,6 +28,7 @@ const observers = {
     },
     date: o.text().state("sale:date"),
     dateToday: o.query("Сегодня").state("sale:date"),
+    dateTomorrow: o.query("Завтра").state("sale:date"),
     time: o.text().state("sale:time"),
     schedulePost: {
       _: schedulePost,

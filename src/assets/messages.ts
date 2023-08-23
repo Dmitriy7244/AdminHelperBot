@@ -6,7 +6,7 @@ import T from "texts"
 
 class Messages {
   hello = new Msg(T.start)
-  askDate = new Msg(T.askDate, K.today)
+  askDate = new Msg(T.askDate, K.dates)
   askTime = new Msg(T.askTime)
   userbot = new Msg(T.userbot)
   channels = new Msg(T.channels)

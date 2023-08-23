@@ -26,6 +26,7 @@ export type QueryPrefix =
   | "noSound"
   | "Добавить кнопки"
   | "Сегодня"
+  | "Завтра"
   | "Таймер удаления"
 
 export type MySession = BaseSession & {

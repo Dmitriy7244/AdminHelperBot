@@ -1,7 +1,7 @@
 import B, { channelButtons } from "buttons"
+import { CHANNELS } from "db"
 import { InlineKeyboard } from "grammy"
 import { addButtons } from "my_grammy_lib"
-import { CHANNELS } from "db";
 
 class Keyboards {
   schedulePost = (saleId: string) =>
@@ -24,7 +24,7 @@ class Keyboards {
   ready = new InlineKeyboard().add(B.ready)
   addPostButtons = (saleId: string) =>
     new InlineKeyboard().add(B.addButtons(saleId))
-  today = new InlineKeyboard().add(B.today)
+  dates = addButtons(new InlineKeyboard(), [B.today, B.tomorrow])
 }
 
 const K = new Keyboards()

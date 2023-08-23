@@ -36,6 +36,7 @@ class Buttons {
     )
   channel = (title: string) => ChannelButton(title)
   today = PrefixButton("Сегодня")
+  tomorrow = PrefixButton("Завтра")
   deleteTimer = (hours: number) =>
     PrefixButton("Таймер удаления", `Таймер удаления: ${hours}ч`)
 }
