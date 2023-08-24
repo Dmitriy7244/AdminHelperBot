@@ -129,7 +129,7 @@ export async function askNext(
   ctx: BaseContext,
   msg: Msg,
   state: State,
-  dataToSave: Partial<MySession>,
+  dataToSave: Partial<MySession> = {},
 ) {
   ctx.session = { ...ctx.session, ...dataToSave }
   setState(ctx, state)

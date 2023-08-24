@@ -23,8 +23,7 @@ o.start.handler = async (ctx) => {
 
 // o.test.handler = (ctx) => {}
 
-o.channels._.handler = (ctx) => reply(ctx, M.channels())
-import("./channels.ts")
+import("./channels/mod.ts")
 
 o.checkRights.handler = async (ctx) => {
   const noRightsChannels = []

@@ -40,8 +40,9 @@ class Buttons {
   deleteTimer = (hours: number) =>
     PrefixButton("Таймер удаления", `Таймер удаления: ${hours}ч`)
   addChannel = PrefixButton("Добавить канал")
+  deleteChannel = PrefixButton("Удалить канал")
 }
 
 const B = new Buttons()
-export const channelButtons = CHANNELS.map((c) => B.channel(c.title))
+export const channelButtons = () => CHANNELS.map((c) => B.channel(c.title))
 export default B

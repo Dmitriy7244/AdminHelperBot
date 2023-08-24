@@ -12,6 +12,7 @@ export type State =
   | "channels_post"
   | "channels_link"
   | "channels_title"
+  | "channels_delete"
 export type Command =
   | "start"
   | "add_sale"
@@ -32,6 +33,7 @@ export type QueryPrefix =
   | "Завтра"
   | "Таймер удаления"
   | "Добавить канал"
+  | "Удалить канал"
 
 export type MySession = BaseSession & {
   messageIds: number[]

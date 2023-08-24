@@ -10,7 +10,7 @@ class Keyboards {
     const buttons = CHANNELS.map((c) => B.pickChannel(c.title, selected))
     return addButtons(new InlineKeyboard(), buttons, 2).add(B.pickAll, B.ready)
   }
-  pickChannel = addButtons(new InlineKeyboard(), channelButtons, 2)
+  pickChannel = () => addButtons(new InlineKeyboard(), channelButtons(), 2)
   postOptions = (
     deleteTimerHours: number,
     asForward = false,
@@ -25,7 +25,7 @@ class Keyboards {
   addPostButtons = (saleId: string) =>
     new InlineKeyboard().add(B.addButtons(saleId))
   dates = addButtons(new InlineKeyboard(), [B.today, B.tomorrow])
-  addChannel = new InlineKeyboard().add(B.addChannel)
+  ChangeChannels = new InlineKeyboard().add(B.addChannel, B.deleteChannel)
 }
 
 const K = new Keyboards()

@@ -7,6 +7,11 @@ async function findChannel(title: string) {
   return new Channel(doc.id, doc.title, doc.url)
 }
 
+async function deleteChannel(title: string) {
+  await channelModel.deleteOne({ title }).exec()
+  CHANNELS = CHANNELS.filter((c) => c.title != title)
+}
+
 async function findChannels(titles: string[]) {
   const channels = []
   for (const title of titles) {
@@ -26,6 +31,13 @@ async function addChannel(id: number, title: string, url: string) {
   CHANNELS.push(channel)
 }
 
-const CHANNELS = await getChannels()
+let CHANNELS = await getChannels()
 
-export { addChannel, CHANNELS, findChannel, findChannels, getChannels }
+export {
+  addChannel,
+  CHANNELS,
+  deleteChannel,
+  findChannel,
+  findChannels,
+  getChannels,
+}

@@ -9,7 +9,7 @@ class Messages {
   askDate = new Msg(T.askDate, K.dates)
   askTime = new Msg(T.askTime)
   userbot = new Msg(T.userbot)
-  channels = () => new Msg(T.channels(), K.addChannel)
+  channels = () => new Msg(T.channels(), K.ChangeChannels)
   dateError = new Msg(T.dateError)
   timeError = new Msg(T.timeError)
   askPost = (saleId: string) => new Msg(T.suggestPost, K.schedulePost(saleId))
@@ -24,8 +24,9 @@ class Messages {
     new Msg("Пост запланирован", K.addPostButtons(saleId))
   askButtons = new Msg(T.askButtons)
   buttonsAdded = (preview: string) => new Msg(`Добавлены кнопки:\n\n${preview}`)
+  pickChannel = () => new Msg("Выбери канал", K.pickChannel())
   content = {
-    askChannel: new Msg("Выбери канал", K.pickChannel),
+    askChannel: this.pickChannel,
     askPosts: new Msg(T.askContentPost, K.ready),
   }
 }

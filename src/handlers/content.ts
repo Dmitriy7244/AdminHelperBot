@@ -12,7 +12,7 @@ const o = observers.content
 
 o._.handler = async (ctx) => {
   setState(ctx, "content:channel")
-  await reply(ctx, M.content.askChannel)
+  await reply(ctx, M.content.askChannel())
 }
 
 o.pickChannel.handler = async (ctx) => {

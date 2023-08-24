@@ -22,6 +22,7 @@
     "userbot": "./userbot/mod.ts",
     "core/": "./src/core/",
     "deps": "./deps.ts",
+    "manager": "./manager/mod.ts",
     "my_grammy": "https://deno.land/x/my_grammy@v0.1.1/mod.ts",
     "my_grammy_lib": "https://deno.land/x/my_grammy@v0.1.1/lib.ts",
     "grammy": "https://deno.land/x/grammy@v1.17.2/mod.ts",
