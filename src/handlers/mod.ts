@@ -10,7 +10,7 @@ import {
 import { bot } from "loader"
 import M from "messages"
 import { postModel } from "models"
-import { reply, Time } from "my_grammy_lib"
+import { reply, Time } from "deps"
 import observers from "observers"
 import { getPostMessages } from "userbot"
 

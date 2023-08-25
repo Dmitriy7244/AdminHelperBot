@@ -1,5 +1,5 @@
 import { Button } from "models"
-import { BaseContext, BaseSession, Observer } from "my_grammy"
+import { BaseContext, BaseSession, Observer } from "deps"
 
 export type State =
   | "sale:channels"

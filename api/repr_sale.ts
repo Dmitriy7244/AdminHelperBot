@@ -1,5 +1,5 @@
 import { Channel, Sale } from "models"
-import { bold, link } from "my_grammy"
+import { bold, link } from "deps"
 
 const MONTH_NAMES: Record<number, string> = {
   1: "января",

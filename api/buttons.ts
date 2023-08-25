@@ -1,5 +1,5 @@
 import { Button } from "models"
-import { link } from "my_grammy"
+import { link } from "deps"
 
 export function parseButtons(text: string): Button[][] {
   return text.split("\n").map((str) =>

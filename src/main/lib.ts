@@ -1,14 +1,20 @@
 import * as api from "api"
 import { ADMIN_ID } from "api"
+import {
+  BaseContext,
+  BotCommand,
+  Document,
+  editReplyMarkup,
+  Message,
+  mgl,
+  Msg,
+  sleep,
+  sleepRandomAmountOfSeconds,
+  Time,
+} from "deps"
 import K from "kbs"
 import { bot } from "loader"
 import { Button, Post, ScheduledPost, scheduledPostModel } from "models"
-import { Document } from "mongoose"
-import { BaseContext } from "my_grammy"
-import * as mgl from "my_grammy_lib"
-import { editReplyMarkup, Msg, Time } from "my_grammy_lib"
-import { sleep, sleepRandomAmountOfSeconds } from "sleep"
-import { BotCommand, Message } from "tg"
 import { Command, MyContext, MySession, QueryPrefix, State } from "types"
 import { reschedulePost } from "userbot"
 
@@ -128,12 +134,12 @@ export async function finish(ctx: BaseContext, msg: Msg) {
 export async function askNext(
   ctx: BaseContext,
   msg: Msg,
-  state: State,
+  state?: State,
   dataToSave: Partial<MySession> = {},
 ) {
   ctx.session = { ...ctx.session, ...dataToSave }
-  setState(ctx, state)
-  await mgl.reply(ctx, msg)
+  if (state !== undefined) setState(ctx, state)
+  return await mgl.reply(ctx, msg)
 }
 
 export async function replyError(

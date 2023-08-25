@@ -1,8 +1,8 @@
 import { ButtonsPreview, parseButtons } from "api"
+import { editText, reply } from "deps"
 import { parseQuery, saveLastMsgId, setState, tryDeleteLastMsg } from "lib"
 import M from "messages"
 import { Button, saleModel } from "models"
-import { editText, reply } from "my_grammy_lib"
 import observers from "observers"
 
 const o = observers.addSale.addButtons

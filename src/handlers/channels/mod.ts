@@ -1,5 +1,5 @@
 import M from "messages"
-import { reply } from "my_grammy_lib"
+import { reply } from "deps"
 import observers from "observers"
 
 const o = observers.channels

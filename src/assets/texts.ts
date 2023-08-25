@@ -1,5 +1,5 @@
 import { CHANNELS } from "db"
-import { bold, link } from "my_grammy"
+import { bold, link } from "deps"
 
 function ChannelsText() {
   const links = CHANNELS.map((c) => link(c.url, c.title))

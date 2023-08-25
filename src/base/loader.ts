@@ -1,5 +1,5 @@
-import { BaseContext, Bot, Observer } from "my_grammy"
-import * as mgl from "my_grammy_lib"
+import { BaseContext, Bot, Observer } from "deps"
+import { mgl } from "deps"
 import { Command, MySession, QueryPrefix, State } from "types"
 
 const defaultSession: MySession = {

@@ -1,6 +1,9 @@
-import { connectToMongoFromEnv } from "my_mongo"
-import { MessageEntity } from "tg"
-import { getModelForClass, prop } from "typegoose"
+import {
+  connectToMongoFromEnv,
+  getModelForClass,
+  MessageEntity,
+  prop,
+} from "deps"
 
 connectToMongoFromEnv()
 

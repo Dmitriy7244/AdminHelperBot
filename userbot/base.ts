@@ -1,4 +1,4 @@
-import env from "env"
+import { env } from "deps"
 
 const USERBOT_URL = env.str("USERBOT_URL")
 const USERBOT_TOKEN = env.str("USERBOT_TOKEN")

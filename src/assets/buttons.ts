@@ -1,6 +1,6 @@
 import { CHANNELS } from "db"
 import { CallbackData, PrefixButton } from "loader"
-import { CallbackButton } from "my_grammy_lib"
+import { CallbackButton } from "deps"
 
 const ChannelCallbackData = (title: string) => CallbackData("channel", title)
 const ChannelButton = (title: string) =>

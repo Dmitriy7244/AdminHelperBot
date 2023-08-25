@@ -1,7 +1,7 @@
 import { reprSale } from "api"
+import { Msg } from "deps"
 import K from "kbs"
 import { Sale } from "models"
-import { Msg } from "my_grammy"
 import T from "texts"
 
 class Messages {

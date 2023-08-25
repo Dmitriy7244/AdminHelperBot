@@ -1,8 +1,7 @@
+import { BaseContext, editText } from "deps"
 import { parseQuery, resetSalePost, setState, updatePostOptions } from "lib"
 import M from "messages"
 import { Button, saleModel } from "models"
-import { BaseContext } from "my_grammy"
-import { editText } from "my_grammy_lib"
 import observers from "observers"
 import { copyMessages } from "userbot"
 

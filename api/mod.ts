@@ -1,7 +1,6 @@
 import { CHANNELS } from "db"
+import { MessageEntity, parseEntity } from "deps"
 import { saleModel } from "models"
-import { parseEntity } from "my_grammy_lib"
-import { MessageEntity } from "tg"
 
 function _parseLink(text: string, entity: MessageEntity) {
   if (entity.type == "mention") {

@@ -1,6 +1,6 @@
 import { ADMIN_ID, REPORT_CHAT_ID } from "api"
 import { CONTENT_CHAT_ID } from "config"
-import { Context, NextFunction } from "grammy"
+import { Context, NextFunction } from "deps"
 
 const allowedChats = [REPORT_CHAT_ID, ADMIN_ID, CONTENT_CHAT_ID]
 

@@ -1,4 +1,4 @@
-import env from "env"
+import { env } from "deps"
 
 export const REPORT_CHAT_ID = env.int("REPORT_CHAT_ID")
 export const CONTENT_CHAT_ID = env.int("CONTENT_CHAT_ID")

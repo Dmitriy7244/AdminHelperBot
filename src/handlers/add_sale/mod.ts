@@ -1,6 +1,7 @@
 import { REPORT_CHAT_ID, resolveDate, resolveDatetime } from "api"
 import { AD_TOP_DURATION } from "config"
 import { findChannels } from "db"
+import { reply, sendMessage } from "deps"
 import {
   saveLastMsgId,
   scheduleNewContentPost,
@@ -9,7 +10,6 @@ import {
 } from "lib"
 import M from "messages"
 import { Sale, saleModel, Seller } from "models"
-import { reply, sendMessage } from "my_grammy_lib"
 import observers from "observers"
 import { MyContext } from "types"
 

@@ -1,8 +1,8 @@
 import { CHANNELS } from "db"
+import { editReplyMarkup, exclude, parseQuery, reply } from "deps"
 import K from "kbs"
 import { saveLastMsgId, setState } from "lib"
 import M from "messages"
-import { editReplyMarkup, exclude, parseQuery, reply } from "my_grammy_lib"
 import observers from "observers"
 
 const o = observers.addSale.pickChannels

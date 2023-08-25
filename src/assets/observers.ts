@@ -25,10 +25,10 @@ const observers = {
       link: o.text().state("channels_link"),
       title: o.text().state("channels_title"),
     },
-    deleteChannel:{
+    deleteChannel: {
       _: o.query("Удалить канал"),
       pickChannel: o.query("channel").state("channels_delete"),
-    }
+    },
   },
   checkRights,
   addSale: {
