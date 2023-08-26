@@ -48,6 +48,7 @@ export type MySession = BaseSession & {
   lastMessageId?: number
   postText?: string
   saleId?: string
+  saleMsgId?: number
   saleButtons: Button[][]
   deleteTimerHours: number
 }

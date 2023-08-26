@@ -60,12 +60,10 @@ o.time.handler = async (ctx) => {
   const seller = new Seller(ctx.from.id, ctx.from.first_name)
   const sale = new Sale(date, channels, seller)
   const saleDoc = await saleModel.create(sale)
-  await sendMessage(ctx, REPORT_CHAT_ID, M.sale(sale))
-  const msg = await reply(ctx, M.askPost(saleDoc.id))
+  await sendMessage(ctx, REPORT_CHAT_ID, M.sale(sale, saleDoc.id))
   setState(ctx)
   await ctx.deleteMessage()
   await tryDeleteLastMsg(ctx)
-  saveLastMsgId(ctx, msg)
 
   channels.forEach((c) => {
     scheduleNewContentPost(c.id, date.getTime() / 1000 + AD_TOP_DURATION)

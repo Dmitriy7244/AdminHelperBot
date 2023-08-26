@@ -1,7 +1,9 @@
 import {
+  BaseContext,
   editText,
   error,
   filterFalsy,
+  InlineKeyboard,
   MessageEntity,
   Msg,
   parseEntity,
@@ -9,11 +11,22 @@ import {
   setState,
 } from "deps"
 import { askNext, finish, replyError } from "lib"
-import { BaseContext } from "deps"
 import { MySession, QueryPrefix, State } from "types"
 
 export class Manager {
   constructor(public ctx: BaseContext) {}
+
+  editKeyboard(kb: InlineKeyboard, msgId: number | undefined) {
+    msgId = msgId ?? this.messageId
+    if (!msgId) error("No message_id")
+    return this.ctx.api.editMessageReplyMarkup(
+      this.ctx.chat!.id,
+      msgId,
+      { reply_markup: kb },
+    )
+  }
+
+  hideKeyboard = () => this.ctx.editMessageReplyMarkup()
 
   reply = (msg: Msg, state?: State, data: Partial<MySession> = {}) =>
     askNext(this.ctx, msg, state, data)
@@ -27,6 +40,10 @@ export class Manager {
     return await editText(this.ctx, msg)
   }
   setState = (state: State) => setState(this.ctx, state)
+
+  get messageId() {
+    return this.ctx.msg?.message_id
+  }
 
   get forwardFromChat() {
     return this.ctx.msg?.forward_from_chat

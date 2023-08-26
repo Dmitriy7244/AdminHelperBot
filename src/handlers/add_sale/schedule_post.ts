@@ -1,5 +1,7 @@
-import { BaseContext, editText } from "deps"
+import { BaseContext } from "deps"
+import K from "kbs"
 import { parseQuery, resetSalePost, setState, updatePostOptions } from "lib"
+import { Manager } from "manager"
 import M from "messages"
 import { Button, saleModel } from "models"
 import observers from "observers"
@@ -8,6 +10,7 @@ import { copyMessages } from "userbot"
 const o = observers.addSale.schedulePost
 
 o._.handler = async (ctx) => {
+  const mg = new Manager(ctx)
   const saleId = parseQuery(ctx, "Запланировать пост")
   ctx.session.saleId = saleId
   ctx.session.saleButtons = []
@@ -19,7 +22,8 @@ o._.handler = async (ctx) => {
     ctx.session.asForward,
     ctx.session.noSound,
   )
-  await editText(ctx, m)
+  await mg.hideKeyboard()
+  await mg.reply(m, undefined, { saleMsgId: mg.messageId })
 }
 
 o.asForward.handler = async (ctx) => {
@@ -53,6 +57,7 @@ o.postMessage.handler = (ctx) => {
 }
 
 o.ready.handler = async (ctx) => {
+  const mg = new Manager(ctx)
   const messageIds = ctx.session.messageIds!
 
   if (!messageIds.length) {
@@ -87,7 +92,9 @@ o.ready.handler = async (ctx) => {
     }
   }
   setState(ctx)
-  await editText(ctx, M.postScheduled(saleId))
+
+  await mg.editKeyboard(K.addPostButtons(saleId), ctx.session.saleMsgId)
+  await ctx.deleteMessage()
   for (const id of messageIds) {
     await ctx.api.deleteMessage(ctx.chat!.id, id)
   }
