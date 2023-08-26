@@ -11,4 +11,8 @@ jobs:
         host: my-bots.ru
         username: root
         password: ${{ secrets.PASSWORD }}
-        script: cd apps/AdminHelperBot/ && git pull && dcu && dcl
+        script: >
+          cd apps/AdminHelperBot/ && 
+          git pull && 
+          docker compose up --build --wait --remove-orphans &&
+          docker compose logs -t
