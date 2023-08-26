@@ -1,5 +1,5 @@
 import { ButtonsPreview, parseButtons } from "api"
-import { editText, reply } from "deps"
+import { reply } from "deps"
 import { parseQuery, saveLastMsgId, setState, tryDeleteLastMsg } from "lib"
 import M from "messages"
 import { Button, saleModel } from "models"
@@ -10,8 +10,8 @@ const o = observers.addSale.addButtons
 o._.handler = async (ctx) => {
   ctx.session.saleId = parseQuery(ctx, "Добавить кнопки")
   setState(ctx, "sale:buttons")
-  saveLastMsgId(ctx, ctx.msg!)
-  await editText(ctx, M.askButtons)
+  const msg = await reply(ctx, M.askButtons)
+  saveLastMsgId(ctx, msg)
 }
 
 o.buttonsToAdd.handler = async (ctx) => {
