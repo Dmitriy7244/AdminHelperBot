@@ -1,18 +1,18 @@
 name: Deploy
 on: [push]
 jobs:
-  run_example_job:
+  main:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-    - name: print out example job
+    - name: main
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: my-bots.ru
         username: root
         password: ${{ secrets.PASSWORD }}
-        script: >
-          cd apps/AdminHelperBot/ && 
-          git pull && 
-          docker compose up --build --wait --remove-orphans &&
+        script: |
+          cd apps/AdminHelperBot/
+          git pull
+          docker compose up --build --wait --remove-orphans
           docker compose logs -t
