@@ -11,4 +11,4 @@ jobs:
         host: my-bots.ru
         username: root
         password: ${{ secrets.PASSWORD }}
-        script: whoami
+        script: cd apps/AdminHelperBot/ && git pull && dcu && dcl
