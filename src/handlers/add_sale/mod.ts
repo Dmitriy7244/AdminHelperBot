@@ -1,17 +1,20 @@
 import { REPORT_CHAT_ID, resolveDate, resolveDatetime } from "api"
 import { AD_TOP_DURATION } from "config"
-import { findChannels } from "db"
+import * as db from "db"
 import { reply, sendMessage } from "deps"
+import K from "kbs"
 import {
   saveLastMsgId,
   scheduleNewContentPost,
   setState,
   tryDeleteLastMsg,
 } from "lib"
+import { Handler } from "manager"
 import M from "messages"
 import { Sale, saleModel, Seller } from "models"
 import observers from "observers"
 import { MyContext } from "types"
+import { deletePost } from "userbot"
 
 const o = observers.addSale
 
@@ -56,7 +59,7 @@ o.time.handler = async (ctx) => {
     await reply(ctx, M.timeError)
     return
   }
-  const channels = await findChannels(ctx.session.channels)
+  const channels = await db.findChannels(ctx.session.channels)
   const seller = new Seller(ctx.from.id, ctx.from.first_name)
   const sale = new Sale(date, channels, seller)
   const saleDoc = await saleModel.create(sale)
@@ -72,6 +75,16 @@ o.time.handler = async (ctx) => {
 
 import("./schedule_post.ts")
 import("./add_buttons.ts")
+
+o.deletePost.handler = Handler(async (mg) => {
+  const saleId = mg.parseQuery("Удалить пост")
+  const sale = await db.getSale(saleId)
+  for (const post of sale.scheduledPosts) {
+    await deletePost(post.chatId, post.messageIds)
+  }
+  await db.deletePost(saleId)
+  await mg.editKeyboard(K.schedulePost(saleId))
+})
 
 async function onSaleDate(ctx: MyContext) {
   const msg = await reply(ctx, M.askTime)

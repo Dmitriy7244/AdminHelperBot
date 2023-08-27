@@ -1,9 +1,9 @@
-import { BaseContext } from "deps"
+import { BaseContext, log } from "deps"
 import K from "kbs"
 import { parseQuery, resetSalePost, setState, updatePostOptions } from "lib"
 import { Manager } from "manager"
 import M from "messages"
-import { Button, saleModel } from "models"
+import { Button, saleModel, ScheduledPost } from "models"
 import observers from "observers"
 import { copyMessages } from "userbot"
 
@@ -12,6 +12,7 @@ const o = observers.addSale.schedulePost
 o._.handler = async (ctx) => {
   const mg = new Manager(ctx)
   const saleId = parseQuery(ctx, "Запланировать пост")
+  log("Schedule post", {saleId})
   ctx.session.saleId = saleId
   ctx.session.saleButtons = []
   ctx.session.deleteTimerHours = 48
@@ -67,6 +68,7 @@ o.ready.handler = async (ctx) => {
 
   const saleId = ctx.session.saleId!
   const sale = await saleModel.findById(saleId)
+  const chatId = ctx.chat!.id
   if (!sale) {
     ctx.reply("Ошибка, зовите Дмитрия")
     return
@@ -74,23 +76,26 @@ o.ready.handler = async (ctx) => {
   sale.text = ctx.session.postText
   sale.buttons = ctx.session.saleButtons
   sale.deleteTimerHours = ctx.session.deleteTimerHours
-  await sale.save()
+
+  console.log(sale.publishDate)
 
   for (const c of sale.channels) {
     try {
-      await copyMessages(
+      const msgIds = await copyMessages(
         c.id,
-        ctx.chat!.id,
+        chatId,
         messageIds,
-        ctx.session.date!,
+        sale.publishDate,
         ctx.session.asForward,
         ctx.session.noSound,
       )
+      sale.scheduledPosts.push(new ScheduledPost(c.id, msgIds))
     } catch (e) {
       ctx.reply(`<b>[Ошибка]</b> <code>${e}</code>`)
       return
     }
   }
+  await sale.save()
   setState(ctx)
 
   await mg.editKeyboard(K.addPostButtons(saleId), ctx.session.saleMsgId)

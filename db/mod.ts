@@ -1,5 +1,5 @@
 import { error } from "deps"
-import { Channel, channelModel } from "models"
+import { Channel, channelModel, saleModel } from "models"
 
 async function findChannel(title: string) {
   const doc = await channelModel.findOne({ title }).exec()
@@ -11,6 +11,23 @@ async function deleteChannel(title: string) {
   await channelModel.deleteOne({ title }).exec()
   CHANNELS = CHANNELS.filter((c) => c.title != title)
 }
+
+async function deletePost(saleId: string) {
+  const doc = await saleModel.findById(saleId).exec()
+  if (!doc) error("Sale not found", { saleId })
+  doc.text = undefined
+  doc.buttons = []
+  doc.deleteTimerHours = undefined
+  doc.scheduledPosts = []
+  doc.save()
+}
+
+async function getSale(saleId: string) {
+  const doc = await saleModel.findById(saleId).exec()
+  if (!doc) error("Sale not found", { saleId })
+  return doc
+}
+
 
 async function findChannels(titles: string[]) {
   const channels = []
@@ -34,9 +51,11 @@ async function addChannel(id: number, title: string, url: string) {
 let CHANNELS = await getChannels()
 
 export {
+  getSale,
   addChannel,
   CHANNELS,
   deleteChannel,
+  deletePost,
   findChannel,
   findChannels,
   getChannels,

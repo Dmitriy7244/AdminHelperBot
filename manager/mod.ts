@@ -16,7 +16,7 @@ import { MySession, QueryPrefix, State } from "types"
 export class Manager {
   constructor(public ctx: BaseContext) {}
 
-  editKeyboard(kb: InlineKeyboard, msgId: number | undefined) {
+  editKeyboard(kb: InlineKeyboard, msgId?: number) {
     msgId = msgId ?? this.messageId
     if (!msgId) error("No message_id")
     return this.ctx.api.editMessageReplyMarkup(

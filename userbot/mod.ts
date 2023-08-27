@@ -36,4 +36,12 @@ async function reschedulePost(
   await post("reschedulePost", data)
 }
 
-export { copyMessages, getPostMessages, reschedulePost }
+async function deletePost(
+  chat_id: number,
+  message_ids: number[],
+) {
+  const data = { chat_id, message_ids }
+  await post("deletePost", data)
+}
+
+export { copyMessages, deletePost, getPostMessages, reschedulePost }

@@ -34,6 +34,7 @@ export type QueryPrefix =
   | "Таймер удаления"
   | "Добавить канал"
   | "Удалить канал"
+  | "Удалить пост"
 
 export type MySession = BaseSession & {
   messageIds: number[]

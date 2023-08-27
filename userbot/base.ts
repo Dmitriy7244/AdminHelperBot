@@ -14,7 +14,11 @@ const headers = {
   "Content-Type": "application/json",
 }
 
-type Method = "copyMessages" | "getPostMessages" | "reschedulePost"
+type Method =
+  | "copyMessages"
+  | "getPostMessages"
+  | "reschedulePost"
+  | "deletePost"
 
 export { headers, USERBOT_TOKEN, USERBOT_URL }
 export type { Method, Result }

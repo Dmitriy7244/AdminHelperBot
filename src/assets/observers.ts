@@ -54,6 +54,7 @@ const observers = {
       _: addButtons,
       buttonsToAdd: o.text().state("sale:buttons"),
     },
+    deletePost: o.query("Удалить пост"),
   },
   content: {
     _: content,

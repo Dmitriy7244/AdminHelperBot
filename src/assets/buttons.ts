@@ -1,12 +1,19 @@
 import { CHANNELS } from "db"
-import { CallbackData, PrefixButton } from "loader"
 import { CallbackButton } from "deps"
+import { CallbackData, PrefixButton } from "loader"
+import { QueryPrefix } from "types"
 
 const ChannelCallbackData = (title: string) => CallbackData("channel", title)
 const ChannelButton = (title: string) =>
   CallbackButton(ChannelCallbackData(title), title)
 
+function DataButton(prefix: QueryPrefix, data: string) {
+  const d = CallbackData(prefix, data)
+  return CallbackButton(d, prefix)
+}
+
 class Buttons {
+  deletePost = (saleId: string) => DataButton("Удалить пост", saleId)
   pickChannel = (title: string, selected: string[]) =>
     CallbackButton(
       ChannelCallbackData(title),
@@ -14,11 +21,7 @@ class Buttons {
     )
   pickAll = PrefixButton("➕ Выбрать все")
   ready = PrefixButton("✅ Готово")
-  schedulePost = (saleId: string) =>
-    CallbackButton(
-      CallbackData("Запланировать пост", saleId),
-      "Запланировать пост",
-    )
+  schedulePost = (saleId: string) => DataButton("Запланировать пост", saleId)
   asForward = (value = false) =>
     PrefixButton(
       "asForward",

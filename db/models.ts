@@ -41,6 +41,18 @@ export class Button {
   url: string
 }
 
+export class ScheduledPost {
+  @prop()
+  chatId: number
+  @prop({ type: Number })
+  messageIds: number[]
+
+  constructor(chatId: number, messageIds: number[]) {
+    this.chatId = chatId
+    this.messageIds = messageIds
+  }
+}
+
 export class Sale {
   @prop()
   publishDate: Date
@@ -54,6 +66,8 @@ export class Sale {
   buttons: Button[][]
   @prop()
   deleteTimerHours?: number
+  @prop({ type: ScheduledPost })
+  scheduledPosts: ScheduledPost[]
 
   constructor(publishDate: Date, channels: Channel[], seller: Seller) {
     this.publishDate = publishDate
@@ -83,13 +97,6 @@ export class ContentPost {
   entities?: MessageEntity[]
   @prop()
   text?: string
-}
-
-export class ScheduledPost {
-  @prop()
-  chatId: number
-  @prop({ type: Number })
-  messageIds: number[]
 }
 
 const saleModel = getModelForClass(Sale)
