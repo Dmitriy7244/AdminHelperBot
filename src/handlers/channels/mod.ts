@@ -1,10 +1,16 @@
-import M from "messages"
-import { reply } from "deps"
-import observers from "observers"
+import { MsgManager } from "manager"
+import M, { messages } from "messages"
 
-const o = observers.channels
+const m = messages.channels.addChannel
 
-o._.handler = (ctx) => reply(ctx, M.channels())
+export async function addChannel(mg: MsgManager) {
+  await mg.edit(m.askPost, "channels_post")
+}
+
+export async function deleteChannel(mg: MsgManager) {
+  await mg.reply(M.pickChannel(), "channels_delete")
+}
+
 
 import("./addChannel.ts")
 import("./deleteChannel.ts")

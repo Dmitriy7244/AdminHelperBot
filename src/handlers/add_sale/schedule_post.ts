@@ -1,83 +1,56 @@
-import { BaseContext, log } from "deps"
+import { log } from "deps"
 import K from "kbs"
-import { parseQuery, resetSalePost, setState, updatePostOptions } from "lib"
-import { Manager } from "manager"
-import M from "messages"
+import { updatePostOptions } from "lib"
+import { MsgManager, QueryManager } from "manager"
 import { Button, saleModel, ScheduledPost } from "models"
-import observers from "observers"
 import { copyMessages } from "userbot"
 
-const o = observers.addSale.schedulePost
-
-o._.handler = async (ctx) => {
-  const mg = new Manager(ctx)
-  const saleId = parseQuery(ctx, "Запланировать пост")
-  log("Schedule post", {saleId})
-  ctx.session.saleId = saleId
-  ctx.session.saleButtons = []
-  ctx.session.deleteTimerHours = 48
-  setState(ctx, "sale:post")
-  resetSalePost(ctx)
-  const m = M.postOptions(
-    ctx.session.deleteTimerHours,
-    ctx.session.asForward,
-    ctx.session.noSound,
-  )
-  await mg.hideKeyboard()
-  await mg.reply(m, undefined, { saleMsgId: mg.messageId })
+export async function asForward(mg: MsgManager) {
+  await updatePostOptions(mg.ctx, !mg.session.asForward, mg.session.noSound)
 }
 
-o.asForward.handler = async (ctx) => {
-  await updatePostOptions(ctx, !ctx.session.asForward, ctx.session.noSound)
+export async function noSound(mg: MsgManager) {
+  await updatePostOptions(mg.ctx, mg.session.asForward, !mg.session.noSound)
 }
 
-o.noSound.handler = async (ctx) => {
-  await updatePostOptions(ctx, ctx.session.asForward, !ctx.session.noSound)
-}
-
-o.deleteTimer.handler = async (ctx) => {
-  let hours = ctx.session.deleteTimerHours
+export async function deleteTimer(mg: MsgManager) {
+  let hours = mg.session.deleteTimerHours
   if (hours == 24) hours = 48
   else if (hours == 48) hours = 2
   else hours = 24
-  ctx.session.deleteTimerHours = hours
-  await updatePostOptions(ctx, ctx.session.asForward, ctx.session.noSound)
+  mg.session.deleteTimerHours = hours
+  await updatePostOptions(mg.ctx, mg.session.asForward, mg.session.noSound)
 }
 
-function answerQuery(ctx: BaseContext, text: string, alert = true) {
-  return ctx.answerCallbackQuery({ text, show_alert: alert })
+export function postMessage(mg: MsgManager) {
+  mg.session.messageIds.push(mg.messageId)
+  const text = mg.text
+  const buttons = (mg.inlineKeyboard ?? []) as Button[][]
+  if (text) mg.session.postText = text
+  mg.session.saleButtons.push(...buttons)
+  log("New post message", { text, buttons })
 }
 
-o.postMessage.handler = (ctx) => {
-  ctx.session.messageIds.push(ctx.msg.message_id)
-  const text = ctx.msg.text ?? ctx.msg.caption
-  const buttons = (ctx.msg.reply_markup?.inline_keyboard ?? []) as Button[][]
-  if (text) ctx.session.postText = text
-  ctx.session.saleButtons.push(...buttons)
-  console.log(ctx.session.saleButtons)
-}
-
-o.ready.handler = async (ctx) => {
-  const mg = new Manager(ctx)
-  const messageIds = ctx.session.messageIds!
+// TODO: to big
+export async function ready(mg: QueryManager) {
+  const messageIds = mg.session.messageIds!
 
   if (!messageIds.length) {
-    await answerQuery(ctx, "Сначала отправь пост, потом вернись к этой кнопке")
+    await mg.answerQuery("Сначала отправь пост, потом вернись к этой кнопке")
     return
   }
 
-  const saleId = ctx.session.saleId!
+  const saleId = mg.session.saleId!
   const sale = await saleModel.findById(saleId)
-  const chatId = ctx.chat!.id
+  const chatId = mg.chatId
   if (!sale) {
-    ctx.reply("Ошибка, зовите Дмитрия")
+    await mg.reply("Ошибка, зовите Дмитрия")
     return
   }
-  sale.text = ctx.session.postText
-  sale.buttons = ctx.session.saleButtons
-  sale.deleteTimerHours = ctx.session.deleteTimerHours
 
-  console.log(sale.publishDate)
+  sale.text = mg.session.postText
+  sale.buttons = mg.session.saleButtons
+  sale.deleteTimerHours = mg.session.deleteTimerHours
 
   for (const c of sale.channels) {
     try {
@@ -86,21 +59,20 @@ o.ready.handler = async (ctx) => {
         chatId,
         messageIds,
         sale.publishDate,
-        ctx.session.asForward,
-        ctx.session.noSound,
+        mg.session.asForward,
+        mg.session.noSound,
       )
       sale.scheduledPosts.push(new ScheduledPost(c.id, msgIds))
     } catch (e) {
-      ctx.reply(`<b>[Ошибка]</b> <code>${e}</code>`)
+      mg.reply(`<b>[Ошибка]</b> <code>${e}</code>`)
       return
     }
   }
   await sale.save()
-  setState(ctx)
-
-  await mg.editKeyboard(K.addPostButtons(saleId), ctx.session.saleMsgId)
-  await ctx.deleteMessage()
+  mg.resetState()
+  await mg.editKeyboard(K.addPostButtons(saleId), mg.session.saleMsgId)
+  await mg.deleteMessage()
   for (const id of messageIds) {
-    await ctx.api.deleteMessage(ctx.chat!.id, id)
+    await mg.deleteMessage(id)
   }
 }

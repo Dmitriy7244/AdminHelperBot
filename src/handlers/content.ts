@@ -1,47 +1,40 @@
 import { nextYear } from "api"
 import { findChannel } from "db"
-import { editText, reply } from "deps"
-import { parseQuery, setState } from "lib"
+import { Msg } from "deps"
+import { MsgManager } from "manager"
 import M from "messages"
 import { scheduledPostModel } from "models"
-import observers from "observers"
 import { MyContext } from "types"
 import { copyMessages } from "userbot"
 
-const o = observers.content
-
-o._.handler = async (ctx) => {
-  setState(ctx, "content:channel")
-  await reply(ctx, M.content.askChannel())
-}
-
-o.pickChannel.handler = async (ctx) => {
-  const title = parseQuery(ctx, "channel")
+export async function askPosts(mg: MsgManager) {
+  const title = mg.parseQuery("channel")
   const channel = await findChannel(title)
-  setState(ctx, "content:posts")
-  ctx.session.channelId = channel.id
-  ctx.session.filedIds = []
-  ctx.session.messageIds = []
-  await editText(ctx, M.content.askPosts)
+  await mg.edit(M.content.askPosts, "content:posts", {
+    channelId: channel.id,
+    filedIds: [],
+    messageIds: [],
+  })
 }
 
-o.postMessage.handler = (ctx) => {
-  ctx.session.messageIds.push(ctx.msg.message_id)
+export function savePostMessage(mg: MsgManager) {
+  mg.session.messageIds.push(mg.messageId)
+  console.log(mg.session)
 }
 
-o.ready.handler = async (ctx) => {
-  setState(ctx)
+export async function onReady(mg: MsgManager) {
+  mg.resetState()
   const date = nextYear(new Date())
-  const chatId = ctx.session.channelId!
-  const messageIds = ctx.session.messageIds
+  const chatId = mg.session.channelId!
+  const messageIds = mg.session.messageIds
   if (!messageIds.length) {
-    await ctx.editMessageText("Сообщений не найдено")
+    await mg.edit(new Msg("Сообщений не найдено"))
     return
   }
   console.log(messageIds)
-  const result = await tryCopyMessages(ctx, chatId, messageIds, date)
+  const result = await tryCopyMessages(mg.ctx, chatId, messageIds, date)
   if (!result) return
-  await ctx.editMessageText("Контент добавлен")
+  await mg.edit(new Msg("Контент добавлен"))
   await scheduledPostModel.create({ chatId, messageIds: result })
 }
 

@@ -11,7 +11,7 @@ bot.catch((err) => {
   console.error(err)
 })
 
-import("../handlers/mod.ts")
+import("observers") // TODO: rename
 setCommands()
 
 postModel.find()
@@ -28,20 +28,25 @@ export async function fixKeyboard(postUrl: string) {
   await bot.setKeyboard(chatId, msgId, [
     [
       {
-        text: "ТУТ",
-        url: "https://t.me/+lHsEag3M4fU0Y2Qy",
+        text: "💟Hannahowo",
+        url: "https://t.me/+GF_fP4vgNI83NWUy",
       },
       {
-        text: "ТУТ",
-        url: "https://t.me/+lHsEag3M4fU0Y2Qy",
+        text: "Sweetiefox🉐",
+        url: "https://t.me/+GF_fP4vgNI83NWUy",
+      },
+    ],[
+      {
+        text: "💟Belledelpnine",
+        url: "https://t.me/+GF_fP4vgNI83NWUy",
       },
       {
-        text: "ТУТ",
-        url: "https://t.me/+lHsEag3M4fU0Y2Qy",
+        text: "purple🉐",
+        url: "https://t.me/+GF_fP4vgNI83NWUy",
       },
     ],
   ])
 }
 
-// await fixKeyboard("https://t.me/c/1988740515/1287");
+// await fixKeyboard("https://t.me/wallposter_r/1655");
 console.log("started")

@@ -42,7 +42,7 @@ export async function findSale(text: string) {
   return sales[sales.length - 1]
 }
 
-export { ADMIN_ID, REPORT_CHAT_ID } from "config"
 export { ButtonsPreview, parseButtons } from "./buttons.ts"
+export { ADMIN_ID, REPORT_CHAT_ID } from "./config.ts"
 export { nextYear, resolveDate, resolveDatetime } from "./dates.ts"
 export { reprSale } from "./repr_sale.ts"

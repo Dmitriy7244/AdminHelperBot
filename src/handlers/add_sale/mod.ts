@@ -1,82 +1,63 @@
 import { REPORT_CHAT_ID, resolveDate, resolveDatetime } from "api"
 import { AD_TOP_DURATION } from "config"
 import * as db from "db"
-import { reply, sendMessage } from "deps"
+import { log } from "deps"
 import K from "kbs"
 import {
+  resetSalePost,
   saveLastMsgId,
   scheduleNewContentPost,
-  setState,
   tryDeleteLastMsg,
 } from "lib"
-import { Handler } from "manager"
+import { MsgManager } from "manager"
 import M from "messages"
 import { Sale, saleModel, Seller } from "models"
-import observers from "observers"
-import { MyContext } from "types"
 import { deletePost } from "userbot"
 
-const o = observers.addSale
-
-o._.handler = async (ctx) => {
-  ctx.session.channels = []
-  await reply(ctx, M.askChannels)
-  setState(ctx, "sale:channels")
-  await ctx.deleteMessage()
-}
-
-import("./pick_channels.ts")
-
-o.date.handler = async (ctx) => {
+export async function date(mg: MsgManager) {
   try {
-    ctx.session.date = resolveDate(ctx.msg.text)
+    mg.saveData({ date: resolveDate(mg.text) })
   } catch {
-    await reply(ctx, M.dateError)
+    await mg.reply(M.dateError)
     return
   }
-  await onSaleDate(ctx)
+  await onSaleDate(mg)
 }
 
-o.dateToday.handler = async (ctx) => {
-  ctx.session.date = new Date()
-  ctx.session.lastMessageId = undefined
-  await onSaleDate(ctx)
+export async function dateToday(mg: MsgManager) {
+  mg.saveData({ date: new Date(), lastMessageId: undefined })
+  await onSaleDate(mg)
 }
 
-o.dateTomorrow.handler = async (ctx) => {
+export async function dateTomorrow(mg: MsgManager) {
   const date = new Date()
   date.setDate(date.getDate() + 1)
-  ctx.session.date = date
-  ctx.session.lastMessageId = undefined
-  await onSaleDate(ctx)
+  mg.saveData({ date, lastMessageId: undefined })
+  await onSaleDate(mg)
 }
 
-o.time.handler = async (ctx) => {
-  const date = ctx.session.date!
+export async function time(mg: MsgManager) {
+  const date = mg.session.date!
   try {
-    resolveDatetime(ctx.msg.text, date)
+    resolveDatetime(mg.text, date)
   } catch {
-    await reply(ctx, M.timeError)
+    await mg.reply(M.timeError)
     return
   }
-  const channels = await db.findChannels(ctx.session.channels)
-  const seller = new Seller(ctx.from.id, ctx.from.first_name)
+  const channels = await db.findChannels(mg.session.channels)
+  const seller = new Seller(mg.user.id, mg.user.first_name)
   const sale = new Sale(date, channels, seller)
   const saleDoc = await saleModel.create(sale)
-  await sendMessage(ctx, REPORT_CHAT_ID, M.sale(sale, saleDoc.id))
-  setState(ctx)
-  await ctx.deleteMessage()
-  await tryDeleteLastMsg(ctx)
-
+  await mg.sendMessage(REPORT_CHAT_ID, M.sale(sale, saleDoc.id))
+  mg.resetState()
+  await mg.deleteMessage()
+  await tryDeleteLastMsg(mg.ctx)
   channels.forEach((c) => {
     scheduleNewContentPost(c.id, date.getTime() / 1000 + AD_TOP_DURATION)
   })
 }
 
-import("./schedule_post.ts")
-import("./add_buttons.ts")
-
-o.deletePost.handler = Handler(async (mg) => {
+export async function onDeletePost(mg: MsgManager) {
   const saleId = mg.parseQuery("Удалить пост")
   const sale = await db.getSale(saleId)
   for (const post of sale.scheduledPosts) {
@@ -84,12 +65,35 @@ o.deletePost.handler = Handler(async (mg) => {
   }
   await db.deletePost(saleId)
   await mg.editKeyboard(K.schedulePost(saleId))
-})
+}
 
-async function onSaleDate(ctx: MyContext) {
-  const msg = await reply(ctx, M.askTime)
-  setState(ctx, "sale:time")
-  await ctx.deleteMessage()
-  await tryDeleteLastMsg(ctx)
-  saveLastMsgId(ctx, msg)
+export async function addButtons(mg: MsgManager) {
+  const saleId = mg.parseQuery("Добавить кнопки")
+  const msg = await mg.reply(M.askButtons, "sale:buttons", { saleId })
+  saveLastMsgId(mg, msg)
+}
+
+export async function schedulePost(mg: MsgManager) {
+  const saleId = mg.parseQuery("Запланировать пост")
+  log("Schedule post", { saleId })
+  resetSalePost(mg.ctx)
+  const m = M.postOptions(
+    mg.session.deleteTimerHours,
+    mg.session.asForward,
+    mg.session.noSound,
+  )
+  await mg.hideKeyboard()
+  await mg.reply(m, "sale:post", {
+    saleMsgId: mg.messageId,
+    saleId: saleId,
+    saleButtons: [],
+    deleteTimerHours: 48,
+  })
+}
+
+async function onSaleDate(mg: MsgManager) {
+  const msg = await mg.reply(M.askTime, "sale:time")
+  await mg.deleteMessage()
+  await tryDeleteLastMsg(mg.ctx)
+  saveLastMsgId(mg, msg)
 }

@@ -11,18 +11,19 @@
     "kbs": "./src/assets/kbs.ts",
     "messages": "./src/assets/messages.ts",
     "texts": "./src/assets/texts.ts",
-    "observers": "./src/assets/observers.ts",
+    "observers": "./src/composer/mod.ts",
+    "handlers/": "./src/handlers/",
     "lib": "./src/main/lib.ts",
-    "config": "./api/config.ts",
-    "models": "./db/models.ts",
-    "db": "./db/mod.ts",
-    "api": "./api/mod.ts",
+    "config": "./packages/api/config.ts",
+    "models": "./packages/db/models.ts",
+    "db": "./packages/db/mod.ts",
+    "api": "./packages/api/mod.ts",
     "loader": "./src/base/loader.ts",
     "types": "./src/base/types.ts",
-    "userbot": "./userbot/mod.ts",
+    "userbot": "./packages/userbot/mod.ts",
     "core/": "./src/core/",
     "deps": "./deps.ts",
-    "manager": "./manager/mod.ts"
+    "manager": "./packages/manager/mod.ts"
   },
   "fmt": {
     "semiColons": false

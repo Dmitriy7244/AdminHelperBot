@@ -14,6 +14,7 @@ import {
 } from "deps"
 import K from "kbs"
 import { bot } from "loader"
+import { Manager } from "manager"
 import { Button, Post, ScheduledPost, scheduledPostModel } from "models"
 import { Command, MyContext, MySession, QueryPrefix, State } from "types"
 import { reschedulePost } from "userbot"
@@ -45,7 +46,7 @@ export function reformatTime(time: string) {
 }
 
 export async function trySetButtons(
-  ctx: BaseContext,
+  mg: Manager,
   chatId: number,
   messageId: number,
   buttons: Button[][],
@@ -54,7 +55,7 @@ export async function trySetButtons(
   for (let attempts = 0; attempts < 3; attempts++) {
     await sleepRandomAmountOfSeconds(1, 5)
     try {
-      await editReplyMarkup(ctx, { inline_keyboard: buttons })
+      await editReplyMarkup(mg.ctx, { inline_keyboard: buttons })
       console.log("Buttons set", { attempts, chatId, messageId })
       return
     } catch (e) {
@@ -90,8 +91,8 @@ export async function scheduleContentPost(
   await post.deleteOne()
 }
 
-export function saveLastMsgId(ctx: MyContext, msg: Message) {
-  ctx.session.lastMessageId = msg.message_id
+export function saveLastMsgId(mg: Manager, msg: Message) {
+  mg.saveData({ lastMessageId: msg.message_id })
 }
 
 export async function tryDeleteLastMsg(ctx: MyContext) {
