@@ -35,7 +35,8 @@ export async function fixKeyboard(postUrl: string) {
         text: "Sweetiefox🉐",
         url: "https://t.me/+GF_fP4vgNI83NWUy",
       },
-    ],[
+    ],
+    [
       {
         text: "💟Belledelpnine",
         url: "https://t.me/+GF_fP4vgNI83NWUy",
