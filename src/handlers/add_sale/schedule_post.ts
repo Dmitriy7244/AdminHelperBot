@@ -24,7 +24,7 @@ export async function deleteTimer(mg: MsgManager) {
 
 export function postMessage(mg: MsgManager) {
   mg.session.messageIds.push(mg.messageId)
-  const text = mg.text
+  const text = mg.getText()
   const buttons = (mg.inlineKeyboard ?? []) as Button[][]
   if (text) mg.session.postText = text
   mg.session.saleButtons.push(...buttons)

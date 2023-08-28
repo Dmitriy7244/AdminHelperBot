@@ -15,7 +15,6 @@ function onText(callback: (mg: MsgManager) => any) {
   o.text().handler = MsgHandler(callback)
 }
 
-
 onCommand("start", handlers.start)
 onCommand("test", handlers.test)
 onCommand("content", handlers.content)
@@ -27,3 +26,5 @@ onCommand("channels", handlers.showChannels)
 await import("./channels/mod.ts")
 onChannelPost(handlers.handleChannelPost)
 onText(handlers.tryAddSale)
+
+// TODO: rename subgroup handlers, move lib.ts
