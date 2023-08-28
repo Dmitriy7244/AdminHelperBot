@@ -76,19 +76,14 @@ export async function addButtons(mg: MsgManager) {
 export async function schedulePost(mg: MsgManager) {
   const saleId = mg.parseQuery("Запланировать пост")
   log("Schedule post", { saleId })
-  resetSalePost(mg.ctx)
+  resetSalePost(mg)
   const m = M.postOptions(
     mg.session.deleteTimerHours,
     mg.session.asForward,
     mg.session.noSound,
   )
   await mg.hideKeyboard()
-  await mg.reply(m, "sale:post", {
-    saleMsgId: mg.messageId,
-    saleId: saleId,
-    saleButtons: [],
-    deleteTimerHours: 48,
-  })
+  await mg.reply(m, "sale:post", { saleMsgId: mg.messageId, saleId: saleId })
 }
 
 async function onSaleDate(mg: MsgManager) {

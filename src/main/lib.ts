@@ -119,12 +119,14 @@ export async function updatePostOptions(
   )
 }
 
-export function resetSalePost(ctx: MyContext) {
-  const s = ctx.session
+export function resetSalePost(mg: Manager) {
+  const s = mg.session
   s.asForward = false
   s.noSound = false
   s.messageIds = []
   s.postText = undefined
+  s.deleteTimerHours = 48
+  s.saleButtons = []
 }
 
 export async function finish(ctx: BaseContext, msg: Msg) {
