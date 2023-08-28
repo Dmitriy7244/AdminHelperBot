@@ -1,5 +1,4 @@
-import { BaseContext, Bot, Observer } from "deps"
-import { mgl } from "deps"
+import { BaseContext, Bot, mgl, Observer } from "deps"
 import { Command, MySession, QueryPrefix, State } from "types"
 
 const defaultSession: MySession = {
@@ -11,6 +10,7 @@ const defaultSession: MySession = {
   state: undefined,
   saleButtons: [],
   deleteTimerHours: 24,
+  postIntervalMins: 0,
 }
 
 export type MyContext = BaseContext<MySession>

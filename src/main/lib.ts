@@ -5,6 +5,7 @@ import {
   BotCommand,
   Document,
   editReplyMarkup,
+  log,
   Message,
   mgl,
   Msg,
@@ -14,10 +15,17 @@ import {
 } from "deps"
 import K from "kbs"
 import { bot } from "loader"
-import { Manager } from "manager"
-import { Button, Post, ScheduledPost, scheduledPostModel } from "models"
+import { Manager, MsgManager, QueryManager } from "manager"
+import {
+  Button,
+  Post,
+  saleModel,
+  ScheduledPost,
+  scheduledPostModel,
+} from "models"
 import { Command, MyContext, MySession, QueryPrefix, State } from "types"
-import { reschedulePost } from "userbot"
+import { copyMessages, reschedulePost } from "userbot"
+import M from "messages";
 
 export const setState = mgl.setState<State>
 export const parseQuery = mgl.parseQuery<QueryPrefix>
@@ -92,7 +100,7 @@ export async function scheduleContentPost(
 }
 
 export function saveLastMsgId(mg: Manager, msg: Message) {
-  mg.saveData({ lastMessageId: msg.message_id })
+  mg.save({ lastMessageId: msg.message_id })
 }
 
 export async function tryDeleteLastMsg(ctx: MyContext) {
@@ -158,3 +166,66 @@ export function cancelHandlers(): never {
 }
 
 export class CancelException extends Error {}
+
+// TODO:
+function addMinutesToDate(date: Date, minutes: number) {
+  return new Date(date.getTime() + minutes * 60000)
+}
+
+export async function _onSchedulePost(mg: MsgManager, saleId: string) {
+  log("Schedule post", { saleId })
+  resetSalePost(mg)
+  const m = M.postOptions(
+    mg.session.deleteTimerHours,
+    mg.session.asForward,
+    mg.session.noSound,
+  )
+  await mg.reply(m, "sale:post", { saleId })
+}
+
+export async function _onPostReady(mg: QueryManager, delayMins = 0) {
+  const messageIds = mg.session.messageIds!
+
+  if (!messageIds.length) {
+    await mg.answerQuery("Сначала отправь пост, потом вернись к этой кнопке")
+    return
+  }
+
+  const saleId = mg.session.saleId!
+  const sale = await saleModel.findById(saleId)
+  const chatId = mg.chatId
+  if (!sale) {
+    await mg.reply("Ошибка, зовите Дмитрия")
+    return
+  }
+
+  sale.text = mg.session.postText
+  sale.buttons = mg.session.saleButtons
+  sale.deleteTimerHours = mg.session.deleteTimerHours
+
+  const date = addMinutesToDate(sale.publishDate, delayMins)
+
+  for (const c of sale.channels) {
+    try {
+      const msgIds = await copyMessages(
+        c.id,
+        chatId,
+        messageIds,
+        date,
+        mg.session.asForward,
+        mg.session.noSound,
+      )
+      sale.scheduledPosts.push(new ScheduledPost(c.id, msgIds))
+    } catch (e) {
+      mg.reply(`<b>[Ошибка]</b> <code>${e}</code>`)
+      return
+    }
+  }
+  await sale.save()
+  mg.resetState()
+  await mg.editKeyboard(K.managePosts(saleId), mg.session.saleMsgId)
+  await mg.deleteMessage()
+  for (const id of messageIds) {
+    await mg.deleteMessage(id)
+  }
+}

@@ -23,7 +23,7 @@ export class MsgManager extends Manager {
 
   async edit(msg: Msg, state?: State, data: Partial<MySession> = {}) {
     if (state !== undefined) this.setState(state)
-    this.saveData(data)
+    this.save(data)
     return await editText(this.ctx, msg)
   }
 

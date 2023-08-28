@@ -1,9 +1,7 @@
 import { log } from "deps"
-import K from "kbs"
-import { updatePostOptions } from "lib"
+import { _onPostReady, updatePostOptions } from "lib"
 import { MsgManager, QueryManager } from "manager"
-import { Button, saleModel, ScheduledPost } from "models"
-import { copyMessages } from "userbot"
+import { Button } from "models"
 
 export async function asForward(mg: MsgManager) {
   await updatePostOptions(mg.ctx, !mg.session.asForward, mg.session.noSound)
@@ -31,48 +29,6 @@ export function postMessage(mg: MsgManager) {
   log("New post message", { text, buttons })
 }
 
-// TODO: to big
-export async function ready(mg: QueryManager) {
-  const messageIds = mg.session.messageIds!
-
-  if (!messageIds.length) {
-    await mg.answerQuery("Сначала отправь пост, потом вернись к этой кнопке")
-    return
-  }
-
-  const saleId = mg.session.saleId!
-  const sale = await saleModel.findById(saleId)
-  const chatId = mg.chatId
-  if (!sale) {
-    await mg.reply("Ошибка, зовите Дмитрия")
-    return
-  }
-
-  sale.text = mg.session.postText
-  sale.buttons = mg.session.saleButtons
-  sale.deleteTimerHours = mg.session.deleteTimerHours
-
-  for (const c of sale.channels) {
-    try {
-      const msgIds = await copyMessages(
-        c.id,
-        chatId,
-        messageIds,
-        sale.publishDate,
-        mg.session.asForward,
-        mg.session.noSound,
-      )
-      sale.scheduledPosts.push(new ScheduledPost(c.id, msgIds))
-    } catch (e) {
-      mg.reply(`<b>[Ошибка]</b> <code>${e}</code>`)
-      return
-    }
-  }
-  await sale.save()
-  mg.resetState()
-  await mg.editKeyboard(K.addPostButtons(saleId), mg.session.saleMsgId)
-  await mg.deleteMessage()
-  for (const id of messageIds) {
-    await mg.deleteMessage(id)
-  }
+export async function onPostReady(mg: QueryManager) {
+  await _onPostReady(mg, mg.session.postIntervalMins)
 }

@@ -21,10 +21,11 @@ class Keyboards {
       .add(B.ready)
   }
   ready = new InlineKeyboard().add(B.ready)
-  addPostButtons = (saleId: string) =>
+  managePosts = (saleId: string) =>
     addButtons(new InlineKeyboard(), [
       B.deletePost(saleId),
       B.addButtons(saleId),
+      B.addPost(saleId),
     ])
   dates = addButtons(new InlineKeyboard(), [B.today, B.tomorrow])
   ChangeChannels = new InlineKeyboard().add(B.addChannel, B.deleteChannel)

@@ -21,7 +21,7 @@ class Messages {
     noSound = false,
   ) => new Msg(T.askPost, K.postOptions(deleteTimerHours, asForward, noSound))
   postScheduled = (saleId: string) =>
-    new Msg("Пост запланирован", K.addPostButtons(saleId))
+    new Msg("Пост запланирован", K.managePosts(saleId))
   askButtons = new Msg(T.askButtons)
   buttonsAdded = (preview: string) => new Msg(`Добавлены кнопки:\n\n${preview}`)
   pickChannel = () => new Msg("Выбери канал", K.pickChannel())

@@ -1,10 +1,9 @@
 import { REPORT_CHAT_ID, resolveDate, resolveDatetime } from "api"
 import { AD_TOP_DURATION } from "config"
 import * as db from "db"
-import { log } from "deps"
 import K from "kbs"
 import {
-  resetSalePost,
+  _onSchedulePost,
   saveLastMsgId,
   scheduleNewContentPost,
   tryDeleteLastMsg,
@@ -16,7 +15,7 @@ import { deletePost } from "userbot"
 
 export async function date(mg: MsgManager) {
   try {
-    mg.saveData({ date: resolveDate(mg.text) })
+    mg.save({ date: resolveDate(mg.text) })
   } catch {
     await mg.reply(M.dateError)
     return
@@ -25,14 +24,14 @@ export async function date(mg: MsgManager) {
 }
 
 export async function dateToday(mg: MsgManager) {
-  mg.saveData({ date: new Date(), lastMessageId: undefined })
+  mg.save({ date: new Date(), lastMessageId: undefined })
   await onSaleDate(mg)
 }
 
 export async function dateTomorrow(mg: MsgManager) {
   const date = new Date()
   date.setDate(date.getDate() + 1)
-  mg.saveData({ date, lastMessageId: undefined })
+  mg.save({ date, lastMessageId: undefined })
   await onSaleDate(mg)
 }
 
@@ -58,7 +57,7 @@ export async function time(mg: MsgManager) {
 }
 
 export async function onDeletePost(mg: MsgManager) {
-  const saleId = mg.parseQuery("Удалить пост")
+  const saleId = mg.parseQuery("Удалить посты")
   const sale = await db.getSale(saleId)
   for (const post of sale.scheduledPosts) {
     await deletePost(post.chatId, post.messageIds)
@@ -75,15 +74,20 @@ export async function addButtons(mg: MsgManager) {
 
 export async function schedulePost(mg: MsgManager) {
   const saleId = mg.parseQuery("Запланировать пост")
-  log("Schedule post", { saleId })
-  resetSalePost(mg)
-  const m = M.postOptions(
-    mg.session.deleteTimerHours,
-    mg.session.asForward,
-    mg.session.noSound,
-  )
+  mg.save({ postIntervalMins: 0, saleMsgId: mg.messageId })
   await mg.hideKeyboard()
-  await mg.reply(m, "sale:post", { saleMsgId: mg.messageId, saleId: saleId })
+  await _onSchedulePost(mg, saleId)
+}
+
+export async function addPost(mg: MsgManager) {
+  const saleId = mg.parseQuery("Добавить пост")
+  await mg.hideKeyboard()
+  const msg = await mg.reply(
+    "Через сколько минут после основного поста опубликовать этот пост?",
+    "post_interval",
+    { saleId, saleMsgId: mg.messageId },
+  )
+  saveLastMsgId(mg, msg)
 }
 
 async function onSaleDate(mg: MsgManager) {

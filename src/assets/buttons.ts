@@ -13,7 +13,8 @@ function DataButton(prefix: QueryPrefix, data: string) {
 }
 
 class Buttons {
-  deletePost = (saleId: string) => DataButton("Удалить пост", saleId)
+  deletePost = (saleId: string) => DataButton("Удалить посты", saleId)
+  addPost = (saleId: string) => DataButton("Добавить пост", saleId)
   pickChannel = (title: string, selected: string[]) =>
     CallbackButton(
       ChannelCallbackData(title),

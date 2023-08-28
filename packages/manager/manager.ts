@@ -27,7 +27,7 @@ export class Manager {
   setState = (state: State) => setState(this.ctx, state)
   resetState = () => setState(this.ctx)
 
-  saveData = (data: Partial<MySession>) => {
+  save = (data: Partial<MySession>) => {
     this.ctx.session = { ...this.ctx.session, ...data }
   }
 

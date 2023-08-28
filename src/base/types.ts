@@ -1,5 +1,5 @@
-import { Button } from "models"
 import { BaseContext, BaseSession, Observer } from "deps"
+import { Button } from "models"
 
 export type State =
   | "sale:channels"
@@ -13,6 +13,7 @@ export type State =
   | "channels_link"
   | "channels_title"
   | "channels_delete"
+  | "post_interval"
 export type Command =
   | "start"
   | "add_sale"
@@ -34,7 +35,8 @@ export type QueryPrefix =
   | "Таймер удаления"
   | "Добавить канал"
   | "Удалить канал"
-  | "Удалить пост"
+  | "Удалить посты"
+  | "Добавить пост"
 
 export type MySession = BaseSession & {
   messageIds: number[]
@@ -52,6 +54,7 @@ export type MySession = BaseSession & {
   saleMsgId?: number
   saleButtons: Button[][]
   deleteTimerHours: number
+  postIntervalMins: number
 }
 
 export type MyContext = BaseContext<MySession>
