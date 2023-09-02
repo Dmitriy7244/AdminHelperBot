@@ -1,11 +1,12 @@
 import { nextYear } from "api"
+import dayjs from "dayjs"
 import { findChannel } from "db"
-import { Msg } from "deps"
+import { Msg, PostScheduleData } from "deps"
+import { poster } from "loader"
 import { MsgManager } from "manager"
 import M from "messages"
 import { scheduledPostModel } from "models"
 import { MyContext } from "types"
-import { copyMessages } from "userbot"
 
 export async function askPosts(mg: MsgManager) {
   const title = mg.parseQuery("channel")
@@ -42,15 +43,11 @@ async function tryCopyMessages(
   ctx: MyContext,
   chatId: number,
   messageIds: number[],
-  date: Date,
+  _date: Date,
 ) {
   try {
-    return await copyMessages(
-      chatId,
-      ctx.chat!.id,
-      messageIds,
-      date,
-    )
+    const data = new PostScheduleData([chatId], messageIds[0], dayjs(_date))
+    return await poster.schedulePost(data)
   } catch (e) {
     await ctx.reply(`<b>[Ошибка]</b> <code>${e}</code>`)
     return false

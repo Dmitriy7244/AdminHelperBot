@@ -28,7 +28,6 @@ async function getSale(saleId: string) {
   return doc
 }
 
-
 async function findChannels(titles: string[]) {
   const channels = []
   for (const title of titles) {
@@ -51,7 +50,6 @@ async function addChannel(id: number, title: string, url: string) {
 let CHANNELS = await getChannels()
 
 export {
-  getSale,
   addChannel,
   CHANNELS,
   deleteChannel,
@@ -59,4 +57,5 @@ export {
   findChannel,
   findChannels,
   getChannels,
+  getSale,
 }

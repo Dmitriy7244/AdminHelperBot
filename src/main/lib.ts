@@ -1,5 +1,6 @@
 import * as api from "api"
 import { ADMIN_ID } from "api"
+import dayjs from "dayjs"
 import {
   BaseContext,
   BotCommand,
@@ -9,13 +10,15 @@ import {
   Message,
   mgl,
   Msg,
+  PostScheduleData,
   sleep,
   sleepRandomAmountOfSeconds,
   Time,
 } from "deps"
 import K from "kbs"
-import { bot } from "loader"
+import { bot, poster } from "loader"
 import { Manager, MsgManager, QueryManager } from "manager"
+import M from "messages"
 import {
   Button,
   Post,
@@ -24,8 +27,6 @@ import {
   scheduledPostModel,
 } from "models"
 import { Command, MyContext, MySession, QueryPrefix, State } from "types"
-import { copyMessages, reschedulePost } from "userbot"
-import M from "messages";
 
 export const setState = mgl.setState<State>
 export const parseQuery = mgl.parseQuery<QueryPrefix>
@@ -93,9 +94,10 @@ export async function scheduleNewContentPost(chatId: number, date: number) {
 
 export async function scheduleContentPost(
   post: ScheduledPost & Document,
-  date: number,
+  _date: number,
 ) {
-  await reschedulePost(post.chatId, post.messageIds, date)
+  console.log("Scheduling content post not implemented")
+  // await poster.reschedulePost(post.chatId, post.messageIds, date)
   await post.deleteOne()
 }
 
@@ -167,11 +169,6 @@ export function cancelHandlers(): never {
 
 export class CancelException extends Error {}
 
-// TODO:
-function addMinutesToDate(date: Date, minutes: number) {
-  return new Date(date.getTime() + minutes * 60000)
-}
-
 export async function _onSchedulePost(mg: MsgManager, saleId: string) {
   log("Schedule post", { saleId })
   resetSalePost(mg)
@@ -193,7 +190,6 @@ export async function _onPostReady(mg: QueryManager, delayMins = 0) {
 
   const saleId = mg.session.saleId!
   const sale = await saleModel.findById(saleId)
-  const chatId = mg.chatId
   if (!sale) {
     await mg.reply("Ошибка, зовите Дмитрия")
     return
@@ -203,23 +199,20 @@ export async function _onPostReady(mg: QueryManager, delayMins = 0) {
   sale.buttons = mg.session.saleButtons
   sale.deleteTimerHours = mg.session.deleteTimerHours
 
-  const date = addMinutesToDate(sale.publishDate, delayMins)
+  const date = dayjs(sale.publishDate).add(delayMins, "minute")
+  const chatIds = sale.channels.map((c) => c.id)
+  const dto = new PostScheduleData(
+    chatIds,
+    messageIds[0],
+    date,
+    mg.session.noSound,
+    mg.session.asForward,
+  )
 
-  for (const c of sale.channels) {
-    try {
-      const msgIds = await copyMessages(
-        c.id,
-        chatId,
-        messageIds,
-        date,
-        mg.session.asForward,
-        mg.session.noSound,
-      )
-      sale.scheduledPosts.push(new ScheduledPost(c.id, msgIds))
-    } catch (e) {
-      mg.reply(`<b>[Ошибка]</b> <code>${e}</code>`)
-      return
-    }
+  try {
+    sale.postGroupId = await poster.schedulePost(dto, sale.postGroupId)
+  } catch (e) {
+    await mg.replyError(`<b>[Ошибка]</b> <code>${e}</code>`)
   }
   await sale.save()
   mg.resetState()

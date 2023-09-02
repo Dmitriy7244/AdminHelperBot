@@ -11,7 +11,7 @@ import {
 import { MsgManager } from "manager"
 import M from "messages"
 import { Sale, saleModel, Seller } from "models"
-import { deletePost } from "userbot"
+import { poster } from "loader"
 
 export async function date(mg: MsgManager) {
   try {
@@ -59,9 +59,7 @@ export async function time(mg: MsgManager) {
 export async function onDeletePost(mg: MsgManager) {
   const saleId = mg.parseQuery("Удалить посты")
   const sale = await db.getSale(saleId)
-  for (const post of sale.scheduledPosts) {
-    await deletePost(post.chatId, post.messageIds)
-  }
+  await poster.deletePostGroup(sale.postGroupId!)
   await db.deletePost(saleId)
   await mg.editKeyboard(K.schedulePost(saleId))
 }

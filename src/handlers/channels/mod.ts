@@ -11,6 +11,5 @@ export async function deleteChannel(mg: MsgManager) {
   await mg.reply(M.pickChannel(), "channels_delete")
 }
 
-
 import("./addChannel.ts")
 import("./deleteChannel.ts")

@@ -9,12 +9,13 @@ class Messages {
   askDate = new Msg(T.askDate, K.dates)
   askTime = new Msg(T.askTime)
   userbot = new Msg(T.userbot)
-  channels = () => new Msg(T.channels(), K.ChangeChannels)
+  channels = () =>
+    new Msg(T.channels() || "Нет ни одного канала", K.ChangeChannels)
   dateError = new Msg(T.dateError)
   timeError = new Msg(T.timeError)
   sale = (s: Sale, saleId: string) =>
     new Msg(reprSale(s), K.schedulePost(saleId))
-  askChannels = new Msg(T.askChannels, K.pickChannels())
+  askChannels = () => new Msg(T.askChannels, K.pickChannels())
   postOptions = (
     deleteTimerHours: number,
     asForward = false,

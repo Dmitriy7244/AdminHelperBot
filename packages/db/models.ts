@@ -68,6 +68,8 @@ export class Sale {
   deleteTimerHours?: number
   @prop({ type: ScheduledPost })
   scheduledPosts: ScheduledPost[]
+  @prop()
+  postGroupId?: string
 
   constructor(publishDate: Date, channels: Channel[], seller: Seller) {
     this.publishDate = publishDate

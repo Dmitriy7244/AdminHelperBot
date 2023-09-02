@@ -1,4 +1,4 @@
-import { BaseContext, Bot, mgl, Observer } from "deps"
+import { BaseContext, Bot, createPosterFromEnv, mgl, Observer } from "deps"
 import { Command, MySession, QueryPrefix, State } from "types"
 
 const defaultSession: MySession = {
@@ -17,6 +17,7 @@ export type MyContext = BaseContext<MySession>
 export const bot = new Bot(null, defaultSession)
 export const CallbackData = mgl.CallbackData<QueryPrefix>
 export const PrefixButton = mgl.PrefixButton<QueryPrefix>
+export const poster = createPosterFromEnv()
 
 export const observer = new Observer<
   MyContext,

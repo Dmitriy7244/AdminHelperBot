@@ -59,3 +59,9 @@ function filterFalsy<T>(array: (T | undefined | null)[]): T[] {
 }
 
 export { error, exclude, filterFalsy, log }
+
+export {
+  createPosterFromEnv,
+  default as Poster,
+  PostScheduleData,
+} from "https://raw.githubusercontent.com/Dmitriy7244/poster-api/master/src/client.ts"

@@ -2,7 +2,7 @@
   "tasks": {
     "start": "deno run -A --unstable src/main/mod.ts",
     "dev": "deno run --watch -A --unstable src/main/mod.ts",
-    "lint": "deno lint && deno check src/main/mod.ts",
+    "lint": "deno fmt && deno lint && deno check src/main/mod.ts",
     "reload": "deno run -A --unstable --reload src/main/mod.ts",
     "test": "deno run -A --unstable tests/test.ts"
   },
@@ -20,10 +20,11 @@
     "api": "./packages/api/mod.ts",
     "loader": "./src/base/loader.ts",
     "types": "./src/base/types.ts",
-    "userbot": "./packages/userbot/mod.ts",
     "core/": "./src/core/",
     "deps": "./deps.ts",
-    "manager": "./packages/manager/mod.ts"
+    "manager": "./packages/manager/mod.ts",
+    "userbot": "./packages/userbot/mod.ts",
+    "dayjs": "npm:dayjs"
   },
   "fmt": {
     "semiColons": false

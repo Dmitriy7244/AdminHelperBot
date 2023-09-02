@@ -7,11 +7,10 @@ import {
   schedulePostDelete,
   trySetButtons,
 } from "lib"
-import { bot } from "loader"
+import { bot, poster } from "loader"
 import { MsgManager } from "manager"
 import M from "messages"
 import { postModel } from "models"
-import { getPostMessages } from "userbot"
 
 export async function start(mg: MsgManager) {
   await mg.finish(M.hello)
@@ -26,7 +25,7 @@ export async function content(mg: MsgManager) {
 }
 
 export async function addSale(mg: MsgManager) {
-  await mg.reply(M.askChannels, "sale:channels", { channels: [] })
+  await mg.reply(M.askChannels(), "sale:channels", { channels: [] })
   await mg.deleteMessage()
 }
 
@@ -81,7 +80,7 @@ export async function handleChannelPost(mg: MsgManager) {
   console.log("Sale post found", { chatId, messageId })
   let messageIds = [messageId]
   if (mg.getMediaGroupId()) {
-    messageIds = await getPostMessages(chatId, mg.messageId)
+    messageIds = await poster.getPostMessageIds(chatId, mg.messageId)
   }
   const deleteTime = Time() + (sale.deleteTimerHours ?? 24) * 60 * 60
   const p = await postModel.create({ chatId, messageIds, deleteTime })
