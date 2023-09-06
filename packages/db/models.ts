@@ -1,11 +1,7 @@
-import {
-  connectToMongoFromEnv,
-  getModelForClass,
-  MessageEntity,
-  prop,
-} from "deps"
+import { env, getModelForClass, MessageEntity, prop } from "deps"
+import { mongoose } from "npm:@typegoose/typegoose"
 
-connectToMongoFromEnv()
+const conn = await mongoose.createConnection(env.str("MONGO_URL")).asPromise()
 
 export class Channel {
   @prop()
@@ -43,14 +39,7 @@ export class Button {
 
 export class ScheduledPost {
   @prop()
-  chatId: number
-  @prop({ type: Number })
-  messageIds: number[]
-
-  constructor(chatId: number, messageIds: number[]) {
-    this.chatId = chatId
-    this.messageIds = messageIds
-  }
+  postGroupId: string
 }
 
 export class Sale {
@@ -101,11 +90,15 @@ export class ContentPost {
   text?: string
 }
 
-const saleModel = getModelForClass(Sale)
-const postModel = getModelForClass(Post)
-const contentPostModel = getModelForClass(ContentPost)
-const scheduledPostModel = getModelForClass(ScheduledPost)
-const channelModel = getModelForClass(Channel)
+const saleModel = getModelForClass(Sale, { existingConnection: conn })
+const postModel = getModelForClass(Post, { existingConnection: conn })
+const contentPostModel = getModelForClass(ContentPost, {
+  existingConnection: conn,
+})
+const scheduledPostModel = getModelForClass(ScheduledPost, {
+  existingConnection: conn,
+})
+const channelModel = getModelForClass(Channel, { existingConnection: conn })
 
 export {
   channelModel,

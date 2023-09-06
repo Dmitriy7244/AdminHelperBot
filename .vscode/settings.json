@@ -2,11 +2,11 @@
   "deno.enable": true,
   "deno.unstable": true,
   "files.exclude": {
-    "**/__pycache__": false,
-    "generated": false,
-    "node_modules": false,
-    "generated\\client": false,
-    "poster": false
+    "**/__pycache__": true,
+    "generated": true,
+    "node_modules": true,
+    "generated\\client": true,
+    "poster": true
   },
   "workspace.isHidden": true,
   "editor.defaultFormatter": "denoland.vscode-deno",

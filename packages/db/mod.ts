@@ -47,6 +47,12 @@ async function addChannel(id: number, title: string, url: string) {
   CHANNELS.push(channel)
 }
 
+async function findSale(text: string) {
+  const sales = await saleModel.find({ text }).exec()
+  if (!sales.length) return
+  return sales[sales.length - 1]
+}
+
 let CHANNELS = await getChannels()
 
 export {
@@ -56,6 +62,7 @@ export {
   deletePost,
   findChannel,
   findChannels,
+  findSale,
   getChannels,
   getSale,
 }

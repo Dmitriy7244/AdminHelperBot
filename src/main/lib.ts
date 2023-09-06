@@ -1,4 +1,3 @@
-import * as api from "api"
 import { ADMIN_ID } from "api"
 import dayjs from "dayjs"
 import {
@@ -12,20 +11,13 @@ import {
   Msg,
   PostScheduleData,
   sleep,
-  sleepRandomAmountOfSeconds,
   Time,
 } from "deps"
 import K from "kbs"
 import { bot, poster } from "loader"
 import { Manager, MsgManager, QueryManager } from "manager"
 import M from "messages"
-import {
-  Button,
-  Post,
-  saleModel,
-  ScheduledPost,
-  scheduledPostModel,
-} from "models"
+import { Post, saleModel, ScheduledPost, scheduledPostModel } from "models"
 import { Command, MyContext, MySession, QueryPrefix, State } from "types"
 
 export const setState = mgl.setState<State>
@@ -52,26 +44,6 @@ export async function setCommands() {
 export function reformatTime(time: string) {
   const re = /(\w{2})(\w{2})/
   return time.replace(re, "$1 $2")
-}
-
-export async function trySetButtons(
-  mg: Manager,
-  chatId: number,
-  messageId: number,
-  buttons: Button[][],
-) {
-  console.log("Trying add button", { chatId, messageId })
-  for (let attempts = 0; attempts < 3; attempts++) {
-    await sleepRandomAmountOfSeconds(1, 5)
-    try {
-      await editReplyMarkup(mg.ctx, { inline_keyboard: buttons })
-      console.log("Buttons set", { attempts, chatId, messageId })
-      return
-    } catch (e) {
-      console.log("Failed to set buttons", { attempts, chatId, messageId }, e)
-    }
-  }
-  await bot.api.sendMessage(ADMIN_ID, "Ошибка с кнопками")
 }
 
 export async function schedulePostDelete(post: Document & Post) {
@@ -109,10 +81,6 @@ export async function tryDeleteLastMsg(ctx: MyContext) {
   const msgId = ctx.session.lastMessageId
   if (!msgId) return
   await bot.tryDeleteMsg(ctx.chat!.id, msgId)
-}
-
-export function parseChannels(msg: Message): string[] {
-  return api.parseChannels(msg.text!, msg.entities ?? [])
 }
 
 export async function updatePostOptions(

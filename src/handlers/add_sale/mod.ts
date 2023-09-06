@@ -8,10 +8,10 @@ import {
   scheduleNewContentPost,
   tryDeleteLastMsg,
 } from "lib"
+import { poster } from "loader"
 import { MsgManager } from "manager"
 import M from "messages"
 import { Sale, saleModel, Seller } from "models"
-import { poster } from "loader"
 
 export async function date(mg: MsgManager) {
   try {
@@ -60,8 +60,10 @@ export async function onDeletePost(mg: MsgManager) {
   const saleId = mg.parseQuery("Удалить посты")
   const sale = await db.getSale(saleId)
   await poster.deletePostGroup(sale.postGroupId!)
+  sale.postGroupId = undefined
   await db.deletePost(saleId)
   await mg.editKeyboard(K.schedulePost(saleId))
+  await sale.save()
 }
 
 export async function addButtons(mg: MsgManager) {

@@ -41,27 +41,14 @@ export {
 
 export * as mgl from "https://deno.land/x/my_grammy@v0.1.1/lib.ts"
 
-function log(header: string, data?: object) {
-  console.log(`${header}:`, data)
-}
-
-function exclude<T>(array: T[], value: T) {
-  return array.filter((item) => item !== value)
-}
-
-function error(header: string, data?: object): never {
-  console.error(`${header}:`, data)
-  throw new Error(header)
-}
-
-function filterFalsy<T>(array: (T | undefined | null)[]): T[] {
-  return array.filter((i) => i != null) as T[]
-}
-
-export { error, exclude, filterFalsy, log }
-
+export {
+  error,
+  exclude,
+  filterFalsy,
+  log,
+} from "https://raw.githubusercontent.com/Dmitriy7244/deno-std/main/src/mod.ts"
 export {
   createPosterFromEnv,
-  default as Poster,
+  Poster,
   PostScheduleData,
-} from "https://raw.githubusercontent.com/Dmitriy7244/poster-api/master/src/client.ts"
+} from "https://raw.githubusercontent.com/Dmitriy7244/poster/master/src/mod.ts"

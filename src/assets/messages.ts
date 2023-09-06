@@ -1,7 +1,7 @@
 import { reprSale } from "api"
 import { Msg } from "deps"
 import K from "kbs"
-import { Sale } from "models"
+import { Channel, Sale } from "models"
 import T from "texts"
 
 class Messages {
@@ -30,6 +30,17 @@ class Messages {
     askChannel: this.pickChannel,
     askPosts: new Msg(T.askContentPost, K.ready),
   }
+
+  channelRights = (noRightsChannels: Channel[]) => {
+    let text: string
+    if (noRightsChannels.length) {
+      text = "У меня нет нужных прав в этих каналах:\n\n"
+      text += noRightsChannels.map((c) => c.url).join("\n")
+    } else {
+      text = "У меня есть нужные права во всех каналах"
+    }
+    return new Msg(text)
+  }
 }
 
 export const messages = {
@@ -41,6 +52,9 @@ export const messages = {
       success: new Msg("Канал успешно добавлен!"),
     },
   },
+  messagesNotFound: new Msg("Сообщений не найдено"),
+  error: (data: any) => new Msg(`<b>[Ошибка]</b> <code>${data}</code>`),
+  contentAdded: new Msg("Контент добавлен")
 }
 
 const M = new Messages()

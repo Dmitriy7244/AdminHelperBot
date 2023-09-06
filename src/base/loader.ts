@@ -17,7 +17,7 @@ export type MyContext = BaseContext<MySession>
 export const bot = new Bot(null, defaultSession)
 export const CallbackData = mgl.CallbackData<QueryPrefix>
 export const PrefixButton = mgl.PrefixButton<QueryPrefix>
-export const poster = createPosterFromEnv()
+export const poster = await createPosterFromEnv()
 
 export const observer = new Observer<
   MyContext,
