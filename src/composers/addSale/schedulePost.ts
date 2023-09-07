@@ -1,6 +1,31 @@
+import { _onSchedulePost } from "lib"
+import { MsgHandler, MsgManager, QueryHandler } from "manager"
+import { createComposer, onQuery, withState } from "new/lib.ts"
+
+const cmp = createComposer()
+
+async function schedulePost(mg: MsgManager) {
+  const saleId = mg.parseQuery("Запланировать пост")
+  mg.save({ postIntervalMins: 0, saleMsgId: mg.messageId })
+  await mg.hideKeyboard()
+  await _onSchedulePost(mg, saleId)
+}
+
+onQuery(cmp, "Запланировать пост").use(MsgHandler(schedulePost))
+
+const cmpWithState = withState(cmp, "sale:post")
+
+onQuery(cmpWithState, "✅ Готово").use(QueryHandler(onPostReady))
+onQuery(cmpWithState, "asForward").use(MsgHandler(asForward))
+onQuery(cmpWithState, "noSound").use(MsgHandler(noSound))
+onQuery(cmpWithState, "Таймер удаления").use(MsgHandler(deleteTimer))
+cmpWithState.on("message", MsgHandler(postMessage))
+
+export { cmp as schedulePostComposer }
+
 import { log } from "deps"
 import { _onPostReady, updatePostOptions } from "lib"
-import { MsgManager, QueryManager } from "manager"
+import { QueryManager } from "manager"
 import { Button } from "models"
 
 export async function asForward(mg: MsgManager) {

@@ -2,7 +2,13 @@ import { ButtonsPreview, parseButtons } from "api"
 import { tryDeleteLastMsg } from "lib"
 import { MsgManager } from "manager"
 import M from "messages"
-import { Button, saleModel } from "models"
+import { Button, saleRepo } from "models"
+
+import { handleAddButtons } from "composers/addSale/lib.ts"
+import { MsgHandler } from "manager"
+import { createComposer, onQuery, onText } from "new/lib.ts"
+
+const cmp = createComposer()
 
 export async function buttonsToAdd(mg: MsgManager) {
   const text = mg.text
@@ -13,15 +19,16 @@ export async function buttonsToAdd(mg: MsgManager) {
     await mg.reply("Ошибка в формате кнопок, попробуй снова")
     return
   }
-  const sale = await saleModel.findById(mg.session.saleId)
-  if (!sale) {
-    await mg.reply("Ошибка, зовите Дмитрия!")
-    return
-  }
+  const sale = await saleRepo.get(mg.session.saleId!)
   sale.buttons = buttons
-  await sale.save()
+  await saleRepo.save(sale)
   const preview = ButtonsPreview(buttons)
   await mg.finish(M.buttonsAdded(preview))
   await mg.deleteMessage()
   await tryDeleteLastMsg(mg.ctx)
 }
+
+onText(cmp, "sale:buttons").use(MsgHandler(buttonsToAdd))
+onQuery(cmp, "Добавить кнопки").use(handleAddButtons)
+
+export { cmp as addButtonsComposer }

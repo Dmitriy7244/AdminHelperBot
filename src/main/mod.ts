@@ -1,22 +1,21 @@
+import { composer } from "composers/mod.ts"
+import { findPosts } from "db"
 import { CancelException, schedulePostDelete, setCommands } from "lib"
 import { bot } from "loader"
-import { postModel } from "models"
 import { checkAccess, spyAfterRoma } from "./middlewares.ts"
 
 bot.use(checkAccess)
 bot.use(spyAfterRoma)
-await bot.run()
+bot.use(composer)
+bot.run()
 bot.catch((err) => {
   if (err.error instanceof CancelException) return
   console.error(err)
 })
 
-import("observers") // TODO: rename
 setCommands()
 
-postModel.find()
-  .exec()
-  .then((posts) => posts.forEach((p) => schedulePostDelete(p)))
+findPosts().then((posts) => posts.forEach((p) => schedulePostDelete(p)))
 
 export async function fixKeyboard(postUrl: string) {
   postUrl = postUrl.replace("https://t.me/", "")
@@ -29,20 +28,6 @@ export async function fixKeyboard(postUrl: string) {
     [
       {
         text: "💟Hannahowo",
-        url: "https://t.me/+GF_fP4vgNI83NWUy",
-      },
-      {
-        text: "Sweetiefox🉐",
-        url: "https://t.me/+GF_fP4vgNI83NWUy",
-      },
-    ],
-    [
-      {
-        text: "💟Belledelpnine",
-        url: "https://t.me/+GF_fP4vgNI83NWUy",
-      },
-      {
-        text: "purple🉐",
         url: "https://t.me/+GF_fP4vgNI83NWUy",
       },
     ],

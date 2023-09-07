@@ -12,7 +12,6 @@
     "messages": "./src/assets/messages.ts",
     "texts": "./src/assets/texts.ts",
     "observers": "./src/composer/mod.ts",
-    "handlers/": "./src/handlers/",
     "lib": "./src/main/lib.ts",
     "config": "./packages/api/config.ts",
     "models": "./packages/db/models.ts",
@@ -24,6 +23,8 @@
     "deps": "./deps.ts",
     "manager": "./packages/manager/mod.ts",
     "userbot": "./packages/userbot/mod.ts",
+    "new/": "./new/",
+    "composers/": "./src/composers/",
     "dayjs": "npm:dayjs"
   },
   "fmt": {

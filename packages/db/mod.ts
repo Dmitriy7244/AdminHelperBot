@@ -1,31 +1,25 @@
-import { error } from "deps"
-import { Channel, channelModel, saleModel } from "models"
+import { Channel, channelRepo, Post, postRepo, saleRepo } from "models"
 
-async function findChannel(title: string) {
-  const doc = await channelModel.findOne({ title }).exec()
-  if (!doc) error("Channel not found", { title })
-  return new Channel(doc.id, doc.title, doc.url)
+function findChannel(title: string) {
+  return channelRepo.find({ title })
 }
 
 async function deleteChannel(title: string) {
-  await channelModel.deleteOne({ title }).exec()
+  await channelRepo.deleteBy({ title })
   CHANNELS = CHANNELS.filter((c) => c.title != title)
 }
 
-async function deletePost(saleId: string) {
-  const doc = await saleModel.findById(saleId).exec()
-  if (!doc) error("Sale not found", { saleId })
-  doc.text = undefined
-  doc.buttons = []
-  doc.deleteTimerHours = undefined
-  doc.scheduledPosts = []
-  doc.save()
+async function deleteSalePost(saleId: string) {
+  const sale = await saleRepo.get(saleId)
+  sale.text = undefined
+  sale.buttons = []
+  sale.deleteTimerHours = undefined
+  sale.scheduledPosts = []
+  await saleRepo.save(sale)
 }
 
-async function getSale(saleId: string) {
-  const doc = await saleModel.findById(saleId).exec()
-  if (!doc) error("Sale not found", { saleId })
-  return doc
+function getSale(saleId: string) {
+  return saleRepo.get(saleId)
 }
 
 async function findChannels(titles: string[]) {
@@ -36,21 +30,28 @@ async function findChannels(titles: string[]) {
   return channels
 }
 
-async function getChannels() {
-  const docs = await channelModel.find().exec()
-  return docs.map((doc) => new Channel(doc.id, doc.title, doc.url))
+function getChannels() {
+  return channelRepo.findAll()
 }
 
 async function addChannel(id: number, title: string, url: string) {
   const channel = new Channel(id, title, url)
-  await channelModel.create(channel)
+  await channelRepo.save(channel)
   CHANNELS.push(channel)
 }
 
 async function findSale(text: string) {
-  const sales = await saleModel.find({ text }).exec()
+  const sales = await saleRepo.findAll({ text })
   if (!sales.length) return
   return sales[sales.length - 1]
+}
+
+function findPosts() {
+  return postRepo.findAll()
+}
+
+function deletePost(post: Post) {
+  return postRepo.delete(post)
 }
 
 let CHANNELS = await getChannels()
@@ -60,8 +61,10 @@ export {
   CHANNELS,
   deleteChannel,
   deletePost,
+  deleteSalePost,
   findChannel,
   findChannels,
+  findPosts,
   findSale,
   getChannels,
   getSale,

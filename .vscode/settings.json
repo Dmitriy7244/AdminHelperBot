@@ -2,6 +2,12 @@
   "deno.enable": true,
   "deno.unstable": true,
   "files.exclude": {
+    "**/.git": true,
+    "**/.svn": false,
+    "**/.hg": false,
+    "**/CVS": false,
+    "**/.DS_Store": false,
+    "**/Thumbs.db": false,
     "**/__pycache__": true,
     "generated": true,
     "node_modules": true,

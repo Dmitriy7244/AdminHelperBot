@@ -2,33 +2,15 @@ import { findSale } from "db"
 import { Time } from "deps"
 import { poster } from "loader"
 import M from "messages"
-import { postModel } from "models"
-import {
-  getNoRightsChannels,
-  parseChannels,
-  sendMessage,
-  trySetButtons,
-} from "../lib.ts"
+import { Post, postRepo } from "models"
+import { parseChannels, sendMessage, trySetButtons } from "../lib.ts"
 
-function start(chatId: number) {
-  return sendMessage(chatId, M.hello)
-}
+// function start(chatId: number) {
+//   return sendMessage(chatId, M.hello)
+// }
 
 function sendContentMenu(chatId: number) {
   return sendMessage(chatId, M.content.askChannel())
-}
-
-function sendSaleChannelsMenu(chatId: number) {
-  return sendMessage(chatId, M.askChannels())
-}
-
-function sendChannelsMenu(chatId: number) {
-  return sendMessage(chatId, M.channels())
-}
-
-async function sendChannelsRights(chatId: number) {
-  const channels = await getNoRightsChannels()
-  return await sendMessage(chatId, M.channelRights(channels))
 }
 
 async function handleChannelPost(
@@ -47,7 +29,8 @@ async function handleChannelPost(
     messageIds = await poster.getPostMessageIds(chatId, messageId)
   }
   const deleteTime = Time() + (sale.deleteTimerHours ?? 48) * 60 * 60
-  const _p = await postModel.create({ chatId, messageIds, deleteTime })
+  const post = new Post(chatId, messageIds, deleteTime)
+  const _p = await postRepo.save(post)
   // schedulePostDelete(p) TODO: !
   if (!sale.buttons.length) return
   const buttons = sale.buttons.map((row) =>
@@ -64,11 +47,10 @@ async function tryAddSale(chatId: number, urls: string[]) {
 }
 
 const methods = {
-  start,
+  // start,
   sendContentMenu,
-  sendSaleChannelsMenu,
-  sendChannelsMenu,
-  sendChannelsRights,
+  // sendChannelsMenu,
+  // sendChannelsRights,
   handleChannelPost,
   tryAddSale,
 }

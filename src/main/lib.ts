@@ -1,5 +1,6 @@
 import { ADMIN_ID } from "api"
 import dayjs from "dayjs"
+import * as db from "db"
 import {
   BaseContext,
   BotCommand,
@@ -17,7 +18,7 @@ import K from "kbs"
 import { bot, poster } from "loader"
 import { Manager, MsgManager, QueryManager } from "manager"
 import M from "messages"
-import { Post, saleModel, ScheduledPost, scheduledPostModel } from "models"
+import { Post, saleRepo, ScheduledPost } from "models"
 import { Command, MyContext, MySession, QueryPrefix, State } from "types"
 
 export const setState = mgl.setState<State>
@@ -46,17 +47,18 @@ export function reformatTime(time: string) {
   return time.replace(re, "$1 $2")
 }
 
-export async function schedulePostDelete(post: Document & Post) {
+export async function schedulePostDelete(post: Post) {
   const dt = post.deleteTime - Time()
   await sleep(dt)
   post.messageIds.forEach((m) => {
     bot.tryDeleteMsg(post.chatId, m)
   })
-  await post.deleteOne()
+  await db.deletePost(post)
 }
 
 export async function scheduleNewContentPost(chatId: number, date: number) {
-  const post = await scheduledPostModel.findOne({ chatId })
+  // const post = await scheduledPostRepo.find({ chatId })
+  const post = null
   if (!post) {
     console.log("No content post", { chatId })
     return
@@ -73,8 +75,12 @@ export async function scheduleContentPost(
   await post.deleteOne()
 }
 
-export function saveLastMsgId(mg: Manager, msg: Message) {
-  mg.save({ lastMessageId: msg.message_id })
+// export function saveLastMsgId(mg: Manager, msg: Message) {
+//   mg.save({ lastMessageId: msg.message_id })
+// }
+
+export function saveLastMsgId(ctx: MyContext, msg: Message) {
+  ctx.session.lastMessageId = msg.message_id
 }
 
 export async function tryDeleteLastMsg(ctx: MyContext) {
@@ -157,11 +163,7 @@ export async function _onPostReady(mg: QueryManager, delayMins = 0) {
   }
 
   const saleId = mg.session.saleId!
-  const sale = await saleModel.findById(saleId)
-  if (!sale) {
-    await mg.reply("Ошибка, зовите Дмитрия")
-    return
-  }
+  const sale = await saleRepo.get(saleId)
 
   sale.text = mg.session.postText
   sale.buttons = mg.session.saleButtons
@@ -182,7 +184,7 @@ export async function _onPostReady(mg: QueryManager, delayMins = 0) {
   } catch (e) {
     await mg.replyError(`<b>[Ошибка]</b> <code>${e}</code>`)
   }
-  await sale.save()
+  await saleRepo.save(sale)
   mg.resetState()
   await mg.editKeyboard(K.managePosts(saleId), mg.session.saleMsgId)
   await mg.deleteMessage()

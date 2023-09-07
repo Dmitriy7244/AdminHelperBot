@@ -1,4 +1,4 @@
-import { MsgManager } from "manager"
+import { MsgManager } from "./MsgManager.ts"
 
 export class QueryManager extends MsgManager {
   answerQuery(text: string, alert = true) {

@@ -66,7 +66,7 @@ function parseUrl(text: string, entity: MessageEntity) {
   }
 }
 
-function parseUrls(text: string, entities: MessageEntity[]) {
+export function parseUrls(text: string, entities: MessageEntity[]) {
   const urls = entities.map((e) => parseUrl(text, e))
   return filterFalsy(urls)
 }

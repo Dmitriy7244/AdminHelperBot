@@ -2,6 +2,7 @@ import { ADMIN_ID } from "config"
 import dayjs from "dayjs"
 import { CHANNELS } from "db"
 import {
+  InlineKeyboard,
   Message,
   Msg,
   PostScheduleData,
@@ -38,9 +39,14 @@ export async function getNoRightsChannels() {
 export function editKeyboard(
   chatId: number,
   messageId: number,
-  buttons?: Button[][],
+  keyboard?: InlineKeyboard | Button[][],
 ) {
-  const reply_markup = buttons ? { inline_keyboard: buttons } : undefined
+  let reply_markup: any = keyboard
+  if (!keyboard) {
+    reply_markup = undefined
+  } else if (keyboard instanceof Array) {
+    reply_markup = { inline_keyboard: keyboard }
+  }
   return bot.api.editMessageReplyMarkup(chatId, messageId, { reply_markup })
 }
 

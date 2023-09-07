@@ -1,7 +1,7 @@
 import { nextYear } from "api"
 import { findChannel } from "db"
 import M, { messages as m } from "messages"
-import { scheduledPostModel } from "models"
+import { ScheduledPost, scheduledPostRepo } from "models"
 import { editMessage, tryCopyMessages } from "../lib.ts"
 
 async function askPosts(
@@ -34,7 +34,8 @@ async function onReady(
   )
   if (!postGroupId) return
   await editMessage(chatId, messageId, m.contentAdded)
-  await scheduledPostModel.create({ postGroupId })
+  const post = new ScheduledPost(postGroupId)
+  await scheduledPostRepo.save(post)
 }
 
 const methods = { askPosts, onReady }
