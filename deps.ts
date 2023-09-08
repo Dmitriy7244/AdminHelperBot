@@ -29,7 +29,7 @@ export {
   sendMessage,
   setState,
   Time,
-} from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.1/lib.ts"
+} from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.2/lib.ts"
 export {
   type BaseContext,
   type BaseSession,
@@ -38,9 +38,9 @@ export {
   cancelHandlers,
   link,
   Observer,
-} from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.1/mod.ts"
+} from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.2/mod.ts"
 
-export * as mgl from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.1/lib.ts"
+export * as mgl from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.2/lib.ts"
 
 export {
   error,
