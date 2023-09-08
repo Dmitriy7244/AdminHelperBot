@@ -20,16 +20,17 @@ onText(cmp, "post_interval").use(MsgHandler(onPostDelay))
 
 export { cmp as addPostComposer }
 
-import { mongoose } from "https://deno.land/x/my_mongo@v0.1.0/deps.ts"
 import { _onSchedulePost, tryDeleteLastMsg } from "lib"
+import { cancelHandlers } from "deps"
 
 export async function onPostDelay(mg: MsgManager) {
   const delay = Number(mg.text)
-  if (!Number.isInteger(delay)) await mg.replyError("Отправь только число")
+  if (!Number.isInteger(delay)) {
+    await mg.reply("Отправь только число")
+    cancelHandlers()
+  }
   mg.save({ postIntervalMins: delay })
   await _onSchedulePost(mg, mg.session.saleId!)
   await tryDeleteLastMsg(mg.ctx)
   await mg.deleteMessage()
 }
-
-console.log(mongoose.modelNames())

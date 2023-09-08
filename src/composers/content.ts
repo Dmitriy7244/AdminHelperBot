@@ -1,16 +1,20 @@
+import { nextYear } from "api"
+import { findChannel } from "db"
+import { bot } from "loader"
 import { MsgHandler, MsgManager } from "manager"
+import M, { messages } from "messages"
+import { ScheduledPost, scheduledPostRepo } from "models"
 import {
   createComposer,
   onCommand,
   onMessage,
   onQueryWithState,
 } from "new/lib.ts"
-import methods2 from "../../bot/methods/content.ts"
-import methods from "../../bot/methods/mod.ts"
+import { editMessage, tryCopyMessages } from "../../bot/lib.ts"
 
 export async function askPosts(mg: MsgManager) {
   const title = mg.parseQuery("channel")
-  const channelId = await methods2.askPosts(mg.chatId, mg.messageId, title)
+  const channelId = await _askPosts(mg.chatId, mg.messageId, title)
   mg.setState("content:posts")
   mg.save({ channelId, filedIds: [], messageIds: [] })
 }
@@ -21,7 +25,7 @@ export function savePostMessage(mg: MsgManager) {
 
 export async function onReady(mg: MsgManager) {
   mg.resetState()
-  await methods2.onReady(
+  await _onReady(
     mg.chatId,
     mg.messageId,
     mg.session.channelId!,
@@ -33,7 +37,11 @@ const cmp = createComposer()
 
 async function handleContent(mg: MsgManager) {
   mg.setState("content:channel")
-  await methods.sendContentMenu(mg.chatId)
+  await sendContentMenu(mg.chatId)
+}
+
+function sendContentMenu(chatId: number) {
+  return bot.sendMessage(chatId, M.content.askChannel())
 }
 
 onCommand(cmp, "content").use(MsgHandler(handleContent))
@@ -47,3 +55,39 @@ onQueryWithState(cmp, "✅ Готово", "content:posts")
   .use(MsgHandler(onReady))
 
 export { cmp as contentComposer }
+
+async function _askPosts(
+  chatId: number,
+  messageId: number,
+  channelTitle: string,
+) {
+  const channel = await findChannel(channelTitle)
+  await editMessage(chatId, messageId, M.content.askPosts)
+  return channel.id
+}
+
+const m = messages
+
+async function _onReady(
+  chatId: number,
+  messageId: number,
+  channelId: number,
+  postMessageIds: number[],
+) {
+  // mg.resetState()
+  const date = nextYear(new Date())
+  if (!postMessageIds.length) {
+    await editMessage(chatId, messageId, m.messagesNotFound)
+    return
+  }
+  const postGroupId = await tryCopyMessages(
+    chatId,
+    channelId,
+    postMessageIds,
+    date,
+  )
+  if (!postGroupId) return
+  await editMessage(chatId, messageId, m.contentAdded)
+  const post = new ScheduledPost(postGroupId)
+  await scheduledPostRepo.save(post)
+}

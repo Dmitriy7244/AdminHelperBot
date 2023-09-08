@@ -29,17 +29,18 @@ export {
   sendMessage,
   setState,
   Time,
-} from "https://deno.land/x/my_grammy@v0.1.1/lib.ts"
+} from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.1/lib.ts"
 export {
   type BaseContext,
   type BaseSession,
   bold,
   Bot,
+  cancelHandlers,
   link,
   Observer,
-} from "https://deno.land/x/my_grammy@v0.1.1/mod.ts"
+} from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.1/mod.ts"
 
-export * as mgl from "https://deno.land/x/my_grammy@v0.1.1/lib.ts"
+export * as mgl from "https://raw.githubusercontent.com/Dmitriy7244/my_grammy/v0.2.1/lib.ts"
 
 export {
   error,
@@ -51,4 +52,4 @@ export {
   createPosterFromEnv,
   Poster,
   PostScheduleData,
-} from "https://raw.githubusercontent.com/Dmitriy7244/poster/master/src/mod.ts"
+} from "https://raw.githubusercontent.com/Dmitriy7244/poster/v0.1.0/src/mod.ts"

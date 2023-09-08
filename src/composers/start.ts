@@ -1,6 +1,8 @@
-import { createComposer, onCommand, sendMessage } from "new/lib.ts"
+import { bot } from "loader"
+import { MsgHandler } from "manager"
+import { createObserver } from "new/lib.ts"
 
-const cmp = createComposer()
+const obs = createObserver()
 const text = `
 👋 Привет. Здесь ты можешь добавлять записи о проданной в каналах рекламе, \
 а также смотреть расписание. Все необходимые команды смотри в меню.
@@ -9,9 +11,12 @@ const text = `
 `
 
 function sendStart(chatId: number) {
-  return sendMessage(chatId, text)
+  return bot.sendMessage(chatId, text)
 }
 
-onCommand(cmp, "start").use((ctx) => sendStart(ctx.chat.id))
+obs.command("start").handler = MsgHandler(async (mg) => {
+  mg.resetState()
+  await sendStart(mg.chatId)
+})
 
-export { cmp as startComposer, sendStart }
+export { obs as startObserver, sendStart }

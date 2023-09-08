@@ -8,19 +8,18 @@ import {
   scheduleNewContentPost,
   tryDeleteLastMsg,
 } from "lib"
-import { poster } from "loader"
+import { bot, poster } from "loader"
 import { MsgManager } from "manager"
 import M from "messages"
 import { Sale, saleRepo, Seller } from "models"
-import { sendMessage } from "new/lib.ts"
 import { MyContext } from "types"
 
 function askPickChannels(chatId: number) {
-  return sendMessage(chatId, M.askChannels())
+  return bot.sendMessage(chatId, M.askChannels())
 }
 
 async function onSaleDate(ctx: MyContext) {
-  const msg = await sendMessage(ctx.chat!.id, M.askTime)
+  const msg = await bot.sendMessage(ctx.chat!.id, M.askTime)
   ctx.session.state = "sale:time"
   await ctx.deleteMessage()
   await tryDeleteLastMsg(ctx)
@@ -64,7 +63,7 @@ async function handleAddButtons(ctx: MyContext) {
   const saleId = parseQuery(ctx, "Добавить кнопки")
   ctx.session.state = "sale:buttons"
   ctx.session.saleId = saleId
-  const sentMsg = await sendMessage(ctx.chat!.id, M.askButtons)
+  const sentMsg = await bot.sendMessage(ctx.chat!.id, M.askButtons)
   saveLastMsgId(ctx, sentMsg)
 }
 

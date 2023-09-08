@@ -1,5 +1,5 @@
 import { error, InlineKeyboard, Msg, parseQuery, setState } from "deps"
-import { finish, replyError } from "lib"
+import { finish } from "lib"
 import { MyContext, MySession, QueryPrefix, State } from "types"
 
 export class Manager {
@@ -22,7 +22,7 @@ export class Manager {
 
   finish = (msg: Msg) => finish(this.ctx, msg)
 
-  replyError = (text: string) => replyError(this.ctx, text)
+  // replyError = (text: string) => replyError(this.ctx, text)
 
   setState = (state: State) => setState(this.ctx, state)
   resetState = () => setState(this.ctx)

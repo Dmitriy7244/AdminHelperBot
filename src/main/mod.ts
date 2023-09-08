@@ -1,6 +1,6 @@
 import { composer } from "composers/mod.ts"
 import { findPosts } from "db"
-import { CancelException, schedulePostDelete, setCommands } from "lib"
+import { schedulePostDelete, setCommands } from "lib"
 import { bot } from "loader"
 import { checkAccess, spyAfterRoma } from "./middlewares.ts"
 
@@ -8,10 +8,6 @@ bot.use(checkAccess)
 bot.use(spyAfterRoma)
 bot.use(composer)
 bot.run()
-bot.catch((err) => {
-  if (err.error instanceof CancelException) return
-  console.error(err)
-})
 
 setCommands()
 

@@ -1,6 +1,7 @@
 import { Channel } from "models"
-import { createComposer, onCommand, sendMessage } from "new/lib.ts"
+import { createComposer, onCommand } from "new/lib.ts"
 import { getNoRightsChannels } from "../../bot/lib.ts"
+import { bot } from "loader"
 
 const cmp = createComposer()
 const Text = (noRightsChannels: Channel[]) => {
@@ -14,7 +15,7 @@ const Text = (noRightsChannels: Channel[]) => {
 
 async function sendChannelsRights(chatId: number) {
   const channels = await getNoRightsChannels()
-  return await sendMessage(chatId, Text(channels))
+  return await bot.sendMessage(chatId, Text(channels))
 }
 
 onCommand(cmp, "check_rights").use((ctx) => sendChannelsRights(ctx.chat.id))

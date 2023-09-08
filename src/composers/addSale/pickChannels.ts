@@ -1,13 +1,15 @@
 import { CHANNELS } from "db"
-import { exclude } from "deps"
+import { cancelHandlers, exclude } from "deps"
 import K from "kbs"
-import { cancelHandlers, parseQuery, saveLastMsgId } from "lib"
+import { parseQuery, saveLastMsgId } from "lib"
+import { bot } from "loader"
+import { QueryHandler } from "manager"
 import M from "messages"
-import { createComposer, onQuery, sendMessage, withState } from "new/lib.ts"
+import { createObserver } from "new/lib.ts"
 import { editKeyboard } from "../../../bot/lib.ts"
 
-const cmp = createComposer()
-const cmpWithState = withState(cmp, "sale:channels")
+const obs = createObserver()
+const obsWithState = obs.state("sale:channels")
 
 async function handleChannelPick(
   chatId: number,
@@ -33,12 +35,19 @@ async function handleAllChannelsPick(
   return pickedChannels
 }
 
-function handleChannelsPicked(chatId: number, channels: string[]) {
-  if (!channels.length) cancelHandlers()
-  return sendMessage(chatId, M.askDate)
+async function handleChannelsPicked(
+  chatId: number,
+  queryId: string,
+  channels: string[],
+) {
+  if (!channels.length) {
+    await bot.answerQuery(queryId, "Выбери хотя бы один канал")
+    cancelHandlers()
+  }
+  return await bot.sendMessage(chatId, M.askDate)
 }
 
-onQuery(cmpWithState, "channel").use(async (ctx) => {
+obsWithState.query("channel").handler = async (ctx) => {
   const channel = parseQuery(ctx, "channel")
   ctx.session.channels = await handleChannelPick(
     ctx.chat!.id,
@@ -46,24 +55,25 @@ onQuery(cmpWithState, "channel").use(async (ctx) => {
     channel,
     ctx.session.channels,
   )
-})
-
-onQuery(cmpWithState, "➕ Выбрать все").use(async (ctx) => {
+}
+obsWithState.query("➕ Выбрать все").handler = async (ctx) => {
   ctx.session.channels = await handleAllChannelsPick(
     ctx.chat!.id,
     ctx.msg!.message_id,
     ctx.session.channels,
   )
+}
+
+obsWithState.query("✅ Готово").handler = QueryHandler(async (mg) => {
+  const { channels } = mg.session
+  const sentMsg = await handleChannelsPicked(
+    mg.chatId,
+    mg.query.id,
+    channels,
+  )
+  saveLastMsgId(mg.ctx, sentMsg)
+  mg.setState("sale:date")
+  await mg.deleteMessage()
 })
 
-// TODO: message on 0 channels picked
-onQuery(cmpWithState, "✅ Готово").use(async (ctx) => {
-  console.log(ctx.session.state)
-  const channels = ctx.session.channels
-  const sentMsg = await handleChannelsPicked(ctx.chat!.id, channels)
-  saveLastMsgId(ctx, sentMsg)
-  ctx.session.state = "sale:date"
-  await ctx.deleteMessage()
-})
-
-export { cmp as pickChannelsComposer, handleAllChannelsPick, handleChannelPick }
+export { handleAllChannelsPick, handleChannelPick, obs as pickChannelsObserver }

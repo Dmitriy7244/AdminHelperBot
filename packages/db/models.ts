@@ -1,9 +1,5 @@
 import { env, MessageEntity } from "deps"
-import {
-  connectClient,
-  Document,
-  DocumentRepo,
-} from "https://raw.githubusercontent.com/Dmitriy7244/mongo-orm/master/src/mod.ts"
+import { connectClient, Document, DocumentRepo } from "./deps.ts"
 
 export class Channel extends Document {
   constructor(public id: number, public title: string, public url: string) {

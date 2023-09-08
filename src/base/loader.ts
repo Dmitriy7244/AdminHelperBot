@@ -1,5 +1,6 @@
-import { BaseContext, Bot, createPosterFromEnv, mgl, Observer } from "deps"
+import { BaseContext, createPosterFromEnv, mgl, Observer } from "deps"
 import { Command, MySession, QueryPrefix, State } from "types"
+import { Bot } from "./bot.ts"
 
 const defaultSession: MySession = {
   asForward: false,

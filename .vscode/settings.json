@@ -18,5 +18,9 @@
   "editor.defaultFormatter": "denoland.vscode-deno",
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
-  }
+  },
+  "cSpell.words": [
+    "contentposts",
+    "scheduledposts"
+  ]
 }

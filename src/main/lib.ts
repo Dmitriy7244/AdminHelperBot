@@ -4,6 +4,7 @@ import * as db from "db"
 import {
   BaseContext,
   BotCommand,
+  cancelHandlers,
   Document,
   editReplyMarkup,
   log,
@@ -87,6 +88,7 @@ export async function tryDeleteLastMsg(ctx: MyContext) {
   const msgId = ctx.session.lastMessageId
   if (!msgId) return
   await bot.tryDeleteMsg(ctx.chat!.id, msgId)
+  ctx.session.lastMessageId = undefined
 }
 
 export async function updatePostOptions(
@@ -129,19 +131,13 @@ export async function askNext(
   return await mgl.reply(ctx, msg)
 }
 
-export async function replyError(
-  ctx: BaseContext,
-  text: string,
-): Promise<never> {
-  await ctx.reply(text)
-  cancelHandlers()
-}
-
-export function cancelHandlers(): never {
-  throw new CancelException()
-}
-
-export class CancelException extends Error {}
+// export async function replyError(
+//   ctx: BaseContext,
+//   text: string,
+// ): Promise<never> {
+//   await ctx.reply(text)
+//   cancelHandlers()
+// }
 
 export async function _onSchedulePost(mg: MsgManager, saleId: string) {
   log("Schedule post", { saleId })
@@ -182,7 +178,8 @@ export async function _onPostReady(mg: QueryManager, delayMins = 0) {
   try {
     sale.postGroupId = await poster.schedulePost(dto, sale.postGroupId)
   } catch (e) {
-    await mg.replyError(`<b>[Ошибка]</b> <code>${e}</code>`)
+    await mg.reply(`<b>[Ошибка]</b> <code>${e}</code>`)
+    cancelHandlers()
   }
   await saleRepo.save(sale)
   mg.resetState()
