@@ -5,6 +5,7 @@ import { MsgHandler, MsgManager } from "manager"
 import { Post, postRepo } from "models"
 import { createComposer, onChannelPost } from "new/lib.ts"
 import { trySetButtons } from "../../bot/lib.ts"
+import { schedulePostDelete } from "lib"
 
 const cmp = createComposer()
 
@@ -38,8 +39,8 @@ async function _handleChannelPost(
   }
   const deleteTime = Time() + (sale.deleteTimerHours ?? 48) * 60 * 60
   const post = new Post(chatId, messageIds, deleteTime)
-  const _p = await postRepo.save(post)
-  // schedulePostDelete(p) TODO: !
+  await postRepo.save(post)
+  schedulePostDelete(post)
   if (!sale.buttons.length) return
   const buttons = sale.buttons.map((row) =>
     row.map((b) => ({ text: b.text, url: b.url }))

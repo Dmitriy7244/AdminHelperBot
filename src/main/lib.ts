@@ -48,12 +48,13 @@ export function reformatTime(time: string) {
   return time.replace(re, "$1 $2")
 }
 
+// TODO: test
 export async function schedulePostDelete(post: Post) {
   const dt = post.deleteTime - Time()
   await sleep(dt)
-  post.messageIds.forEach((m) => {
-    bot.tryDeleteMsg(post.chatId, m)
-  })
+  for (const m of post.messageIds) {
+    await bot.tryDeleteMsg(post.chatId, m)
+  }
   await db.deletePost(post)
 }
 
