@@ -5,6 +5,7 @@ import M from "messages"
 import { Button, saleRepo } from "models"
 
 import { handleAddButtons } from "composers/addSale/lib.ts"
+import { poster } from "loader"
 import { MsgHandler } from "manager"
 import { createComposer, onQuery, onText } from "new/lib.ts"
 
@@ -26,6 +27,7 @@ export async function buttonsToAdd(mg: MsgManager) {
   await mg.finish(M.buttonsAdded(preview))
   await mg.deleteMessage()
   await tryDeleteLastMsg(mg.ctx)
+  await poster.setPostButtons(sale.postGroupId!, buttons)
 }
 
 onText(cmp, "sale:buttons").use(MsgHandler(buttonsToAdd))

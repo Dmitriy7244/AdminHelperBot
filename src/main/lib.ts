@@ -174,6 +174,8 @@ export async function _onPostReady(mg: QueryManager, delayMins = 0) {
     date,
     mg.session.noSound,
     mg.session.asForward,
+    sale.text,
+    sale.buttons,
   )
 
   try {

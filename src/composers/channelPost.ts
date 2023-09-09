@@ -1,11 +1,11 @@
 import { findSale } from "db"
 import { Time } from "deps"
+import { schedulePostDelete } from "lib"
 import { poster } from "loader"
 import { MsgHandler, MsgManager } from "manager"
 import { Post, postRepo } from "models"
 import { createComposer, onChannelPost } from "new/lib.ts"
 import { trySetButtons } from "../../bot/lib.ts"
-import { schedulePostDelete } from "lib"
 
 const cmp = createComposer()
 
@@ -30,6 +30,10 @@ async function _handleChannelPost(
 ) {
   if (!text) return
   console.log("New channel post", { chatId, messageId })
+
+  const buttons = await poster.getPostButtons(text)
+  if (buttons && buttons.length) trySetButtons(chatId, messageId, buttons)
+
   const sale = await findSale(text)
   if (!sale) return
   console.log("Sale post found", { chatId, messageId })
@@ -41,9 +45,4 @@ async function _handleChannelPost(
   const post = new Post(chatId, messageIds, deleteTime)
   await postRepo.save(post)
   schedulePostDelete(post)
-  if (!sale.buttons.length) return
-  const buttons = sale.buttons.map((row) =>
-    row.map((b) => ({ text: b.text, url: b.url }))
-  )
-  trySetButtons(chatId, messageId, buttons)
 }

@@ -52,4 +52,4 @@ export {
   createPosterFromEnv,
   Poster,
   PostScheduleData,
-} from "https://raw.githubusercontent.com/Dmitriy7244/poster/v0.1.0/src/mod.ts"
+} from "https://raw.githubusercontent.com/Dmitriy7244/poster/v0.2.0/src/mod.ts"
